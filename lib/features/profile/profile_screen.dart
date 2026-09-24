@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../core/database/profile_repository.dart';
+
+/// Placeholder for Profil et paramètres (Brique 9 for the advanced parts).
+/// Already wired to the local profile row so Brique 0's data layer
+/// (fondations) is exercised end-to-end.
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync = ref.watch(currentProfileProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Profil')),
+      body: Center(
+        child: profileAsync.when(
+          data: (profile) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Profil local créé (id: ${profile.id})'),
+              Text('Niveau : ${profile.memorizationLevel}'),
+              Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
+              const SizedBox(height: 8),
+              const Text('Réglages complets — à venir (Brique 9)'),
+            ],
+          ),
+          loading: () => const CircularProgressIndicator(),
+          error: (err, stack) => Text('Erreur de chargement du profil : $err'),
+        ),
+      ),
+    );
+  }
+}
