@@ -6,7 +6,7 @@ import 'tables.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [UserProfiles, MemorizationUnits, ReviewHistoryEntries])
+@DriftDatabase(tables: [UserProfiles, MemorizationUnits, ReviewHistoryEntries, Bookmarks])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

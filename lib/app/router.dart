@@ -6,6 +6,7 @@ import '../features/home/home_screen.dart';
 import '../features/path/path_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/reading/reading_screen.dart';
+import '../features/reading/surah_reading_screen.dart';
 
 /// Squelette de navigation (Brique 0) : les grands onglets existent, même
 /// si la plupart des écrans sont encore des placeholders. Mémorisation et
@@ -22,7 +23,23 @@ final appRouter = GoRouter(
           GoRoute(path: '/accueil', builder: (context, state) => const HomeScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/lecture', builder: (context, state) => const ReadingScreen()),
+          GoRoute(
+            path: '/lecture',
+            builder: (context, state) => const ReadingScreen(),
+            routes: [
+              GoRoute(
+                path: 'sourate/:number',
+                builder: (context, state) {
+                  final surahNumber = int.parse(state.pathParameters['number']!);
+                  final ayah = state.uri.queryParameters['ayah'];
+                  return SurahReadingScreen(
+                    surahNumber: surahNumber,
+                    initialAyah: ayah != null ? int.tryParse(ayah) : null,
+                  );
+                },
+              ),
+            ],
+          ),
         ]),
         StatefulShellBranch(routes: [
           GoRoute(path: '/chemin', builder: (context, state) => const PathScreen()),

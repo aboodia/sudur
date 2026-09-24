@@ -41,6 +41,10 @@ dependencies:
   path: ^1.9.1
   uuid: ^4.6.0
   drift_flutter: ^0.3.1
+  just_audio: ^0.10.6
+  audio_session: ^0.2.4
+  shared_preferences: ^2.5.5
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +72,12 @@ flutter:
 
   assets:
     - assets/data/quran_meta.json
+    - assets/data/quran_text.json
+
+  fonts:
+    - family: AmiriQuran
+      fonts:
+        - asset: assets/fonts/AmiriQuran-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

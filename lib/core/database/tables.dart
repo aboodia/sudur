@@ -83,3 +83,20 @@ class ReviewHistoryEntries extends Table {
   @override
   Set<Column> get primaryKey => {id};
 }
+
+/// A signet (bookmark) on one ayah, shown in the Accueil lecture "Signets"
+/// tab (Brique 1).
+class Bookmarks extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get surahNumber => integer()();
+  IntColumn get ayahNumber => integer()();
+  TextColumn get note => text().nullable()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
