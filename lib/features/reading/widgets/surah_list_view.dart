@@ -38,9 +38,16 @@ class SurahListView extends ConsumerWidget {
             trailing: isPlayingThis
                 ? Tooltip(
                     message: playback.isPlaying ? 'En cours de lecture' : 'En pause',
-                    child: Icon(
-                      playback.isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
-                      color: theme.colorScheme.primary,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          playback.isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 2),
+                        Icon(Icons.graphic_eq, color: theme.colorScheme.primary),
+                      ],
                     ),
                   )
                 : null,

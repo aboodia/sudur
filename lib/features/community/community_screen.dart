@@ -7,8 +7,9 @@ class CommunityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Communauté')),
-      body: const Center(child: Text('Communauté — à venir (Brique 8)')),
+      body: const SafeArea(
+        child: Center(child: Text('Communauté — à venir (Brique 8)')),
+      ),
     );
   }
 }

@@ -7,8 +7,9 @@ class PathScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Le Chemin')),
-      body: const Center(child: Text('Le Chemin — à venir (Brique 6)')),
+      body: const SafeArea(
+        child: Center(child: Text('Le Chemin — à venir (Brique 6)')),
+      ),
     );
   }
 }

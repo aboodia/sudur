@@ -25,6 +25,7 @@ class SurahReadingScreen extends ConsumerStatefulWidget {
 
 class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
   final _itemScrollController = ItemScrollController();
+  bool _showPlayerBar = true;
 
   @override
   Widget build(BuildContext context) {
@@ -62,42 +63,53 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
           const _TextSizeMenu(),
         ],
       ),
-      body: textAsync.when(
-        data: (repo) {
-          final surah = repo.surah(widget.surahNumber);
-          return ScrollablePositionedList.separated(
-            itemScrollController: _itemScrollController,
-            initialScrollIndex: ((widget.initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
-            itemCount: surah.ayahs.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              final ayah = surah.ayahs[index];
-              final isPlaying = playback.isPlaying &&
-                  playback.surahNumber == widget.surahNumber &&
-                  playback.ayahNumber == ayah.numberInSurah;
-              return AyahCard(
-                surahNumber: widget.surahNumber,
-                ayah: ayah,
-                isPlaying: isPlaying,
-                onTap: () {
-                  final isCurrent = playback.surahNumber == widget.surahNumber &&
-                      playback.ayahNumber == ayah.numberInSurah;
-                  if (isCurrent && playback.isPlaying) {
-                    controller.pause();
-                  } else if (isCurrent) {
-                    controller.resume();
-                  } else {
-                    controller.playFrom(widget.surahNumber, ayah.numberInSurah);
-                  }
-                },
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Erreur : $err')),
+      body: GestureDetector(
+        // Tapoter le texte (hors des zones interactives : mots, boutons)
+        // bascule l'affichage du mini-lecteur, pour une lecture plus
+        // immersive.
+        onTap: () => setState(() => _showPlayerBar = !_showPlayerBar),
+        behavior: HitTestBehavior.translucent,
+        child: textAsync.when(
+          data: (repo) {
+            final surah = repo.surah(widget.surahNumber);
+            return ScrollablePositionedList.separated(
+              itemScrollController: _itemScrollController,
+              initialScrollIndex: ((widget.initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
+              itemCount: surah.ayahs.length,
+              separatorBuilder: (_, _) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final ayah = surah.ayahs[index];
+                final isPlaying = playback.isPlaying &&
+                    playback.surahNumber == widget.surahNumber &&
+                    playback.ayahNumber == ayah.numberInSurah;
+                return AyahCard(
+                  surahNumber: widget.surahNumber,
+                  ayah: ayah,
+                  isPlaying: isPlaying,
+                  onTap: () {
+                    final isCurrent = playback.surahNumber == widget.surahNumber &&
+                        playback.ayahNumber == ayah.numberInSurah;
+                    if (isCurrent && playback.isPlaying) {
+                      controller.pause();
+                    } else if (isCurrent) {
+                      controller.resume();
+                    } else {
+                      controller.playFrom(widget.surahNumber, ayah.numberInSurah);
+                    }
+                  },
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, _) => Center(child: Text('Erreur : $err')),
+        ),
       ),
-      bottomNavigationBar: const AudioPlayerBar(),
+      bottomNavigationBar: AnimatedSize(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        child: _showPlayerBar ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
+      ),
     );
   }
 }

@@ -16,37 +16,38 @@ class ProfileScreen extends ConsumerWidget {
     final profileAsync = ref.watch(currentProfileProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
-      body: ListView(
-        children: [
-          profileAsync.when(
-            data: (profile) => Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Profil local créé (id: ${profile.id})'),
-                  Text('Niveau : ${profile.memorizationLevel}'),
-                  Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
-                  const SizedBox(height: 4),
-                  const Text('Réglages complets — à venir (Brique 9)'),
-                ],
+      body: SafeArea(
+        child: ListView(
+          children: [
+            profileAsync.when(
+              data: (profile) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Profil local créé (id: ${profile.id})'),
+                    Text('Niveau : ${profile.memorizationLevel}'),
+                    Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
+                    const SizedBox(height: 4),
+                    const Text('Réglages complets — à venir (Brique 9)'),
+                  ],
+                ),
+              ),
+              loading: () => const Padding(
+                padding: EdgeInsets.all(16),
+                child: CircularProgressIndicator(),
+              ),
+              error: (err, stack) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text('Erreur de chargement du profil : $err'),
               ),
             ),
-            loading: () => const Padding(
-              padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(),
-            ),
-            error: (err, stack) => Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text('Erreur de chargement du profil : $err'),
-            ),
-          ),
-          const Divider(height: 1),
-          const SizedBox(height: 8),
-          const ThemeVariantPicker(),
-          const SizedBox(height: 16),
-        ],
+            const Divider(height: 1),
+            const SizedBox(height: 8),
+            const ThemeVariantPicker(),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

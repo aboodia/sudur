@@ -20,14 +20,6 @@ class ReadingScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Lecture'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.menu_book),
-              tooltip: 'Vue Mushaf',
-              onPressed: () => context.push('/lecture/mushaf?page=1'),
-            ),
-          ],
           bottom: const TabBar(tabs: [
             Tab(text: 'Sourates'),
             Tab(text: 'Juz'),

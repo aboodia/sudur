@@ -22,6 +22,7 @@ class MushafPageViewScreen extends ConsumerStatefulWidget {
 class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   late final PageController _controller;
   late int _currentPage;
+  bool _showPlayerBar = true;
 
   @override
   void initState() {
@@ -62,20 +63,31 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Page $_currentPage')),
-      body: mushafAsync.when(
-        data: (mushaf) => PageView.builder(
-          controller: _controller,
-          // Un Mushaf se feuillette de droite à gauche : glisser vers la
-          // droite doit avancer (page suivante), pas reculer.
-          reverse: true,
-          itemCount: mushaf.pageCount,
-          onPageChanged: (index) => setState(() => _currentPage = index + 1),
-          itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
+      body: GestureDetector(
+        // Tapoter une zone vide de la page (hors des mots, qui lancent
+        // leur lecture) bascule l'affichage du mini-lecteur, pour une
+        // lecture plus immersive.
+        onTap: () => setState(() => _showPlayerBar = !_showPlayerBar),
+        behavior: HitTestBehavior.translucent,
+        child: mushafAsync.when(
+          data: (mushaf) => PageView.builder(
+            controller: _controller,
+            // Un Mushaf se feuillette de droite à gauche : glisser vers la
+            // droite doit avancer (page suivante), pas reculer.
+            reverse: true,
+            itemCount: mushaf.pageCount,
+            onPageChanged: (index) => setState(() => _currentPage = index + 1),
+            itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, _) => Center(child: Text('Erreur : $err')),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Erreur : $err')),
       ),
-      bottomNavigationBar: const AudioPlayerBar(),
+      bottomNavigationBar: AnimatedSize(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        child: _showPlayerBar ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
+      ),
     );
   }
 }
