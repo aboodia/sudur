@@ -85,6 +85,9 @@ flutter:
         - asset: assets/fonts/Amiri-Regular.ttf
         - asset: assets/fonts/Amiri-Bold.ttf
           weight: 700
+    - family: SurahNameV4
+      fonts:
+        - asset: assets/fonts/SurahNameV4.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

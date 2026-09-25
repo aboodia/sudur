@@ -5,7 +5,6 @@ import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/mushaf/mushaf_font_cache.dart';
 import '../../../core/mushaf/mushaf_models.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
-import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 import 'mushaf_line_row.dart';
 
@@ -91,7 +90,6 @@ class _MushafPageBody extends ConsumerWidget {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final fontAsync = ref.watch(mushafPageFontProvider(pageNumber));
     final settings = ref.watch(readingSettingsProvider);
-    final referenceAsync = ref.watch(quranReferenceProvider);
     final controller = ref.read(audioPlaybackProvider.notifier);
 
     final mushaf = mushafAsync.value;
@@ -124,7 +122,6 @@ class _MushafPageBody extends ConsumerWidget {
                           words: mushaf.wordsForLine(line),
                           fontFamily: fontFamily,
                           textScale: settings.textScale,
-                          reference: referenceAsync.value,
                           onWordTap: (word) => controller.playFrom(word.surah, word.ayah),
                         ),
                       ),

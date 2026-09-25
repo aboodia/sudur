@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/mushaf/mushaf_models.dart';
-import '../../../core/quran_reference/quran_reference_repository.dart';
+import '../../../core/mushaf/surah_name_glyph.dart';
 
 const _kBismillah = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 
 /// Renders one line of a Mushaf page. Ayah lines use the page-specific QCF
-/// glyph font (pixel-faithful to the print Mushaf); the sourate banner and
-/// basmallah lines aren't covered by the word/glyph dataset (they're not
-/// part of the 6236-ayah numbering), so they fall back to the app's own
-/// Arabic font (AmiriQuran) with a simple decorative treatment.
+/// glyph font (pixel-faithful to the print Mushaf); the sourate banner uses
+/// the QUL "surah-name-v4" decorative font (ligature-substituted, see
+/// [surahNameLigature]). The basmallah line isn't covered by any Mushaf
+/// glyph dataset (it's not part of the 6236-ayah numbering), so it falls
+/// back to the app's own Arabic font (AmiriQuran).
 class MushafLineRow extends StatelessWidget {
   const MushafLineRow({
     super.key,
@@ -17,7 +18,6 @@ class MushafLineRow extends StatelessWidget {
     required this.words,
     required this.fontFamily,
     required this.textScale,
-    required this.reference,
     required this.onWordTap,
   });
 
@@ -25,27 +25,17 @@ class MushafLineRow extends StatelessWidget {
   final List<MushafWord> words;
   final String? fontFamily;
   final double textScale;
-  final QuranReferenceRepository? reference;
   final void Function(MushafWord word) onWordTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (line.type == 'surah_name') {
-      final name = line.surahNumber != null
-          ? reference?.surahByNumber(line.surahNumber!).nameArabic ?? ''
-          : '';
-      return Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          border: Border.all(color: theme.colorScheme.outlineVariant),
-          borderRadius: BorderRadius.circular(6),
-        ),
+      if (line.surahNumber == null) return const SizedBox.shrink();
+      return FittedBox(
+        fit: BoxFit.scaleDown,
         child: Text(
-          name,
-          style: TextStyle(fontFamily: 'AmiriQuran', fontSize: 20 * textScale),
+          surahNameLigature(line.surahNumber!),
+          style: TextStyle(fontFamily: 'SurahNameV4', fontSize: 40 * textScale),
         ),
       );
     }
