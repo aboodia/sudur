@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/bookmark_repository.dart';
 import '../../../core/database/profile_repository.dart';
 import '../../../core/quran_text/quran_text_models.dart';
+import '../../../core/quran_text/sajda_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 
 class AyahCard extends ConsumerWidget {
@@ -38,6 +39,7 @@ class AyahCard extends ConsumerWidget {
                 radius: 14,
                 child: Text('${ayah.numberInSurah}', style: const TextStyle(fontSize: 12)),
               ),
+              _SajdaBadge(surahNumber: surahNumber, ayahNumber: ayah.numberInSurah),
               const Spacer(),
               if (profileAsync.value case final profile?)
                 _BookmarkButton(
@@ -84,6 +86,35 @@ class AyahCard extends ConsumerWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _SajdaBadge extends ConsumerWidget {
+  const _SajdaBadge({required this.surahNumber, required this.ayahNumber});
+
+  final int surahNumber;
+  final int ayahNumber;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sajdaType = ref.watch(sajdaRepositoryProvider).value?.sajdaTypeFor(surahNumber, ayahNumber);
+    if (sajdaType == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Tooltip(
+        message: sajdaType == 'required' ? 'Sajda obligatoire' : 'Sajda recommandée',
+        child: Chip(
+          label: const Text('۩', style: TextStyle(fontFamily: 'AmiriQuran')),
+          labelPadding: EdgeInsets.zero,
+          visualDensity: VisualDensity.compact,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          backgroundColor: sajdaType == 'required'
+              ? Theme.of(context).colorScheme.errorContainer
+              : Theme.of(context).colorScheme.secondaryContainer,
+        ),
       ),
     );
   }

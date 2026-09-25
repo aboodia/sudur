@@ -75,6 +75,7 @@ flutter:
     - assets/data/quran_text.json
     - assets/data/mushaf_pages.json
     - assets/data/mushaf_words.json
+    - assets/data/quran_sajda.json
 
   fonts:
     - family: AmiriQuran
@@ -88,6 +89,9 @@ flutter:
     - family: SurahNameV4
       fonts:
         - asset: assets/fonts/SurahNameV4.ttf
+    - family: QuranCommon
+      fonts:
+        - asset: assets/fonts/QuranCommon.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
