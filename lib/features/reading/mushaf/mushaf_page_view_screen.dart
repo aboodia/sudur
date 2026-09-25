@@ -61,16 +61,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Page $_currentPage'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.play_circle_outline),
-            tooltip: 'Lire cette page',
-            onPressed: () => _playPage(mushafAsync.value),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Page $_currentPage')),
       body: mushafAsync.when(
         data: (mushaf) => PageView.builder(
           controller: _controller,
@@ -86,18 +77,6 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
       ),
       bottomNavigationBar: const AudioPlayerBar(),
     );
-  }
-
-  void _playPage(MushafRepository? mushaf) {
-    if (mushaf == null) return;
-    final lines = mushaf.linesForPage(_currentPage);
-    for (final line in lines) {
-      final words = mushaf.wordsForLine(line);
-      if (words.isNotEmpty) {
-        ref.read(audioPlaybackProvider.notifier).playFrom(words.first.surah, words.first.ayah);
-        return;
-      }
-    }
   }
 }
 
