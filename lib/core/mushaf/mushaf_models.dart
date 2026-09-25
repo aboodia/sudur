@@ -1,8 +1,3 @@
-/// Constant line grid of the "QPC v4 tajweed, 15 lines" Madina Mushaf
-/// layout — pages with fewer content lines (e.g. page 1) leave the rest of
-/// the grid blank rather than stretching their lines apart.
-const kMushafLinesPerPage = 15;
-
 /// One line of one Mushaf page, from the QUL "QPC v4 tajweed, 15 lines"
 /// layout (604 pages — the standard Madina Mushaf pagination). Word-bearing
 /// lines reference a contiguous range of [MushafWord] ids; decorative lines

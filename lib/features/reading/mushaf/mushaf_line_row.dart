@@ -35,7 +35,7 @@ class MushafLineRow extends StatelessWidget {
     if (line.type == 'surah_name') {
       if (line.surahNumber == null) return const SizedBox.shrink();
       return FittedBox(
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.contain,
         child: Text(
           surahNameLigature(line.surahNumber!),
           style: TextStyle(fontFamily: 'SurahNameV4', fontSize: 40 * textScale),
@@ -45,7 +45,7 @@ class MushafLineRow extends StatelessWidget {
 
     if (line.type == 'basmallah') {
       return FittedBox(
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.contain,
         child: Text(
           _kBismillahLigature,
           style: TextStyle(fontFamily: 'QuranCommon', fontSize: 34 * textScale),
@@ -57,13 +57,14 @@ class MushafLineRow extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    // A dense line (many short words) can be wider than the screen once
-    // laid out edge-to-edge, especially at larger text scales — scale the
-    // whole line down to fit instead of overflowing (FittedBox), rather
-    // than wrapping mid-line, which would break the one-line-per-line
-    // Mushaf layout.
+    // The parent Column sits in a SingleChildScrollView, so height here is
+    // unbounded — BoxFit.contain then only ever binds on width, scaling
+    // the line up or down to exactly match it. That's what makes a line
+    // grow to fill a wider viewport (landscape, tablet) instead of staying
+    // pixel-locked to whatever fit the last portrait layout, while still
+    // shrinking a dense line's word count down when it doesn't fit.
     return FittedBox(
-      fit: BoxFit.scaleDown,
+      fit: BoxFit.contain,
       alignment: Alignment.center,
       child: Row(
         textDirection: TextDirection.rtl,

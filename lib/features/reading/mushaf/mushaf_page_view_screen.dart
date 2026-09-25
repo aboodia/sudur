@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/mushaf/mushaf_font_cache.dart';
-import '../../../core/mushaf/mushaf_models.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 import 'mushaf_line_row.dart';
@@ -102,33 +101,29 @@ class _MushafPageBody extends ConsumerWidget {
         if (fontFamily == null) {
           return _OfflineFallback(onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber)));
         }
-        return Padding(
+        // Each line is sized to fill the available width (FittedBox in
+        // MushafLineRow), so it grows or shrinks with the actual screen —
+        // portrait, landscape or tablet — instead of staying pixel-locked
+        // to whatever fit a fixed row-height grid on first layout. Lines
+        // are no longer squeezed into a fixed 15-row height division, so
+        // the page scrolls vertically when a wider (and therefore taller,
+        // width-fit) line no longer fits the viewport, e.g. in landscape.
+        return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Real Mushaf pages have up to 15 lines of constant height;
-              // short pages (like page 1) use fewer and leave the rest of
-              // the page blank, rather than stretching their lines apart.
-              final rowHeight = constraints.maxHeight / kMushafLinesPerPage;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  for (final line in lines)
-                    SizedBox(
-                      height: rowHeight,
-                      child: Center(
-                        child: MushafLineRow(
-                          line: line,
-                          words: mushaf.wordsForLine(line),
-                          fontFamily: fontFamily,
-                          textScale: settings.textScale,
-                          onWordTap: (word) => controller.playFrom(word.surah, word.ayah),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
+          child: Column(
+            children: [
+              for (final line in lines)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6 * settings.textScale),
+                  child: MushafLineRow(
+                    line: line,
+                    words: mushaf.wordsForLine(line),
+                    fontFamily: fontFamily,
+                    textScale: settings.textScale,
+                    onWordTap: (word) => controller.playFrom(word.surah, word.ayah),
+                  ),
+                ),
+            ],
           ),
         );
       },
