@@ -63,22 +63,32 @@ class MushafLineRow extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Row(
-      textDirection: TextDirection.rtl,
-      mainAxisAlignment: line.isCentered ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
-      children: [
-        for (final word in words)
-          GestureDetector(
-            onTap: () => onWordTap(word),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: line.isCentered ? 4.0 * textScale : 0),
-              child: Text(
-                word.text,
-                style: TextStyle(fontFamily: fontFamily, fontSize: 22 * textScale),
+    // A dense line (many short words) can be wider than the screen once
+    // laid out edge-to-edge, especially at larger text scales — scale the
+    // whole line down to fit instead of overflowing (FittedBox), rather
+    // than wrapping mid-line, which would break the one-line-per-line
+    // Mushaf layout.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.center,
+      child: Row(
+        textDirection: TextDirection.rtl,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: line.isCentered ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+        children: [
+          for (final word in words)
+            GestureDetector(
+              onTap: () => onWordTap(word),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.0 * textScale),
+                child: Text(
+                  word.text,
+                  style: TextStyle(fontFamily: fontFamily, fontSize: 22 * textScale),
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

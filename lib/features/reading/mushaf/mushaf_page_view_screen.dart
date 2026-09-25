@@ -55,6 +55,9 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
       body: mushafAsync.when(
         data: (mushaf) => PageView.builder(
           controller: _controller,
+          // Un Mushaf se feuillette de droite à gauche : glisser vers la
+          // droite doit avancer (page suivante), pas reculer.
+          reverse: true,
           itemCount: mushaf.pageCount,
           onPageChanged: (index) => setState(() => _currentPage = index + 1),
           itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
