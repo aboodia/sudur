@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart' hide RepeatMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/audio/playback_state.dart';
 import '../../../core/audio/reciter.dart';
+import '../../../core/quran_reference/quran_reference_repository.dart';
 
 const _kSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
 
 /// Lecteur audio étendu (Brique 1) : transport, répétition à 4 états,
-/// vitesse, choix du récitateur.
+/// vitesse, choix du récitateur. Rendu globalement par le shell de
+/// navigation (voir router.dart), pas par chaque écran de lecture, pour
+/// qu'on sache toujours ce qui joue — même en revenant sur l'app depuis un
+/// autre onglet — plutôt que de devoir renaviguer vers le bon écran pour
+/// le retrouver.
 class AudioPlayerBar extends ConsumerWidget {
   const AudioPlayerBar({super.key});
 
@@ -16,9 +22,13 @@ class AudioPlayerBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playback = ref.watch(audioPlaybackProvider);
     final controller = ref.read(audioPlaybackProvider.notifier);
+    final referenceAsync = ref.watch(quranReferenceProvider);
     final theme = Theme.of(context);
 
     if (!playback.hasCurrentAyah) return const SizedBox.shrink();
+
+    final surahName = referenceAsync.value?.surahByNumber(playback.surahNumber!).englishName ??
+        'Sourate ${playback.surahNumber}';
 
     return Material(
       elevation: 8,
@@ -50,11 +60,16 @@ class AudioPlayerBar extends ConsumerWidget {
                 onPressed: controller.next,
               ),
               Expanded(
-                child: Text(
-                  'Sourate ${playback.surahNumber} · verset ${playback.ayahNumber}'
-                  '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget})' : ''}',
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall,
+                child: InkWell(
+                  onTap: () => context.push(
+                    '/lecture/sourate/${playback.surahNumber}?ayah=${playback.ayahNumber}',
+                  ),
+                  child: Text(
+                    '$surahName · verset ${playback.ayahNumber}'
+                    '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget})' : ''}',
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall,
+                  ),
                 ),
               ),
               _SpeedButton(speed: playback.speed, onSelected: controller.setSpeed),

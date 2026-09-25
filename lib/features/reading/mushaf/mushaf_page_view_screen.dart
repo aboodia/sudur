@@ -5,7 +5,6 @@ import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/mushaf/mushaf_font_cache.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/settings/reading_settings.dart';
-import '../widgets/audio_player_bar.dart';
 import 'mushaf_line_row.dart';
 
 /// Vue Mushaf : pagination fidèle au Mushaf imprimé (604 pages, glyphes
@@ -75,7 +74,6 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Erreur : $err')),
       ),
-      bottomNavigationBar: const AudioPlayerBar(),
     );
   }
 }

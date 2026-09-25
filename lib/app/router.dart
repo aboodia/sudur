@@ -8,6 +8,7 @@ import '../features/profile/profile_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
 import '../features/reading/reading_screen.dart';
 import '../features/reading/surah_reading_screen.dart';
+import '../features/reading/widgets/audio_player_bar.dart';
 
 /// Squelette de navigation (Brique 0) : les grands onglets existent, même
 /// si la plupart des écrans sont encore des placeholders. Mémorisation et
@@ -72,18 +73,28 @@ class _WirdScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (index) => navigationShell.goBranch(
-          index,
-          initialLocation: index == navigationShell.currentIndex,
-        ),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Accueil'),
-          NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'Lecture'),
-          NavigationDestination(icon: Icon(Icons.route_outlined), selectedIcon: Icon(Icons.route), label: 'Chemin'),
-          NavigationDestination(icon: Icon(Icons.groups_outlined), selectedIcon: Icon(Icons.groups), label: 'Communauté'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profil'),
+      // Le mini-lecteur vit ici, au niveau du shell, et non dans chaque
+      // écran de lecture : il reste donc visible (et permet de retrouver
+      // ce qui joue) sur n'importe quel onglet, y compris en revenant sur
+      // l'app depuis l'arrière-plan.
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const AudioPlayerBar(),
+          NavigationBar(
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: (index) => navigationShell.goBranch(
+              index,
+              initialLocation: index == navigationShell.currentIndex,
+            ),
+            destinations: const [
+              NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Accueil'),
+              NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'Lecture'),
+              NavigationDestination(icon: Icon(Icons.route_outlined), selectedIcon: Icon(Icons.route), label: 'Chemin'),
+              NavigationDestination(icon: Icon(Icons.groups_outlined), selectedIcon: Icon(Icons.groups), label: 'Communauté'),
+              NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profil'),
+            ],
+          ),
         ],
       ),
     );

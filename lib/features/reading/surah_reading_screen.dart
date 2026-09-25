@@ -8,7 +8,6 @@ import '../../core/mushaf/mushaf_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import '../../core/quran_text/quran_text_repository.dart';
 import '../../core/settings/reading_settings.dart';
-import 'widgets/audio_player_bar.dart';
 import 'widgets/ayah_card.dart';
 
 /// Écran de lecture (Brique 1), mode Arabe seul en priorité — Translittération
@@ -97,7 +96,6 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Erreur : $err')),
       ),
-      bottomNavigationBar: const AudioPlayerBar(),
     );
   }
 }
