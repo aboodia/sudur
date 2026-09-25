@@ -22,6 +22,8 @@ class MushafLineRow extends StatelessWidget {
     required this.fontFamily,
     required this.textScale,
     required this.onWordTap,
+    this.playingSurah,
+    this.playingAyah,
   });
 
   final MushafLine line;
@@ -29,6 +31,12 @@ class MushafLineRow extends StatelessWidget {
   final String? fontFamily;
   final double textScale;
   final void Function(MushafWord word) onWordTap;
+
+  /// The ayah the audio player is currently on, if any — words belonging
+  /// to it are highlighted so the reader can always see where the audio
+  /// is up to without hunting for it on the page.
+  final int? playingSurah;
+  final int? playingAyah;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +82,10 @@ class MushafLineRow extends StatelessWidget {
           for (final word in words)
             GestureDetector(
               onTap: () => onWordTap(word),
-              child: Padding(
+              child: Container(
+                color: word.surah == playingSurah && word.ayah == playingAyah
+                    ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.6)
+                    : null,
                 padding: EdgeInsets.symmetric(horizontal: 4.0 * textScale),
                 child: Text(
                   word.text,

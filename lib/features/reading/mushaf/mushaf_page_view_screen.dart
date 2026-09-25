@@ -39,6 +39,26 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
 
+    // Keep the playing ayah's highlight always in view: whenever playback
+    // moves to a new ayah, jump to whichever page it's on if we're not
+    // already there.
+    ref.listen(audioPlaybackProvider, (previous, next) {
+      final movedToNewAyah =
+          next.ayahNumber != null &&
+          (previous?.ayahNumber != next.ayahNumber || previous?.surahNumber != next.surahNumber);
+      if (!movedToNewAyah) return;
+      final mushaf = mushafAsync.value;
+      if (mushaf == null) return;
+      final targetPage = mushaf.pageForAyah(next.surahNumber!, next.ayahNumber!);
+      if (targetPage != null && targetPage != _currentPage && _controller.hasClients) {
+        _controller.animateToPage(
+          targetPage - 1,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Page $_currentPage'),
@@ -89,6 +109,7 @@ class _MushafPageBody extends ConsumerWidget {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final fontAsync = ref.watch(mushafPageFontProvider(pageNumber));
     final settings = ref.watch(readingSettingsProvider);
+    final playback = ref.watch(audioPlaybackProvider);
     final controller = ref.read(audioPlaybackProvider.notifier);
 
     final mushaf = mushafAsync.value;
@@ -120,6 +141,8 @@ class _MushafPageBody extends ConsumerWidget {
                     words: mushaf.wordsForLine(line),
                     fontFamily: fontFamily,
                     textScale: settings.textScale,
+                    playingSurah: playback.surahNumber,
+                    playingAyah: playback.ayahNumber,
                     onWordTap: (word) => controller.playFrom(word.surah, word.ayah),
                   ),
                 ),

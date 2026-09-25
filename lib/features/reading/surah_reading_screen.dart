@@ -13,56 +13,81 @@ import 'widgets/ayah_card.dart';
 
 /// Écran de lecture (Brique 1), mode Arabe seul en priorité — Translittération
 /// et Bilingue réutilisent le même écran et le même réglage de zoom.
-class SurahReadingScreen extends ConsumerWidget {
+class SurahReadingScreen extends ConsumerStatefulWidget {
   const SurahReadingScreen({super.key, required this.surahNumber, this.initialAyah});
 
   final int surahNumber;
   final int? initialAyah;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SurahReadingScreen> createState() => _SurahReadingScreenState();
+}
+
+class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
+  final _itemScrollController = ItemScrollController();
+
+  @override
+  Widget build(BuildContext context) {
     final textAsync = ref.watch(quranTextProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
     final playback = ref.watch(audioPlaybackProvider);
     final controller = ref.read(audioPlaybackProvider.notifier);
 
-    final surahName = referenceAsync.value?.surahByNumber(surahNumber).englishName ??
-        'Sourate $surahNumber';
+    // Keep the playing ayah's highlight always in view: whenever playback
+    // moves to a new ayah of this sourate, scroll it into a comfortable
+    // position instead of leaving the reader to hunt for it manually.
+    ref.listen(audioPlaybackProvider, (previous, next) {
+      final movedToNewAyah =
+          next.ayahNumber != null &&
+          (previous?.ayahNumber != next.ayahNumber || previous?.surahNumber != next.surahNumber);
+      if (next.surahNumber == widget.surahNumber && movedToNewAyah && _itemScrollController.isAttached) {
+        _itemScrollController.scrollTo(
+          index: next.ayahNumber! - 1,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          alignment: 0.3,
+        );
+      }
+    });
+
+    final surahName = referenceAsync.value?.surahByNumber(widget.surahNumber).englishName ??
+        'Sourate ${widget.surahNumber}';
 
     return Scaffold(
       appBar: AppBar(
         title: Text(surahName),
         actions: [
-          _MushafButton(surahNumber: surahNumber, ayah: initialAyah ?? 1),
+          _MushafButton(surahNumber: widget.surahNumber, ayah: widget.initialAyah ?? 1),
           const _DisplayModeMenu(),
           const _TextSizeMenu(),
         ],
       ),
       body: textAsync.when(
         data: (repo) {
-          final surah = repo.surah(surahNumber);
+          final surah = repo.surah(widget.surahNumber);
           return ScrollablePositionedList.separated(
-            initialScrollIndex: ((initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
+            itemScrollController: _itemScrollController,
+            initialScrollIndex: ((widget.initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
             itemCount: surah.ayahs.length,
             separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, index) {
               final ayah = surah.ayahs[index];
               final isPlaying = playback.isPlaying &&
-                  playback.surahNumber == surahNumber &&
+                  playback.surahNumber == widget.surahNumber &&
                   playback.ayahNumber == ayah.numberInSurah;
               return AyahCard(
-                surahNumber: surahNumber,
+                surahNumber: widget.surahNumber,
                 ayah: ayah,
                 isPlaying: isPlaying,
                 onTap: () {
-                  final isCurrent = playback.surahNumber == surahNumber &&
+                  final isCurrent = playback.surahNumber == widget.surahNumber &&
                       playback.ayahNumber == ayah.numberInSurah;
                   if (isCurrent && playback.isPlaying) {
                     controller.pause();
                   } else if (isCurrent) {
                     controller.resume();
                   } else {
-                    controller.playFrom(surahNumber, ayah.numberInSurah);
+                    controller.playFrom(widget.surahNumber, ayah.numberInSurah);
                   }
                 },
               );
