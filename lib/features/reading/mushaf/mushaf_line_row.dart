@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../core/mushaf/mushaf_models.dart';
 import '../../../core/mushaf/surah_name_glyph.dart';
 
-const _kBismillah = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+/// Per QUL's own convention: a basmallah line is just the single Arabic
+/// ligature character U+FDFD (﷽), styled with a Hafs-script font so it
+/// renders as one ornate calligraphic glyph rather than four separate
+/// words. Neither the per-page QCF v4-tajweed font nor QUL's own "QPC
+/// Hafs" font (UthmanicHafs_V22) actually contain U+FDFD in the files
+/// fetched from their CDN (checked directly with fonttools) — AmiriQuran
+/// does, so that's what's used here instead.
+const _kBismillahLigature = '﷽';
 
 /// Renders one line of a Mushaf page. Ayah lines use the page-specific QCF
 /// glyph font (pixel-faithful to the print Mushaf); the sourate banner uses
 /// the QUL "surah-name-v4" decorative font (ligature-substituted, see
-/// [surahNameLigature]). The basmallah line isn't covered by any Mushaf
-/// glyph dataset (it's not part of the 6236-ayah numbering), so it falls
-/// back to the app's own Arabic font (AmiriQuran).
+/// [surahNameLigature]).
 class MushafLineRow extends StatelessWidget {
   const MushafLineRow({
     super.key,
@@ -41,10 +46,11 @@ class MushafLineRow extends StatelessWidget {
     }
 
     if (line.type == 'basmallah') {
-      return Center(
+      return FittedBox(
+        fit: BoxFit.scaleDown,
         child: Text(
-          _kBismillah,
-          style: TextStyle(fontFamily: 'AmiriQuran', fontSize: 20 * textScale),
+          _kBismillahLigature,
+          style: TextStyle(fontFamily: 'AmiriQuran', fontSize: 34 * textScale),
         ),
       );
     }
