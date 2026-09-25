@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../core/audio/audio_playback_controller.dart';
+import '../../core/mushaf/mushaf_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import '../../core/quran_text/quran_text_repository.dart';
 import '../../core/settings/reading_settings.dart';
@@ -30,7 +32,11 @@ class SurahReadingScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(surahName),
-        actions: const [_DisplayModeMenu(), _TextSizeMenu()],
+        actions: [
+          _MushafButton(surahNumber: surahNumber, ayah: initialAyah ?? 1),
+          const _DisplayModeMenu(),
+          const _TextSizeMenu(),
+        ],
       ),
       body: textAsync.when(
         data: (repo) {
@@ -67,6 +73,26 @@ class SurahReadingScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('Erreur : $err')),
       ),
       bottomNavigationBar: const AudioPlayerBar(),
+    );
+  }
+}
+
+class _MushafButton extends ConsumerWidget {
+  const _MushafButton({required this.surahNumber, required this.ayah});
+
+  final int surahNumber;
+  final int ayah;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      icon: const Icon(Icons.menu_book),
+      tooltip: 'Vue Mushaf',
+      onPressed: () async {
+        final mushaf = await ref.read(mushafRepositoryProvider.future);
+        final page = mushaf.pageForAyah(surahNumber, ayah) ?? 1;
+        if (context.mounted) context.push('/lecture/mushaf?page=$page');
+      },
     );
   }
 }

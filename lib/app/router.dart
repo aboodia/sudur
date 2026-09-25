@@ -5,6 +5,7 @@ import '../features/community/community_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/path/path_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/reading/mushaf/mushaf_page_view_screen.dart';
 import '../features/reading/reading_screen.dart';
 import '../features/reading/surah_reading_screen.dart';
 
@@ -36,6 +37,13 @@ final appRouter = GoRouter(
                     surahNumber: surahNumber,
                     initialAyah: ayah != null ? int.tryParse(ayah) : null,
                   );
+                },
+              ),
+              GoRoute(
+                path: 'mushaf',
+                builder: (context, state) {
+                  final page = state.uri.queryParameters['page'];
+                  return MushafPageViewScreen(initialPage: int.tryParse(page ?? '') ?? 1);
                 },
               ),
             ],

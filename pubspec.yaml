@@ -73,6 +73,8 @@ flutter:
   assets:
     - assets/data/quran_meta.json
     - assets/data/quran_text.json
+    - assets/data/mushaf_pages.json
+    - assets/data/mushaf_words.json
 
   fonts:
     - family: AmiriQuran
