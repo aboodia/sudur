@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/profile_repository.dart';
+import 'widgets/theme_variant_picker.dart';
 
 /// Placeholder for Profil et paramètres (Brique 9 for the advanced parts).
 /// Already wired to the local profile row so Brique 0's data layer
-/// (fondations) is exercised end-to-end.
+/// (fondations) is exercised end-to-end, plus a live charte graphique
+/// picker (3 themes to try and switch between).
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -15,21 +17,36 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profil')),
-      body: Center(
-        child: profileAsync.when(
-          data: (profile) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Profil local créé (id: ${profile.id})'),
-              Text('Niveau : ${profile.memorizationLevel}'),
-              Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
-              const SizedBox(height: 8),
-              const Text('Réglages complets — à venir (Brique 9)'),
-            ],
+      body: ListView(
+        children: [
+          profileAsync.when(
+            data: (profile) => Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Profil local créé (id: ${profile.id})'),
+                  Text('Niveau : ${profile.memorizationLevel}'),
+                  Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
+                  const SizedBox(height: 4),
+                  const Text('Réglages complets — à venir (Brique 9)'),
+                ],
+              ),
+            ),
+            loading: () => const Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ),
+            error: (err, stack) => Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text('Erreur de chargement du profil : $err'),
+            ),
           ),
-          loading: () => const CircularProgressIndicator(),
-          error: (err, stack) => Text('Erreur de chargement du profil : $err'),
-        ),
+          const Divider(height: 1),
+          const SizedBox(height: 8),
+          const ThemeVariantPicker(),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }
