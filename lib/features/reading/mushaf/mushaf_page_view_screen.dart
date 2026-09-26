@@ -64,7 +64,6 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
-    final playback = ref.watch(audioPlaybackProvider);
 
     // Keep the playing ayah's highlight always in view: whenever playback
     // moves to a new ayah, jump to whichever page it's on if we're not
@@ -150,9 +149,10 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
         curve: Curves.easeInOut,
         child: _showChrome
             ? const AudioPlayerBar()
-            : (playback.hasCurrentAyah
-                ? CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true))
-                : const SizedBox(width: double.infinity)),
+            : _CollapsedPageBadge(
+                pageNumber: _currentPage,
+                onTap: () => setState(() => _showChrome = true),
+              ),
       ),
     );
   }
@@ -197,6 +197,48 @@ class _MushafTopBar extends StatelessWidget {
               onPressed: onSwitchToTextView,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Remplace le mini-lecteur et la barre du haut quand ils sont masqués :
+/// un badge circulaire avec le numéro de page, seul point fiable pour
+/// rouvrir le reste du chrome — sur une page Mushaf les mots couvrent
+/// quasi toute la largeur de chaque ligne (voir MushafLineRow), donc un
+/// tap sur une zone réellement vide de la page est rarissime.
+class _CollapsedPageBadge extends StatelessWidget {
+  const _CollapsedPageBadge({required this.pageNumber, required this.onTap});
+
+  final int pageNumber;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerHigh,
+      child: InkWell(
+        onTap: onTap,
+        // La zone de tap fait au moins 48x48 (recommandation Material),
+        // bien plus large que le cercle visible.
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: Center(
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: theme.colorScheme.primaryContainer,
+              child: Text(
+                '$pageNumber',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
