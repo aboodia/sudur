@@ -130,24 +130,27 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: AnimatedSize(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        child: _showChrome
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _PageNumberBar(pageNumber: _currentPage),
-                  const AudioPlayerBar(),
-                ],
-              )
-            // Toujours affichée quand la page est masquée (pas seulement si
-            // l'audio joue) : les mots couvrent quasi toute la largeur de
-            // chaque ligne (voir MushafLineRow), donc un tap sur une zone
-            // vraiment vide de la page est rarissime — sans cette poignée
-            // toujours atteignable, l'utilisateur n'a quasiment aucun moyen
-            // fiable de rouvrir les infos et le mini-lecteur.
-            : CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true)),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            child: _showChrome ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
+          ),
+          // Le numéro de page reste toujours affiché — contrairement au
+          // reste du chrome — et sert lui-même de poignée pour
+          // masquer/afficher le mini-lecteur et les infos du haut : sur une
+          // page Mushaf les mots couvrent quasi toute la largeur de chaque
+          // ligne (voir MushafLineRow), donc un tap sur une zone réellement
+          // vide de la page est rarissime, et ce bandeau est le seul point
+          // fiable pour rouvrir le reste du chrome une fois masqué.
+          _PageNumberBar(
+            pageNumber: _currentPage,
+            showChrome: _showChrome,
+            onTap: () => setState(() => _showChrome = !_showChrome),
+          ),
+        ],
       ),
     );
   }
@@ -199,21 +202,47 @@ class _MushafTopBar extends StatelessWidget {
 }
 
 class _PageNumberBar extends StatelessWidget {
-  const _PageNumberBar({required this.pageNumber});
+  const _PageNumberBar({required this.pageNumber, required this.showChrome, required this.onTap});
 
   final int pageNumber;
+  final bool showChrome;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
+    return Material(
       color: theme.colorScheme.surfaceContainerHigh,
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        '$pageNumber',
-        textAlign: TextAlign.center,
-        style: theme.textTheme.titleMedium,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                showChrome ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                size: 16,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '$pageNumber',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
