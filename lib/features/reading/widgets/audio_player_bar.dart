@@ -119,9 +119,17 @@ class _RepeatModeButton extends StatelessWidget {
       case RepeatMode.repeatAyah:
         return Text('∞', style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.bold));
       case RepeatMode.repeatEachAyahNTimes:
-        return Text(
-          '${playback.repeatTarget}',
-          style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold),
+        // Le chiffre se superpose au centre de l'icône de répétition (les
+        // deux flèches tournantes), plutôt que de la remplacer.
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(Icons.repeat, color: color),
+            Text(
+              '${playback.repeatTarget}',
+              style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold, height: 1),
+            ),
+          ],
         );
     }
   }
