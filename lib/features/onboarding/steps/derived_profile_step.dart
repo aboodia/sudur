@@ -15,8 +15,12 @@ class DerivedProfileStep extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final draft = ref.watch(onboardingDraftProvider);
-    final badge = memorizerBadgeForCount(draft.memorizedSurahs.length);
+    final count = draft.memorizedSurahs.length;
+    final badge = memorizerBadgeForCount(count);
     final info = badge.info;
+    // Sa situation personnelle plutôt que l'intervalle du palier : "12
+    // sourates mémorisées" parle plus à l'utilisateur que "6 – 20 sourates".
+    final countLabel = '$count sourate${count > 1 ? 's' : ''} mémorisée${count > 1 ? 's' : ''}';
 
     final foreground = info.isDark ? Colors.white : theme.colorScheme.onSurface;
     final subForeground =
@@ -34,7 +38,7 @@ class DerivedProfileStep extends ConsumerWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            info.rangeLabel,
+            countLabel,
             style: theme.textTheme.labelMedium?.copyWith(color: info.isDark ? info.color : null),
           ),
         ),
