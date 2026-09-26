@@ -38,6 +38,20 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
     super.initState();
     _currentPage = widget.initialPage;
     _controller = PageController(initialPage: widget.initialPage - 1);
+    _prepareInitialAyah();
+  }
+
+  // Le mini-lecteur doit être visible dès l'entrée sur la page, prêt à
+  // jouer sans attendre un premier tap sur un mot — sauf si une lecture
+  // est déjà en cours ailleurs, que [prepare] ne doit pas écraser. Le
+  // (surah, ayah) de la page d'entrée n'est connu qu'une fois le
+  // MushafRepository chargé, d'où l'attente async.
+  Future<void> _prepareInitialAyah() async {
+    final mushaf = await ref.read(mushafRepositoryProvider.future);
+    if (!mounted) return;
+    final firstAyah = mushaf.firstAyahOnPage(widget.initialPage);
+    if (firstAyah == null) return;
+    ref.read(audioPlaybackProvider.notifier).prepare(firstAyah.surah, firstAyah.ayah);
   }
 
   @override

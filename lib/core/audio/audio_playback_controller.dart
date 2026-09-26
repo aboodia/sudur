@@ -13,6 +13,13 @@ import 'reciter.dart';
 class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   late final AudioPlayer _player;
 
+  /// Whether [_player] currently has a source loaded — distinct from
+  /// [ReadingPlaybackState.hasCurrentAyah], which [prepare] can make true
+  /// without ever touching the player. The mini-player's play button needs
+  /// this to know whether pressing play should resume an already-loaded
+  /// ayah or actually start loading one for the first time.
+  bool _hasLoadedSource = false;
+
   @override
   ReadingPlaybackState build() {
     _player = AudioPlayer();
@@ -38,6 +45,18 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     }
   }
 
+  /// Prépare le mini-lecteur pour un ayah sans lancer sa lecture — utilisé
+  /// à l'entrée sur un écran de lecture pour que la barre soit visible
+  /// tout de suite, prête à jouer, sans attendre qu'on clique un ayah.
+  /// N'écrase jamais un ayah déjà courant (en cours de lecture, en pause,
+  /// ou déjà préparé ailleurs) : la lecture en tenue ailleurs dans l'app
+  /// prime toujours sur la simple ouverture d'un nouvel écran.
+  void prepare(int surahNumber, int ayahNumber) {
+    if (state.hasCurrentAyah) return;
+    _hasLoadedSource = false;
+    state = state.copyWith(surahNumber: surahNumber, ayahNumber: ayahNumber);
+  }
+
   Future<void> playFrom(int surahNumber, int ayahNumber) async {
     state = state.copyWith(
       surahNumber: surahNumber,
@@ -54,6 +73,7 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     final url = ayahAudioUrl(reciterById(state.reciterId), global);
     try {
       await _player.setUrl(url);
+      _hasLoadedSource = true;
       await _player.setSpeed(state.speed);
       await _player.play();
     } catch (_) {
@@ -65,10 +85,20 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
 
   Future<void> pause() => _player.pause();
 
-  Future<void> resume() => _player.play();
+  /// Bouton play du mini-lecteur : reprend un ayah déjà chargé (mis en
+  /// pause) là où il en était, mais si l'ayah courant vient juste d'être
+  /// préparé par [prepare] (jamais chargé dans le player), démarre
+  /// vraiment sa lecture au lieu de dégeler un player vide.
+  Future<void> resume() {
+    if (!_hasLoadedSource && state.hasCurrentAyah) {
+      return _loadAndPlayCurrent();
+    }
+    return _player.play();
+  }
 
   Future<void> stop() async {
     await _player.stop();
+    _hasLoadedSource = false;
     state = state.copyWith(isPlaying: false);
   }
 

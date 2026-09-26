@@ -33,6 +33,16 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
   bool _showChrome = true;
 
   @override
+  void initState() {
+    super.initState();
+    // Le mini-lecteur doit être visible dès l'entrée sur la sourate, prêt
+    // à jouer l'ayah demandé sans attendre un premier tap — sauf si une
+    // lecture est déjà en cours ailleurs, que [prepare] ne doit pas
+    // écraser.
+    ref.read(audioPlaybackProvider.notifier).prepare(widget.surahNumber, widget.initialAyah ?? 1);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textAsync = ref.watch(quranTextProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
