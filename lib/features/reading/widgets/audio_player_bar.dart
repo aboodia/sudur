@@ -66,7 +66,7 @@ class AudioPlayerBar extends ConsumerWidget {
                   ),
                   child: Text(
                     '$surahName · verset ${playback.ayahNumber}'
-                    '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget})' : ''}',
+                    '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget + 1})' : ''}',
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodySmall,
                   ),

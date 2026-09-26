@@ -141,8 +141,9 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     state = state.copyWith(repeatMode: RepeatMode.off, repeatProgress: 0);
   }
 
-  /// Repeat the current ayah [n] times before moving on — the mini-player's
-  /// "1" / "2" / "3" options.
+  /// Repeat the current ayah [n] times (n extra plays after the first, so
+  /// n+1 plays total) before moving on — the mini-player's "1" / "2" / "3"
+  /// options.
   void setRepeatCount(int n) {
     state = state.copyWith(
       repeatMode: RepeatMode.repeatEachAyahNTimes,
@@ -202,13 +203,15 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
         }
         await _loadAndPlayCurrent();
       case RepeatMode.repeatEachAyahNTimes:
-        final progress = state.repeatProgress + 1;
-        if (progress >= state.repeatTarget) {
+        // repeatTarget is how many times to REPEAT (the "1"/"2"/"3" on the
+        // button), so the ayah plays repeatTarget + 1 times in total —
+        // repeatProgress counts repeats done so far, not total plays.
+        if (state.repeatProgress < state.repeatTarget) {
+          state = state.copyWith(repeatProgress: state.repeatProgress + 1);
+          await _loadAndPlayCurrent();
+        } else {
           state = state.copyWith(repeatProgress: 0);
           await next();
-        } else {
-          state = state.copyWith(repeatProgress: progress);
-          await _loadAndPlayCurrent();
         }
     }
   }
