@@ -57,6 +57,27 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     state = state.copyWith(surahNumber: surahNumber, ayahNumber: ayahNumber);
   }
 
+  /// Sélectionne un ayah sans lancer sa lecture — utilisé quand on tape un
+  /// mot dans la vue Mushaf pour choisir/surligner un verset : ça ne doit
+  /// pas déclencher le son tout seul, l'utilisateur reste maître d'appuyer
+  /// sur play dans le mini-lecteur. Contrairement à [prepare], remplace
+  /// toujours l'ayah courant (choix explicite de l'utilisateur) et coupe
+  /// toute lecture en cours d'un autre ayah.
+  Future<void> select(int surahNumber, int ayahNumber) async {
+    if (state.surahNumber == surahNumber && state.ayahNumber == ayahNumber) {
+      return;
+    }
+    await _player.stop();
+    _hasLoadedSource = false;
+    state = state.copyWith(
+      surahNumber: surahNumber,
+      ayahNumber: ayahNumber,
+      isPlaying: false,
+      isLoading: false,
+      repeatProgress: 0,
+    );
+  }
+
   Future<void> playFrom(int surahNumber, int ayahNumber) async {
     state = state.copyWith(
       surahNumber: surahNumber,

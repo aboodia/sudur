@@ -289,7 +289,7 @@ class _MushafPageBody extends ConsumerWidget {
                     textScale: settings.textScale,
                     playingSurah: playback.surahNumber,
                     playingAyah: playback.ayahNumber,
-                    onWordTap: (word) => controller.playFrom(word.surah, word.ayah),
+                    onWordTap: (word) => controller.select(word.surah, word.ayah),
                   ),
                 ),
             ],
