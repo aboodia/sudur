@@ -50,7 +50,6 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
-    final playback = ref.watch(audioPlaybackProvider);
 
     // Keep the playing ayah's highlight always in view: whenever playback
     // moves to a new ayah, jump to whichever page it's on if we're not
@@ -142,9 +141,13 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
                   const AudioPlayerBar(),
                 ],
               )
-            : (playback.hasCurrentAyah
-                ? CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true))
-                : const SizedBox(width: double.infinity)),
+            // Toujours affichée quand la page est masquée (pas seulement si
+            // l'audio joue) : les mots couvrent quasi toute la largeur de
+            // chaque ligne (voir MushafLineRow), donc un tap sur une zone
+            // vraiment vide de la page est rarissime — sans cette poignée
+            // toujours atteignable, l'utilisateur n'a quasiment aucun moyen
+            // fiable de rouvrir les infos et le mini-lecteur.
+            : CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true)),
       ),
     );
   }
@@ -206,11 +209,11 @@ class _PageNumberBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: theme.colorScheme.surfaceContainerHigh,
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Text(
         '$pageNumber',
         textAlign: TextAlign.center,
-        style: theme.textTheme.bodySmall,
+        style: theme.textTheme.titleMedium,
       ),
     );
   }
