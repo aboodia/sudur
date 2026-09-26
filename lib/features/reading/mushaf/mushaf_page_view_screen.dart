@@ -147,7 +147,6 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
           // fiable pour rouvrir le reste du chrome une fois masqué.
           _PageNumberBar(
             pageNumber: _currentPage,
-            showChrome: _showChrome,
             onTap: () => setState(() => _showChrome = !_showChrome),
           ),
         ],
@@ -202,10 +201,9 @@ class _MushafTopBar extends StatelessWidget {
 }
 
 class _PageNumberBar extends StatelessWidget {
-  const _PageNumberBar({required this.pageNumber, required this.showChrome, required this.onTap});
+  const _PageNumberBar({required this.pageNumber, required this.onTap});
 
   final int pageNumber;
-  final bool showChrome;
   final VoidCallback onTap;
 
   @override
@@ -220,13 +218,7 @@ class _PageNumberBar extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                showChrome ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-                size: 16,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
               Container(
-                margin: const EdgeInsets.only(top: 2),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
