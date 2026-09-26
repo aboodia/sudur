@@ -39,7 +39,7 @@ class AudioPlayerBar extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
-              _RepeatModeButton(mode: playback.repeatMode, onTap: controller.cycleRepeatMode),
+              _RepeatModeButton(playback: playback, controller: controller),
               IconButton(
                 icon: const Icon(Icons.skip_previous),
                 onPressed: controller.previous,
@@ -82,26 +82,57 @@ class AudioPlayerBar extends ConsumerWidget {
   }
 }
 
+/// Combien de fois répéter l'ayah courant avant de passer au suivant :
+/// aucune répétition, 1 à 3 fois, ou en boucle infinie. La valeur `null`
+/// du menu représente la boucle infinie ; `0` représente "aucune".
 class _RepeatModeButton extends StatelessWidget {
-  const _RepeatModeButton({required this.mode, required this.onTap});
+  const _RepeatModeButton({required this.playback, required this.controller});
 
-  final RepeatMode mode;
-  final VoidCallback onTap;
+  final ReadingPlaybackState playback;
+  final AudioPlaybackController controller;
 
-  IconData get _icon => switch (mode) {
-        RepeatMode.off => Icons.repeat,
-        RepeatMode.repeatAyah => Icons.repeat_one,
-        RepeatMode.repeatRange => Icons.repeat_on,
-        RepeatMode.repeatEachAyahNTimes => Icons.repeat_one_on,
+  bool get _isActive => playback.repeatMode != RepeatMode.off;
+
+  String? get _badge => switch (playback.repeatMode) {
+        RepeatMode.off => null,
+        RepeatMode.repeatAyah => null,
+        RepeatMode.repeatEachAyahNTimes => '${playback.repeatTarget}',
+        RepeatMode.repeatRange => null,
       };
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: mode.label,
-      child: IconButton(
-        icon: Icon(_icon, color: mode == RepeatMode.off ? null : Theme.of(context).colorScheme.primary),
-        onPressed: onTap,
+    final color = _isActive ? Theme.of(context).colorScheme.primary : null;
+    return PopupMenuButton<int?>(
+      tooltip: 'Répétition',
+      onSelected: (value) {
+        if (value == null) {
+          controller.setInfiniteRepeat();
+        } else if (value == 0) {
+          controller.setNoRepeat();
+        } else {
+          controller.setRepeatCount(value);
+        }
+      },
+      itemBuilder: (context) => const [
+        PopupMenuItem(value: 0, child: Text('Aucune')),
+        PopupMenuItem(value: 1, child: Text('1 fois')),
+        PopupMenuItem(value: 2, child: Text('2 fois')),
+        PopupMenuItem(value: 3, child: Text('3 fois')),
+        PopupMenuItem(value: null, child: Text('Boucle infinie')),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              playback.repeatMode == RepeatMode.repeatAyah ? Icons.all_inclusive : Icons.repeat,
+              color: color,
+            ),
+            if (_badge != null) Text(_badge!, style: TextStyle(color: color, fontSize: 11)),
+          ],
+        ),
       ),
     );
   }

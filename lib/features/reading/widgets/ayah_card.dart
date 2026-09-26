@@ -14,12 +14,18 @@ class AyahCard extends ConsumerWidget {
     required this.ayah,
     required this.isPlaying,
     required this.onTap,
+    this.basmalah,
   });
 
   final int surahNumber;
   final AyahText ayah;
   final bool isPlaying;
   final VoidCallback onTap;
+
+  /// Set on ayah 1 of every sourate that has a basmalah (all but
+  /// Al-Fatiha and At-Tawbah) — shown as its own heading, distinct from
+  /// the ayah's own text, instead of running the two together.
+  final String? basmalah;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,6 +39,19 @@ class AyahCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (basmalah case final basmalah?) ...[
+            Text(
+              basmalah,
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: 'AmiriQuran',
+                fontSize: 22 * settings.textScale,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           Row(
             children: [
               CircleAvatar(

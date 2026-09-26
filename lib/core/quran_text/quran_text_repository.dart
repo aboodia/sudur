@@ -24,7 +24,21 @@ class QuranTextRepository {
         .cast<Map<String, dynamic>>()
         .map(SurahText.fromJson)
         .toList(growable: false);
-    return QuranTextRepository(surahs);
+
+    // Al-Fatiha's ayah 1 genuinely IS the basmalah — use its exact text
+    // (not a separately hand-typed copy) to detect and strip the same
+    // prefix from every other sourate's ayah 1, where Tanzil/alquran.cloud
+    // concatenate it in without giving it its own numbered slot. Tanzil
+    // marks that specific occurrence with a leading U+FEFF (not present
+    // when the same basmalah is just a prefix elsewhere) — drop it before
+    // using the string as a prefix to match against.
+    final basmalah = surahs[0].ayahs.first.arabic.replaceFirst('﻿', '');
+    final stripped = [
+      for (final surah in surahs)
+        surah.number == 1 ? surah : surah.withBasmalahStripped(basmalah),
+    ];
+
+    return QuranTextRepository(stripped);
   }
 
   final List<SurahText> _surahs;

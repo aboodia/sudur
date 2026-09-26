@@ -86,6 +86,7 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
                   surahNumber: widget.surahNumber,
                   ayah: ayah,
                   isPlaying: isPlaying,
+                  basmalah: index == 0 ? surah.basmalah : null,
                   onTap: () {
                     final isCurrent = playback.surahNumber == widget.surahNumber &&
                         playback.ayahNumber == ayah.numberInSurah;

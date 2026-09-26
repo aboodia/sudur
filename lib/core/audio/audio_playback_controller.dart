@@ -84,16 +84,31 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     }
   }
 
-  void cycleRepeatMode() {
-    final next = switch (state.repeatMode) {
-      RepeatMode.off => RepeatMode.repeatAyah,
-      RepeatMode.repeatAyah => RepeatMode.repeatRange,
-      RepeatMode.repeatRange => RepeatMode.repeatEachAyahNTimes,
-      RepeatMode.repeatEachAyahNTimes => RepeatMode.off,
-    };
-    state = state.copyWith(repeatMode: next, repeatProgress: 0);
+  /// No repeat: play each ayah once, then move on — the mini-player's
+  /// "Aucune" option.
+  void setNoRepeat() {
+    state = state.copyWith(repeatMode: RepeatMode.off, repeatProgress: 0);
   }
 
+  /// Repeat the current ayah [n] times before moving on — the mini-player's
+  /// "1" / "2" / "3" options.
+  void setRepeatCount(int n) {
+    state = state.copyWith(
+      repeatMode: RepeatMode.repeatEachAyahNTimes,
+      repeatTarget: n,
+      repeatProgress: 0,
+    );
+  }
+
+  /// Repeat the current ayah forever — the mini-player's "boucle infinie"
+  /// option.
+  void setInfiniteRepeat() {
+    state = state.copyWith(repeatMode: RepeatMode.repeatAyah, repeatProgress: 0);
+  }
+
+  /// Reserved for a future "répéter cette plage" passage-repeat feature in
+  /// the Mémorisation brique — not wired to the mini-player's simple
+  /// repeat button, which only offers a per-ayah count (see above).
   void setRepeatRange(int startAyah, int endAyah) {
     state = state.copyWith(
       repeatMode: RepeatMode.repeatRange,
@@ -101,10 +116,6 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
       repeatRangeEnd: endAyah,
       repeatProgress: 0,
     );
-  }
-
-  void setRepeatTarget(int n) {
-    state = state.copyWith(repeatTarget: n);
   }
 
   Future<void> next() async {

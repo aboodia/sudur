@@ -27,6 +27,13 @@ void main() {
     expect(fatiha.englishName, 'Al-Faatiha');
   });
 
+  test('every sourate has a French name translation', () {
+    expect(repo.surahs.every((s) => s.frenchNameTranslation.isNotEmpty), isTrue);
+    expect(repo.surahByNumber(1).frenchNameTranslation, "L'Ouverture");
+    expect(repo.surahByNumber(2).frenchNameTranslation, 'La Vache');
+    expect(repo.surahByNumber(114).frenchNameTranslation, 'Les Hommes');
+  });
+
   test('Juz boundaries around Al-Baqara match the known Mushaf split', () {
     expect(repo.juzForSurahAyah(2, 141), 1);
     expect(repo.juzForSurahAyah(2, 142), 2);

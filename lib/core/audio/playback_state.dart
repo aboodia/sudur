@@ -8,15 +8,6 @@
 ///   suivant — mode répétition pour la mémorisation.
 enum RepeatMode { off, repeatAyah, repeatRange, repeatEachAyahNTimes }
 
-extension RepeatModeLabel on RepeatMode {
-  String get label => switch (this) {
-        RepeatMode.off => 'Sans répétition',
-        RepeatMode.repeatAyah => 'Répéter le verset',
-        RepeatMode.repeatRange => 'Répéter la plage',
-        RepeatMode.repeatEachAyahNTimes => 'Répéter chaque verset',
-      };
-}
-
 class ReadingPlaybackState {
   const ReadingPlaybackState({
     this.surahNumber,

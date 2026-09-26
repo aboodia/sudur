@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/audio/audio_playback_controller.dart';
+import '../../../core/mushaf/surah_name_glyph.dart';
 import '../../../core/quran_reference/quran_reference_models.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 
@@ -26,10 +27,36 @@ class SurahListView extends ConsumerWidget {
 
           return ListTile(
             tileColor: isPlayingThis ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3) : null,
-            leading: CircleAvatar(child: Text('${surah.number}')),
-            title: Text('${surah.englishName} — ${surah.nameArabic}'),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            leading: CircleAvatar(
+              radius: 18,
+              child: Text('${surah.number}', style: const TextStyle(fontSize: 13)),
+            ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    surah.englishName,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Bannière décorative du nom en arabe, rendue via le jeu de
+                // ligatures QUL "surah-name-v4" (§6.6) plutôt qu'un simple
+                // texte Unicode brut — cohérent avec le style Mushaf utilisé
+                // ailleurs dans l'app.
+                Text(
+                  surahNameLigature(surah.number),
+                  style: TextStyle(
+                    fontFamily: 'SurahNameV4',
+                    fontSize: 24,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
             subtitle: Text(
-              '${surah.englishNameTranslation} · ${surah.numberOfAyahs} versets · '
+              '${surah.frenchNameTranslation} · ${surah.numberOfAyahs} versets · '
               '${surah.revelationType == RevelationType.meccan ? 'Mecquoise' : 'Médinoise'}',
             ),
             // Marque la sourate en cours de lecture — mini-indicateur plutôt

@@ -29,4 +29,23 @@ void main() {
     // 2:1 comes right after Al-Fatiha's 7 ayahs.
     expect(repo.globalAyahNumber(2, 1), 8);
   });
+
+  test('the basmalah is split out of ayah 1, not left merged into it', () {
+    final baqara = repo.surah(2);
+    expect(baqara.hasBasmalah, isTrue);
+    expect(baqara.ayahs.first.arabic, isNot(contains('بِسْمِ')));
+    expect(baqara.ayahs.first.arabic, isNotEmpty);
+    // 2:1 is just "Alif Lam Meem" — much shorter than the basmalah alone.
+    expect(baqara.ayahs.first.arabic.length, lessThan(10));
+
+    // Al-Fatiha: the basmalah genuinely IS ayah 1, so it must stay.
+    final fatiha = repo.surah(1);
+    expect(fatiha.hasBasmalah, isFalse);
+    expect(fatiha.ayahs.first.arabic, contains('بِسْمِ'));
+
+    // At-Tawbah (9) is the one sourate with no basmalah at all.
+    final tawbah = repo.surah(9);
+    expect(tawbah.hasBasmalah, isFalse);
+    expect(tawbah.ayahs.first.arabic, isNot(contains('بِسْمِ')));
+  });
 }

@@ -11,6 +11,7 @@ class Surah {
     required this.nameArabic,
     required this.englishName,
     required this.englishNameTranslation,
+    required this.frenchNameTranslation,
     required this.numberOfAyahs,
     required this.revelationType,
   });
@@ -20,6 +21,7 @@ class Surah {
         nameArabic: json['nameArabic'] as String,
         englishName: json['englishName'] as String,
         englishNameTranslation: json['englishNameTranslation'] as String,
+        frenchNameTranslation: json['frenchNameTranslation'] as String,
         numberOfAyahs: json['numberOfAyahs'] as int,
         revelationType: revelationTypeFromJson(json['revelationType'] as String),
       );
@@ -28,6 +30,7 @@ class Surah {
   final String nameArabic;
   final String englishName;
   final String englishNameTranslation;
+  final String frenchNameTranslation;
   final int numberOfAyahs;
   final RevelationType revelationType;
 }
