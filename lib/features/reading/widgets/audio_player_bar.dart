@@ -83,8 +83,10 @@ class AudioPlayerBar extends ConsumerWidget {
 }
 
 /// Combien de fois répéter l'ayah courant avant de passer au suivant :
-/// aucune répétition, 1 à 3 fois, ou en boucle infinie. La valeur `null`
-/// du menu représente la boucle infinie ; `0` représente "aucune".
+/// aucune répétition, 1 à 3 fois, ou en boucle infinie. Plutôt qu'un menu
+/// à choix, un tap fait défiler ces états dans l'ordre — le symbole du
+/// bouton affiche directement l'état courant (1, 2, 3, ∞ ou l'icône de
+/// répétition pour "aucune").
 class _RepeatModeButton extends StatelessWidget {
   const _RepeatModeButton({required this.playback, required this.controller});
 
@@ -93,47 +95,45 @@ class _RepeatModeButton extends StatelessWidget {
 
   bool get _isActive => playback.repeatMode != RepeatMode.off;
 
-  String? get _badge => switch (playback.repeatMode) {
-        RepeatMode.off => null,
-        RepeatMode.repeatAyah => null,
-        RepeatMode.repeatEachAyahNTimes => '${playback.repeatTarget}',
-        RepeatMode.repeatRange => null,
-      };
+  void _cycle() {
+    switch (playback.repeatMode) {
+      case RepeatMode.off:
+      case RepeatMode.repeatRange:
+        controller.setRepeatCount(1);
+      case RepeatMode.repeatEachAyahNTimes:
+        if (playback.repeatTarget < 3) {
+          controller.setRepeatCount(playback.repeatTarget + 1);
+        } else {
+          controller.setInfiniteRepeat();
+        }
+      case RepeatMode.repeatAyah:
+        controller.setNoRepeat();
+    }
+  }
+
+  Widget _symbol(Color color) {
+    switch (playback.repeatMode) {
+      case RepeatMode.off:
+      case RepeatMode.repeatRange:
+        return Icon(Icons.repeat, color: color);
+      case RepeatMode.repeatAyah:
+        return Text('∞', style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.bold));
+      case RepeatMode.repeatEachAyahNTimes:
+        return Text(
+          '${playback.repeatTarget}',
+          style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold),
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final color = _isActive ? Theme.of(context).colorScheme.primary : null;
-    return PopupMenuButton<int?>(
+    final theme = Theme.of(context);
+    final color = _isActive ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant;
+    return IconButton(
       tooltip: 'Répétition',
-      onSelected: (value) {
-        if (value == null) {
-          controller.setInfiniteRepeat();
-        } else if (value == 0) {
-          controller.setNoRepeat();
-        } else {
-          controller.setRepeatCount(value);
-        }
-      },
-      itemBuilder: (context) => const [
-        PopupMenuItem(value: 0, child: Text('Aucune')),
-        PopupMenuItem(value: 1, child: Text('1 fois')),
-        PopupMenuItem(value: 2, child: Text('2 fois')),
-        PopupMenuItem(value: 3, child: Text('3 fois')),
-        PopupMenuItem(value: null, child: Text('Boucle infinie')),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              playback.repeatMode == RepeatMode.repeatAyah ? Icons.all_inclusive : Icons.repeat,
-              color: color,
-            ),
-            if (_badge != null) Text(_badge!, style: TextStyle(color: color, fontSize: 11)),
-          ],
-        ),
-      ),
+      onPressed: _cycle,
+      icon: _symbol(color),
     );
   }
 }
