@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/audio/audio_playback_controller.dart';
+import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/memorization/ayah_display_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import 'memorization_session_controller.dart';
@@ -94,11 +95,21 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
                             revealedIndices: session.revealedWordIndices,
                             onWordTap: controller.revealWord,
                           )
-                        : Text(
-                            [...parsed.words, if (parsed.marker != null) parsed.marker!].join(' '),
+                        : Wrap(
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, height: 1.9),
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final word in parsed.words)
+                                Text(
+                                  word,
+                                  textDirection: TextDirection.rtl,
+                                  style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, height: 1.9),
+                                ),
+                              if (parsed.marker != null) _AyahEndMarker(parsed.marker!),
+                            ],
                           ),
                   ),
                 ),
@@ -174,18 +185,42 @@ class _MaskedAyahText extends StatelessWidget {
               textDirection: TextDirection.rtl,
               style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 26, height: 1.9),
             ),
-        if (marker != null)
-          Text(
-            marker!,
+        if (marker != null) _AyahEndMarker(marker!),
+      ],
+    );
+  }
+}
+
+/// Le repère de fin de verset, mis en forme comme dans un vrai Mushaf : le
+/// numéro au centre d'une petite rosette (motif Rub el Hizb déjà utilisé
+/// pour les badges de mémorisation) plutôt qu'un simple chiffre.
+class _AyahEndMarker extends StatelessWidget {
+  const _AyahEndMarker(this.marker);
+
+  final String marker;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    const size = 30.0;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: RosettePainter(color: theme.colorScheme.primary, background: theme.colorScheme.surface),
+        child: Center(
+          child: Text(
+            marker,
             textDirection: TextDirection.rtl,
             style: TextStyle(
               fontFamily: 'AmiriQuran',
-              fontSize: 22,
-              height: 1.9,
+              fontSize: 13,
               color: theme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
             ),
           ),
-      ],
+        ),
+      ),
     );
   }
 }

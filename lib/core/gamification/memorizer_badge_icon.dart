@@ -26,7 +26,7 @@ class MemorizerBadgeIcon extends StatelessWidget {
       width: size,
       height: size,
       child: CustomPaint(
-        painter: _RosettePainter(color: color, background: background ?? Colors.white),
+        painter: RosettePainter(color: color, background: background ?? Colors.white),
         child: Center(
           child: Icon(icon, color: color, size: size * 0.42),
         ),
@@ -35,8 +35,12 @@ class MemorizerBadgeIcon extends StatelessWidget {
   }
 }
 
-class _RosettePainter extends CustomPainter {
-  _RosettePainter({required this.color, required this.background});
+/// The Rub el Hizb motif (two overlapping squares) on its own, stroked in
+/// [color] over [background] — reused wherever that ornament fits, such as
+/// [MemorizerBadgeIcon] and the Mushaf-style ayah-end marker in the
+/// Mémorisation session.
+class RosettePainter extends CustomPainter {
+  RosettePainter({required this.color, required this.background});
 
   final Color color;
   final Color background;
@@ -83,6 +87,6 @@ class _RosettePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _RosettePainter oldDelegate) =>
+  bool shouldRepaint(covariant RosettePainter oldDelegate) =>
       oldDelegate.color != color || oldDelegate.background != background;
 }
