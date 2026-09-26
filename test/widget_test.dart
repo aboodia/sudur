@@ -1,14 +1,54 @@
-// Smoke test for Brique 0: the app boots, the profile row is created, and
-// the bottom navigation skeleton (5 grands onglets) renders.
+// Smoke test for Brique 0/2: the app boots straight into Onboarding on a
+// fresh profile, and completing it reveals the bottom navigation skeleton
+// (5 grands onglets).
+//
+// Each test gets its own in-memory AppDatabase override — the real
+// appDatabaseProvider persists to an on-disk file (driftDatabase(name:
+// 'wird')) that survives across separate `flutter test` runs, which would
+// make "fresh profile" assertions depend on whatever a previous run last
+// wrote (e.g. hasCompletedOnboarding already true).
 
+import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wird/app/app.dart';
+import 'package:wird/core/database/app_database.dart';
 
 void main() {
-  testWidgets('App boots and shows the 5 navigation tabs', (tester) async {
-    await tester.pumpWidget(const ProviderScope(child: WirdApp()));
+  testWidgets('a fresh profile boots straight into Onboarding', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
+        ],
+        child: const WirdApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Bienvenue sur Wird'), findsOneWidget);
+    expect(find.text('Accueil'), findsNothing);
+  });
+
+  testWidgets('completing Onboarding reveals the 5 navigation tabs', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
+        ],
+        child: const WirdApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Bienvenue -> Sourates -> Profil dérivé -> Disponibilités -> Plan : 4
+    // "Suivant", puis "Terminer" sans rien cocher (profil débutant).
+    for (var i = 0; i < 4; i++) {
+      await tester.tap(find.text('Suivant'));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.text('Terminer'));
     await tester.pumpAndSettle();
 
     expect(find.text('Accueil'), findsWidgets);

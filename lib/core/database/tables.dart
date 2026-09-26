@@ -24,6 +24,10 @@ class UserProfiles extends Table {
   /// 'hafs' | 'warsh' — Mushaf script/riwaya.
   TextColumn get scriptMode => text().withDefault(const Constant('hafs'))();
 
+  /// Whether the Onboarding (Brique 2) flow has been completed — gates
+  /// whether the app shows it again on the next launch.
+  BoolColumn get hasCompletedOnboarding => boolean().withDefault(const Constant(false))();
+
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_database.dart';
@@ -29,6 +30,27 @@ class UserProfileRepository {
           ..where((p) => p.id.equals(localProfileId)))
         .getSingle();
   }
+
+  /// Partial update — used by the Onboarding flow (Brique 2) to persist the
+  /// derived level, availability and completion flag once, at the end.
+  Future<void> updateProfile({
+    required String id,
+    String? memorizationLevel,
+    int? availableDaysMask,
+    int? dailyTargetMinutes,
+    bool? hasCompletedOnboarding,
+  }) async {
+    await (_db.update(_db.userProfiles)..where((p) => p.id.equals(id))).write(
+      UserProfilesCompanion(
+        memorizationLevel: memorizationLevel != null ? Value(memorizationLevel) : const Value.absent(),
+        availableDaysMask: availableDaysMask != null ? Value(availableDaysMask) : const Value.absent(),
+        dailyTargetMinutes: dailyTargetMinutes != null ? Value(dailyTargetMinutes) : const Value.absent(),
+        hasCompletedOnboarding:
+            hasCompletedOnboarding != null ? Value(hasCompletedOnboarding) : const Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
 }
 
 final userProfileRepositoryProvider = Provider<UserProfileRepository>((ref) {
@@ -37,4 +59,11 @@ final userProfileRepositoryProvider = Provider<UserProfileRepository>((ref) {
 
 final currentProfileProvider = FutureProvider<UserProfile>((ref) {
   return ref.watch(userProfileRepositoryProvider).getOrCreateLocalProfile();
+});
+
+/// Whether the Onboarding flow (Brique 2) still needs to run before the
+/// rest of the app is shown — see [WirdApp].
+final needsOnboardingProvider = FutureProvider<bool>((ref) async {
+  final profile = await ref.watch(currentProfileProvider.future);
+  return !profile.hasCompletedOnboarding;
 });

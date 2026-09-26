@@ -89,6 +89,21 @@ class $UserProfilesTable extends UserProfiles
     requiredDuringInsert: false,
     defaultValue: const Constant('hafs'),
   );
+  static const VerificationMeta _hasCompletedOnboardingMeta =
+      const VerificationMeta('hasCompletedOnboarding');
+  @override
+  late final GeneratedColumn<bool> hasCompletedOnboarding =
+      GeneratedColumn<bool>(
+        'has_completed_onboarding',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("has_completed_onboarding" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -120,6 +135,7 @@ class $UserProfilesTable extends UserProfiles
     dailyTargetMinutes,
     preferredQariId,
     scriptMode,
+    hasCompletedOnboarding,
     createdAt,
     updatedAt,
   ];
@@ -191,6 +207,15 @@ class $UserProfilesTable extends UserProfiles
         scriptMode.isAcceptableOrUnknown(data['script_mode']!, _scriptModeMeta),
       );
     }
+    if (data.containsKey('has_completed_onboarding')) {
+      context.handle(
+        _hasCompletedOnboardingMeta,
+        hasCompletedOnboarding.isAcceptableOrUnknown(
+          data['has_completed_onboarding']!,
+          _hasCompletedOnboardingMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -244,6 +269,10 @@ class $UserProfilesTable extends UserProfiles
         DriftSqlType.string,
         data['${effectivePrefix}script_mode'],
       )!,
+      hasCompletedOnboarding: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_completed_onboarding'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -275,6 +304,10 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
 
   /// 'hafs' | 'warsh' — Mushaf script/riwaya.
   final String scriptMode;
+
+  /// Whether the Onboarding (Brique 2) flow has been completed — gates
+  /// whether the app shows it again on the next launch.
+  final bool hasCompletedOnboarding;
   final DateTime createdAt;
   final DateTime updatedAt;
   const UserProfile({
@@ -285,6 +318,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     required this.dailyTargetMinutes,
     this.preferredQariId,
     required this.scriptMode,
+    required this.hasCompletedOnboarding,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -300,6 +334,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       map['preferred_qari_id'] = Variable<String>(preferredQariId);
     }
     map['script_mode'] = Variable<String>(scriptMode);
+    map['has_completed_onboarding'] = Variable<bool>(hasCompletedOnboarding);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -316,6 +351,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ? const Value.absent()
           : Value(preferredQariId),
       scriptMode: Value(scriptMode),
+      hasCompletedOnboarding: Value(hasCompletedOnboarding),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -334,6 +370,9 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       dailyTargetMinutes: serializer.fromJson<int>(json['dailyTargetMinutes']),
       preferredQariId: serializer.fromJson<String?>(json['preferredQariId']),
       scriptMode: serializer.fromJson<String>(json['scriptMode']),
+      hasCompletedOnboarding: serializer.fromJson<bool>(
+        json['hasCompletedOnboarding'],
+      ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -349,6 +388,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       'dailyTargetMinutes': serializer.toJson<int>(dailyTargetMinutes),
       'preferredQariId': serializer.toJson<String?>(preferredQariId),
       'scriptMode': serializer.toJson<String>(scriptMode),
+      'hasCompletedOnboarding': serializer.toJson<bool>(hasCompletedOnboarding),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -362,6 +402,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     int? dailyTargetMinutes,
     Value<String?> preferredQariId = const Value.absent(),
     String? scriptMode,
+    bool? hasCompletedOnboarding,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => UserProfile(
@@ -374,6 +415,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
         ? preferredQariId.value
         : this.preferredQariId,
     scriptMode: scriptMode ?? this.scriptMode,
+    hasCompletedOnboarding:
+        hasCompletedOnboarding ?? this.hasCompletedOnboarding,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -398,6 +441,9 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       scriptMode: data.scriptMode.present
           ? data.scriptMode.value
           : this.scriptMode,
+      hasCompletedOnboarding: data.hasCompletedOnboarding.present
+          ? data.hasCompletedOnboarding.value
+          : this.hasCompletedOnboarding,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -413,6 +459,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ..write('dailyTargetMinutes: $dailyTargetMinutes, ')
           ..write('preferredQariId: $preferredQariId, ')
           ..write('scriptMode: $scriptMode, ')
+          ..write('hasCompletedOnboarding: $hasCompletedOnboarding, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -428,6 +475,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     dailyTargetMinutes,
     preferredQariId,
     scriptMode,
+    hasCompletedOnboarding,
     createdAt,
     updatedAt,
   );
@@ -442,6 +490,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           other.dailyTargetMinutes == this.dailyTargetMinutes &&
           other.preferredQariId == this.preferredQariId &&
           other.scriptMode == this.scriptMode &&
+          other.hasCompletedOnboarding == this.hasCompletedOnboarding &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -454,6 +503,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
   final Value<int> dailyTargetMinutes;
   final Value<String?> preferredQariId;
   final Value<String> scriptMode;
+  final Value<bool> hasCompletedOnboarding;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
@@ -465,6 +515,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.dailyTargetMinutes = const Value.absent(),
     this.preferredQariId = const Value.absent(),
     this.scriptMode = const Value.absent(),
+    this.hasCompletedOnboarding = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -477,6 +528,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.dailyTargetMinutes = const Value.absent(),
     this.preferredQariId = const Value.absent(),
     this.scriptMode = const Value.absent(),
+    this.hasCompletedOnboarding = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
@@ -491,6 +543,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Expression<int>? dailyTargetMinutes,
     Expression<String>? preferredQariId,
     Expression<String>? scriptMode,
+    Expression<bool>? hasCompletedOnboarding,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
@@ -504,6 +557,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
         'daily_target_minutes': dailyTargetMinutes,
       if (preferredQariId != null) 'preferred_qari_id': preferredQariId,
       if (scriptMode != null) 'script_mode': scriptMode,
+      if (hasCompletedOnboarding != null)
+        'has_completed_onboarding': hasCompletedOnboarding,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -518,6 +573,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Value<int>? dailyTargetMinutes,
     Value<String?>? preferredQariId,
     Value<String>? scriptMode,
+    Value<bool>? hasCompletedOnboarding,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
@@ -530,6 +586,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       dailyTargetMinutes: dailyTargetMinutes ?? this.dailyTargetMinutes,
       preferredQariId: preferredQariId ?? this.preferredQariId,
       scriptMode: scriptMode ?? this.scriptMode,
+      hasCompletedOnboarding:
+          hasCompletedOnboarding ?? this.hasCompletedOnboarding,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -560,6 +618,11 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     if (scriptMode.present) {
       map['script_mode'] = Variable<String>(scriptMode.value);
     }
+    if (hasCompletedOnboarding.present) {
+      map['has_completed_onboarding'] = Variable<bool>(
+        hasCompletedOnboarding.value,
+      );
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -582,6 +645,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
           ..write('dailyTargetMinutes: $dailyTargetMinutes, ')
           ..write('preferredQariId: $preferredQariId, ')
           ..write('scriptMode: $scriptMode, ')
+          ..write('hasCompletedOnboarding: $hasCompletedOnboarding, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -2281,6 +2345,7 @@ typedef $$UserProfilesTableCreateCompanionBuilder =
       Value<int> dailyTargetMinutes,
       Value<String?> preferredQariId,
       Value<String> scriptMode,
+      Value<bool> hasCompletedOnboarding,
       required DateTime createdAt,
       required DateTime updatedAt,
       Value<int> rowid,
@@ -2294,6 +2359,7 @@ typedef $$UserProfilesTableUpdateCompanionBuilder =
       Value<int> dailyTargetMinutes,
       Value<String?> preferredQariId,
       Value<String> scriptMode,
+      Value<bool> hasCompletedOnboarding,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
@@ -2384,6 +2450,11 @@ class $$UserProfilesTableFilterComposer
 
   ColumnFilters<String> get scriptMode => $composableBuilder(
     column: $table.scriptMode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hasCompletedOnboarding => $composableBuilder(
+    column: $table.hasCompletedOnboarding,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2492,6 +2563,11 @@ class $$UserProfilesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get hasCompletedOnboarding => $composableBuilder(
+    column: $table.hasCompletedOnboarding,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -2542,6 +2618,11 @@ class $$UserProfilesTableAnnotationComposer
 
   GeneratedColumn<String> get scriptMode => $composableBuilder(
     column: $table.scriptMode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get hasCompletedOnboarding => $composableBuilder(
+    column: $table.hasCompletedOnboarding,
     builder: (column) => column,
   );
 
@@ -2641,6 +2722,7 @@ class $$UserProfilesTableTableManager
                 Value<int> dailyTargetMinutes = const Value.absent(),
                 Value<String?> preferredQariId = const Value.absent(),
                 Value<String> scriptMode = const Value.absent(),
+                Value<bool> hasCompletedOnboarding = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2652,6 +2734,7 @@ class $$UserProfilesTableTableManager
                 dailyTargetMinutes: dailyTargetMinutes,
                 preferredQariId: preferredQariId,
                 scriptMode: scriptMode,
+                hasCompletedOnboarding: hasCompletedOnboarding,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -2665,6 +2748,7 @@ class $$UserProfilesTableTableManager
                 Value<int> dailyTargetMinutes = const Value.absent(),
                 Value<String?> preferredQariId = const Value.absent(),
                 Value<String> scriptMode = const Value.absent(),
+                Value<bool> hasCompletedOnboarding = const Value.absent(),
                 required DateTime createdAt,
                 required DateTime updatedAt,
                 Value<int> rowid = const Value.absent(),
@@ -2676,6 +2760,7 @@ class $$UserProfilesTableTableManager
                 dailyTargetMinutes: dailyTargetMinutes,
                 preferredQariId: preferredQariId,
                 scriptMode: scriptMode,
+                hasCompletedOnboarding: hasCompletedOnboarding,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
