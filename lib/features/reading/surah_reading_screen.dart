@@ -109,7 +109,11 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
       bottomNavigationBar: AnimatedSize(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        child: _showPlayerBar ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
+        child: _showPlayerBar
+            ? const AudioPlayerBar()
+            : (playback.hasCurrentAyah
+                ? CollapsedPlayerHandle(onTap: () => setState(() => _showPlayerBar = true))
+                : const SizedBox(width: double.infinity)),
       ),
     );
   }

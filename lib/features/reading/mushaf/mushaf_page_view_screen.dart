@@ -40,6 +40,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   @override
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
+    final playback = ref.watch(audioPlaybackProvider);
 
     // Keep the playing ayah's highlight always in view: whenever playback
     // moves to a new ayah, jump to whichever page it's on if we're not
@@ -86,7 +87,11 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
       bottomNavigationBar: AnimatedSize(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        child: _showPlayerBar ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
+        child: _showPlayerBar
+            ? const AudioPlayerBar()
+            : (playback.hasCurrentAyah
+                ? CollapsedPlayerHandle(onTap: () => setState(() => _showPlayerBar = true))
+                : const SizedBox(width: double.infinity)),
       ),
     );
   }

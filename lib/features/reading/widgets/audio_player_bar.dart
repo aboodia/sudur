@@ -161,6 +161,38 @@ class _SpeedButton extends StatelessWidget {
   }
 }
 
+/// Poignée affichée à la place du mini-lecteur quand la lecture immersive
+/// l'a masqué (tap sur le texte) — sans elle, rien ne montre que la barre
+/// est juste cachée plutôt que disparue, ni comment la faire réapparaître.
+class CollapsedPlayerHandle extends StatelessWidget {
+  const CollapsedPlayerHandle({super.key, required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerHigh,
+      child: SafeArea(
+        top: false,
+        child: InkWell(
+          onTap: onTap,
+          child: SizedBox(
+            width: double.infinity,
+            height: 32,
+            child: Icon(
+              Icons.keyboard_arrow_up,
+              size: 20,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ReciterButton extends StatelessWidget {
   const _ReciterButton({required this.reciterId, required this.onSelected});
 
