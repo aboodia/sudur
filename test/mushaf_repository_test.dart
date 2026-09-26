@@ -42,4 +42,13 @@ void main() {
     expect(repo.pageForAyah(1, 1), 1);
     expect(repo.pageForAyah(114, 6), 604);
   });
+
+  test('firstAyahOnPage labels a page that starts mid-sourate correctly', () {
+    expect(repo.firstAyahOnPage(1), (surah: 1, ayah: 1));
+    final page2 = repo.pageForAyah(2, 1)!;
+    expect(repo.firstAyahOnPage(page2), (surah: 2, ayah: 1));
+    // Al-Baqara spans many pages that start mid-sourate, well past ayah 1.
+    final laterPage = repo.pageForAyah(2, 200)!;
+    expect(repo.firstAyahOnPage(laterPage)?.surah, 2);
+  });
 }

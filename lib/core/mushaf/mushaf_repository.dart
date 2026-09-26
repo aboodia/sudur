@@ -74,6 +74,19 @@ class MushafRepository {
     }
     return page;
   }
+
+  /// The (surah, ayah) of the first ayah on [page] — a page can start
+  /// mid-sourate, so this is what labels the page header (surah name, Juz)
+  /// rather than assuming the page's own banner line.
+  ({int surah, int ayah})? firstAyahOnPage(int page) {
+    final lines = List.of(_linesByPage[page] ?? const [])..sort((a, b) => a.line.compareTo(b.line));
+    for (final line in lines) {
+      if (!line.hasWords) continue;
+      final word = _words[line.firstWordId];
+      if (word != null) return (surah: word.surah, ayah: word.ayah);
+    }
+    return null;
+  }
 }
 
 final mushafRepositoryProvider = FutureProvider<MushafRepository>((ref) {

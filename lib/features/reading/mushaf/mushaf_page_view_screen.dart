@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/mushaf/mushaf_font_cache.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
+import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 import '../widgets/audio_player_bar.dart';
 import 'mushaf_line_row.dart';
 
 /// Vue Mushaf : pagination fidèle au Mushaf imprimé (604 pages, glyphes
-/// mot-par-mot QCF v4 tajwid) — §6.6 du cahier des charges.
+/// mot-par-mot QCF v4 tajwid) — §6.6 du cahier des charges. C'est la vue de
+/// lecture par défaut à l'ouverture d'une sourate ; la lecture continue
+/// (avec traduction) reste accessible via le bouton en haut à droite.
 class MushafPageViewScreen extends ConsumerStatefulWidget {
   const MushafPageViewScreen({super.key, this.initialPage = 1});
 
@@ -22,7 +26,12 @@ class MushafPageViewScreen extends ConsumerStatefulWidget {
 class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   late final PageController _controller;
   late int _currentPage;
-  bool _showPlayerBar = true;
+
+  /// Masque/affiche ensemble le mini-lecteur ET les infos de page (nom de
+  /// sourate, Juz, numéro de page) sur un tap dans la zone de lecture —
+  /// un seul geste pour une lecture immersive, plutôt que deux réglages
+  /// indépendants qui se désynchroniseraient.
+  bool _showChrome = true;
 
   @override
   void initState() {
@@ -40,6 +49,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   @override
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
+    final referenceAsync = ref.watch(quranReferenceProvider);
     final playback = ref.watch(audioPlaybackProvider);
 
     // Keep the playing ayah's highlight always in view: whenever playback
@@ -62,36 +72,145 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
       }
     });
 
+    // A Mushaf page can start mid-sourate, so the header always reflects
+    // the page's first ayah rather than assuming its own banner line.
+    final firstAyah = mushafAsync.value?.firstAyahOnPage(_currentPage);
+    final surahName = firstAyah != null
+        ? referenceAsync.value?.surahByNumber(firstAyah.surah).englishName
+        : null;
+    final juz = firstAyah != null
+        ? referenceAsync.value?.juzForSurahAyah(firstAyah.surah, firstAyah.ayah)
+        : null;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Page $_currentPage')),
-      body: GestureDetector(
-        // Tapoter une zone vide de la page (hors des mots, qui lancent
-        // leur lecture) bascule l'affichage du mini-lecteur, pour une
-        // lecture plus immersive.
-        onTap: () => setState(() => _showPlayerBar = !_showPlayerBar),
-        behavior: HitTestBehavior.translucent,
-        child: mushafAsync.when(
-          data: (mushaf) => PageView.builder(
-            controller: _controller,
-            // Un Mushaf se feuillette de droite à gauche : glisser vers la
-            // droite doit avancer (page suivante), pas reculer.
-            reverse: true,
-            itemCount: mushaf.pageCount,
-            onPageChanged: (index) => setState(() => _currentPage = index + 1),
-            itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text('Erreur : $err')),
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              child: _showChrome
+                  ? _MushafTopBar(
+                      surahName: surahName,
+                      juz: juz,
+                      onSwitchToTextView: firstAyah == null
+                          ? null
+                          : () => context.push(
+                                '/lecture/sourate/${firstAyah.surah}?ayah=${firstAyah.ayah}',
+                              ),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
+            Expanded(
+              child: GestureDetector(
+                // Tapoter une zone vide de la page (hors des mots, qui
+                // lancent leur lecture) bascule l'affichage du mini-lecteur
+                // et des infos de page, pour une lecture plus immersive —
+                // ce détecteur ne couvre que la zone de lecture, pas la
+                // barre du haut, pour qu'un tap dans un espace vide de
+                // celle-ci ne masque pas tout par erreur.
+                onTap: () => setState(() => _showChrome = !_showChrome),
+                behavior: HitTestBehavior.translucent,
+                child: mushafAsync.when(
+                  data: (mushaf) => PageView.builder(
+                    controller: _controller,
+                    // Un Mushaf se feuillette de droite à gauche : glisser
+                    // vers la droite doit avancer (page suivante), pas
+                    // reculer.
+                    reverse: true,
+                    itemCount: mushaf.pageCount,
+                    onPageChanged: (index) => setState(() => _currentPage = index + 1),
+                    itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
+                  ),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, _) => Center(child: Text('Erreur : $err')),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: AnimatedSize(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        child: _showPlayerBar
-            ? const AudioPlayerBar()
+        child: _showChrome
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _PageNumberBar(pageNumber: _currentPage),
+                  const AudioPlayerBar(),
+                ],
+              )
             : (playback.hasCurrentAyah
-                ? CollapsedPlayerHandle(onTap: () => setState(() => _showPlayerBar = true))
+                ? CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true))
                 : const SizedBox(width: double.infinity)),
+      ),
+    );
+  }
+}
+
+class _MushafTopBar extends StatelessWidget {
+  const _MushafTopBar({required this.surahName, required this.juz, required this.onSwitchToTextView});
+
+  final String? surahName;
+  final int? juz;
+  final VoidCallback? onSwitchToTextView;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerHigh,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              tooltip: 'Retour',
+              onPressed: () => context.pop(),
+            ),
+            Expanded(
+              child: Text(
+                surahName ?? '',
+                style: theme.textTheme.titleMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (juz != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text('Juz $juz', style: theme.textTheme.titleMedium),
+              ),
+            IconButton(
+              icon: const Icon(Icons.article_outlined),
+              tooltip: 'Vue texte / traduction',
+              onPressed: onSwitchToTextView,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PageNumberBar extends StatelessWidget {
+  const _PageNumberBar({required this.pageNumber});
+
+  final int pageNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      color: theme.colorScheme.surfaceContainerHigh,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Text(
+        '$pageNumber',
+        textAlign: TextAlign.center,
+        style: theme.textTheme.bodySmall,
       ),
     );
   }
