@@ -59,20 +59,44 @@ class MushafRepository {
     ];
   }
 
+  /// All of (surah, ayah)'s words in reading order, glyph ids included —
+  /// used by the Mémorisation session to reuse the exact Mushaf rendering
+  /// (word ids are assigned in Quran order, so they're contiguous for a
+  /// given ayah once the first one is found).
+  List<MushafWord> wordsForAyah(int surah, int ayah) {
+    final firstId = _firstWordIdByAyah['$surah:$ayah'];
+    if (firstId == null) return const [];
+    final result = <MushafWord>[];
+    var id = firstId;
+    while (true) {
+      final word = _words[id];
+      if (word == null || word.surah != surah || word.ayah != ayah) break;
+      result.add(word);
+      id++;
+    }
+    return result;
+  }
+
+  /// The Mushaf page containing word [wordId] — a long ayah (e.g. 2:282,
+  /// the Quran's longest) can straddle two pages, each needing its own QCF
+  /// font, so this is looked up per word rather than once per ayah.
+  int? pageForWordId(int wordId) {
+    for (final entry in _linesByPage.entries) {
+      for (final line in entry.value) {
+        if (line.hasWords && line.firstWordId! <= wordId && wordId <= line.lastWordId!) {
+          return entry.key;
+        }
+      }
+    }
+    return null;
+  }
+
   /// The page on which (surah, ayah) first appears — used to jump from the
   /// continuous reading view into the Mushaf page view.
   int? pageForAyah(int surah, int ayah) {
     final wordId = _firstWordIdByAyah['$surah:$ayah'];
     if (wordId == null) return null;
-    int? page;
-    for (final entry in _linesByPage.entries) {
-      for (final line in entry.value) {
-        if (line.hasWords && line.firstWordId! <= wordId && wordId <= line.lastWordId!) {
-          page = entry.key;
-        }
-      }
-    }
-    return page;
+    return pageForWordId(wordId);
   }
 
   /// The (surah, ayah) of the first ayah on [page] — a page can start

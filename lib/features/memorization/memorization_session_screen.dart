@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/audio/audio_playback_controller.dart';
-import '../../core/gamification/memorizer_badge_icon.dart';
-import '../../core/memorization/ayah_display_repository.dart';
+import '../../core/mushaf/mushaf_font_cache.dart';
+import '../../core/mushaf/mushaf_models.dart';
+import '../../core/mushaf/mushaf_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import 'memorization_session_controller.dart';
 
@@ -60,17 +61,16 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
     }
 
     final referenceAsync = ref.watch(quranReferenceProvider);
-    final displayAsync = ref.watch(ayahDisplayRepositoryProvider);
+    final mushafAsync = ref.watch(mushafRepositoryProvider);
     final controller = ref.read(memorizationSessionProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(referenceAsync.value?.surahByNumber(widget.surahNumber).englishName ?? 'Mémorisation'),
       ),
-      body: displayAsync.when(
-        data: (repo) {
-          final raw = repo.rawText(widget.surahNumber, session.currentAyah!) ?? '';
-          final parsed = parseAyahDisplayText(raw);
+      body: mushafAsync.when(
+        data: (mushaf) {
+          final words = mushaf.wordsForAyah(widget.surahNumber, session.currentAyah!);
 
           return Padding(
             padding: const EdgeInsets.all(24),
@@ -87,30 +87,14 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
                 const SizedBox(height: 24),
                 Expanded(
                   child: Center(
-                    child: session.stage == MemorizationStage.masking
-                        ? _MaskedAyahText(
-                            words: parsed.words,
-                            marker: parsed.marker,
-                            maskLevel: session.maskLevel,
-                            revealedIndices: session.revealedWordIndices,
-                            onWordTap: controller.revealWord,
-                          )
-                        : Wrap(
-                            alignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            textDirection: TextDirection.rtl,
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: [
-                              for (final word in parsed.words)
-                                Text(
-                                  word,
-                                  textDirection: TextDirection.rtl,
-                                  style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, height: 1.9),
-                                ),
-                              if (parsed.marker != null) _AyahEndMarker(parsed.marker!),
-                            ],
-                          ),
+                    child: _AyahGlyphs(
+                      mushaf: mushaf,
+                      words: words,
+                      masking: session.stage == MemorizationStage.masking,
+                      maskLevel: session.maskLevel,
+                      revealedIndices: session.revealedWordIndices,
+                      onWordTap: controller.revealWord,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -126,48 +110,83 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
   }
 }
 
-class _MaskedAyahText extends StatelessWidget {
-  const _MaskedAyahText({
+/// Affiche l'ayah avec les glyphes exacts du Mushaf (même police par page,
+/// via [MushafFontCache], que l'écran de lecture paginée) plutôt qu'un
+/// rendu texte générique — le repère de fin de verset est alors le vrai
+/// ornement du Mushaf, puisque c'est simplement le dernier "mot" du flux
+/// glyphique (jamais masqué, comme les autres mots ne le sont qu'en phase
+/// de masquage).
+class _AyahGlyphs extends ConsumerWidget {
+  const _AyahGlyphs({
+    required this.mushaf,
     required this.words,
-    required this.marker,
+    required this.masking,
     required this.maskLevel,
     required this.revealedIndices,
     required this.onWordTap,
   });
 
-  final List<String> words;
-
-  /// Le petit repère de fin de verset (chiffre arabe-indien) — jamais
-  /// masqué, ce n'est pas un mot à mémoriser.
-  final String? marker;
+  final MushafRepository mushaf;
+  final List<MushafWord> words;
+  final bool masking;
   final int maskLevel;
   final Set<int> revealedIndices;
   final ValueChanged<int> onWordTap;
 
-  Set<int> _hiddenIndices(int wordCount) {
+  Set<int> _hiddenIndices(int maskableCount) {
+    if (!masking) return const {};
     switch (maskLevel) {
       case 0:
         return const {};
       case 1:
-        return {for (var i = 1; i < wordCount; i += 2) i};
+        return {for (var i = 1; i < maskableCount; i += 2) i};
       default:
-        return {for (var i = 0; i < wordCount; i++) i};
+        return {for (var i = 0; i < maskableCount; i++) i};
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (words.isEmpty) return const SizedBox.shrink();
+
+    // Un ayah très long (ex. 2:282, le plus long du Coran) peut être à
+    // cheval sur deux pages Mushaf, donc la page se résout mot par mot,
+    // pas une seule fois pour tout l'ayah.
+    final pageByWordId = {for (final w in words) w.id: mushaf.pageForWordId(w.id)};
+    final neededPages = pageByWordId.values.whereType<int>().toSet();
+
+    final fontAsyncs = {for (final page in neededPages) page: ref.watch(mushafPageFontProvider(page))};
+    if (fontAsyncs.values.any((a) => a.isLoading)) {
+      return const CircularProgressIndicator();
+    }
+    final families = {
+      for (final entry in fontAsyncs.entries)
+        if (entry.value.value != null) entry.key: entry.value.value!,
+    };
+    if (families.length != neededPages.length) {
+      return _OfflineAyahFallback(
+        onRetry: () {
+          for (final page in neededPages) {
+            ref.invalidate(mushafPageFontProvider(page));
+          }
+        },
+      );
+    }
+
+    // Le repère de fin de verset est toujours le dernier "mot" du flux
+    // glyphique — jamais masqué, ce n'est pas un mot à mémoriser.
+    final maskableCount = words.length - 1;
+    final hidden = _hiddenIndices(maskableCount);
     final theme = Theme.of(context);
-    final hidden = _hiddenIndices(words.length);
 
     return Wrap(
       alignment: WrapAlignment.center,
       textDirection: TextDirection.rtl,
       spacing: 8,
-      runSpacing: 8,
+      runSpacing: 12,
       children: [
         for (var i = 0; i < words.length; i++)
-          if (hidden.contains(i) && !revealedIndices.contains(i))
+          if (i < maskableCount && hidden.contains(i) && !revealedIndices.contains(i))
             GestureDetector(
               onTap: () => onWordTap(i),
               child: Container(
@@ -176,51 +195,36 @@ class _MaskedAyahText extends StatelessWidget {
                   border: Border.all(color: theme.colorScheme.outlineVariant),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text('•••', style: TextStyle(fontFamily: 'AmiriQuran', fontSize: 26)),
+                child: const Text('•••', style: TextStyle(fontSize: 26)),
               ),
             )
           else
             Text(
-              words[i],
+              words[i].text,
               textDirection: TextDirection.rtl,
-              style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 26, height: 1.9),
+              style: TextStyle(fontFamily: families[pageByWordId[words[i].id]], fontSize: 30, height: 1.9),
             ),
-        if (marker != null) _AyahEndMarker(marker!),
       ],
     );
   }
 }
 
-/// Le repère de fin de verset, mis en forme comme dans un vrai Mushaf : le
-/// numéro au centre d'une petite rosette (motif Rub el Hizb déjà utilisé
-/// pour les badges de mémorisation) plutôt qu'un simple chiffre.
-class _AyahEndMarker extends StatelessWidget {
-  const _AyahEndMarker(this.marker);
+class _OfflineAyahFallback extends StatelessWidget {
+  const _OfflineAyahFallback({required this.onRetry});
 
-  final String marker;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    const size = 30.0;
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(
-        painter: RosettePainter(color: theme.colorScheme.primary, background: theme.colorScheme.surface),
-        child: Center(
-          child: Text(
-            marker,
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-              fontFamily: 'AmiriQuran',
-              fontSize: 13,
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.cloud_off, size: 40),
+        const SizedBox(height: 12),
+        const Text('Ce verset nécessite une connexion la première fois.', textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        OutlinedButton(onPressed: onRetry, child: const Text('Réessayer')),
+      ],
     );
   }
 }
