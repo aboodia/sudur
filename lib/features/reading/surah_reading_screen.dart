@@ -25,7 +25,12 @@ class SurahReadingScreen extends ConsumerStatefulWidget {
 
 class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
   final _itemScrollController = ItemScrollController();
-  bool _showPlayerBar = true;
+
+  /// Masque/affiche ensemble la barre du haut ET le mini-lecteur sur un tap
+  /// dans la zone de lecture — même geste et même synchronisation que la
+  /// vue Mushaf, plutôt que de ne masquer que le mini-lecteur en laissant
+  /// la barre du haut fixe.
+  bool _showChrome = true;
 
   @override
   Widget build(BuildContext context) {
@@ -55,65 +60,107 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
         'Sourate ${widget.surahNumber}';
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(surahName),
-        actions: [
-          _MushafButton(surahNumber: widget.surahNumber, ayah: widget.initialAyah ?? 1),
-          const _DisplayModeMenu(),
-          const _TextSizeMenu(),
-        ],
-      ),
-      body: GestureDetector(
-        // Tapoter le texte (hors des zones interactives : mots, boutons)
-        // bascule l'affichage du mini-lecteur, pour une lecture plus
-        // immersive.
-        onTap: () => setState(() => _showPlayerBar = !_showPlayerBar),
-        behavior: HitTestBehavior.translucent,
-        child: textAsync.when(
-          data: (repo) {
-            final surah = repo.surah(widget.surahNumber);
-            return ScrollablePositionedList.separated(
-              itemScrollController: _itemScrollController,
-              initialScrollIndex: ((widget.initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
-              itemCount: surah.ayahs.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final ayah = surah.ayahs[index];
-                final isPlaying = playback.isPlaying &&
-                    playback.surahNumber == widget.surahNumber &&
-                    playback.ayahNumber == ayah.numberInSurah;
-                return AyahCard(
-                  surahNumber: widget.surahNumber,
-                  ayah: ayah,
-                  isPlaying: isPlaying,
-                  basmalah: index == 0 ? surah.basmalah : null,
-                  onTap: () {
-                    final isCurrent = playback.surahNumber == widget.surahNumber &&
-                        playback.ayahNumber == ayah.numberInSurah;
-                    if (isCurrent && playback.isPlaying) {
-                      controller.pause();
-                    } else if (isCurrent) {
-                      controller.resume();
-                    } else {
-                      controller.playFrom(widget.surahNumber, ayah.numberInSurah);
-                    }
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              child: _showChrome
+                  ? _SurahTopBar(surahName: surahName, surahNumber: widget.surahNumber, ayah: widget.initialAyah ?? 1)
+                  : const SizedBox(width: double.infinity),
+            ),
+            Expanded(
+              child: GestureDetector(
+                // Tapoter le texte (hors des zones interactives : mots,
+                // boutons) bascule l'affichage de la barre du haut et du
+                // mini-lecteur, pour une lecture plus immersive — ce
+                // détecteur ne couvre que la zone de lecture, pas la barre
+                // du haut, pour qu'un tap dans un espace vide de celle-ci
+                // ne masque pas tout par erreur.
+                onTap: () => setState(() => _showChrome = !_showChrome),
+                behavior: HitTestBehavior.translucent,
+                child: textAsync.when(
+                  data: (repo) {
+                    final surah = repo.surah(widget.surahNumber);
+                    return ScrollablePositionedList.separated(
+                      itemScrollController: _itemScrollController,
+                      initialScrollIndex: ((widget.initialAyah ?? 1) - 1).clamp(0, surah.ayahs.length - 1),
+                      itemCount: surah.ayahs.length,
+                      separatorBuilder: (_, _) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final ayah = surah.ayahs[index];
+                        final isPlaying = playback.isPlaying &&
+                            playback.surahNumber == widget.surahNumber &&
+                            playback.ayahNumber == ayah.numberInSurah;
+                        return AyahCard(
+                          surahNumber: widget.surahNumber,
+                          ayah: ayah,
+                          isPlaying: isPlaying,
+                          basmalah: index == 0 ? surah.basmalah : null,
+                          onTap: () {
+                            final isCurrent = playback.surahNumber == widget.surahNumber &&
+                                playback.ayahNumber == ayah.numberInSurah;
+                            if (isCurrent && playback.isPlaying) {
+                              controller.pause();
+                            } else if (isCurrent) {
+                              controller.resume();
+                            } else {
+                              controller.playFrom(widget.surahNumber, ayah.numberInSurah);
+                            }
+                          },
+                        );
+                      },
+                    );
                   },
-                );
-              },
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text('Erreur : $err')),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, _) => Center(child: Text('Erreur : $err')),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: AnimatedSize(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        child: _showPlayerBar
+        child: _showChrome
             ? const AudioPlayerBar()
             : (playback.hasCurrentAyah
-                ? CollapsedPlayerHandle(onTap: () => setState(() => _showPlayerBar = true))
+                ? CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true))
                 : const SizedBox(width: double.infinity)),
+      ),
+    );
+  }
+}
+
+class _SurahTopBar extends StatelessWidget {
+  const _SurahTopBar({required this.surahName, required this.surahNumber, required this.ayah});
+
+  final String surahName;
+  final int surahNumber;
+  final int ayah;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerHigh,
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            tooltip: 'Retour',
+            onPressed: () => context.pop(),
+          ),
+          Expanded(
+            child: Text(surahName, style: theme.textTheme.titleMedium, overflow: TextOverflow.ellipsis),
+          ),
+          _MushafButton(surahNumber: surahNumber, ayah: ayah),
+          const _DisplayModeMenu(),
+          const _TextSizeMenu(),
+        ],
       ),
     );
   }
