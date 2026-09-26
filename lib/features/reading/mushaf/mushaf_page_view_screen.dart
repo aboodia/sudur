@@ -27,10 +27,10 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   late final PageController _controller;
   late int _currentPage;
 
-  /// Masque/affiche ensemble le mini-lecteur ET les infos de page (nom de
-  /// sourate, Juz, numéro de page) sur un tap dans la zone de lecture —
-  /// un seul geste pour une lecture immersive, plutôt que deux réglages
-  /// indépendants qui se désynchroniseraient.
+  /// Masque/affiche ensemble le mini-lecteur ET la barre du haut (nom de
+  /// sourate, Juz) sur un tap dans la zone de lecture — un seul geste pour
+  /// une lecture immersive, plutôt que deux réglages indépendants qui se
+  /// désynchroniseraient.
   bool _showChrome = true;
 
   @override
@@ -50,6 +50,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
+    final playback = ref.watch(audioPlaybackProvider);
 
     // Keep the playing ayah's highlight always in view: whenever playback
     // moves to a new ayah, jump to whichever page it's on if we're not
@@ -105,7 +106,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
               child: GestureDetector(
                 // Tapoter une zone vide de la page (hors des mots, qui
                 // lancent leur lecture) bascule l'affichage du mini-lecteur
-                // et des infos de page, pour une lecture plus immersive —
+                // et de la barre du haut, pour une lecture plus immersive —
                 // ce détecteur ne couvre que la zone de lecture, pas la
                 // barre du haut, pour qu'un tap dans un espace vide de
                 // celle-ci ne masque pas tout par erreur.
@@ -130,26 +131,14 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedSize(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOut,
-            child: _showChrome ? const AudioPlayerBar() : const SizedBox(width: double.infinity),
-          ),
-          // Le numéro de page reste toujours affiché — contrairement au
-          // reste du chrome — et sert lui-même de poignée pour
-          // masquer/afficher le mini-lecteur et les infos du haut : sur une
-          // page Mushaf les mots couvrent quasi toute la largeur de chaque
-          // ligne (voir MushafLineRow), donc un tap sur une zone réellement
-          // vide de la page est rarissime, et ce bandeau est le seul point
-          // fiable pour rouvrir le reste du chrome une fois masqué.
-          _PageNumberBar(
-            pageNumber: _currentPage,
-            onTap: () => setState(() => _showChrome = !_showChrome),
-          ),
-        ],
+      bottomNavigationBar: AnimatedSize(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        child: _showChrome
+            ? const AudioPlayerBar()
+            : (playback.hasCurrentAyah
+                ? CollapsedPlayerHandle(onTap: () => setState(() => _showChrome = true))
+                : const SizedBox(width: double.infinity)),
       ),
     );
   }
@@ -194,35 +183,6 @@ class _MushafTopBar extends StatelessWidget {
               onPressed: onSwitchToTextView,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PageNumberBar extends StatelessWidget {
-  const _PageNumberBar({required this.pageNumber, required this.onTap});
-
-  final int pageNumber;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Material(
-      color: theme.colorScheme.surfaceContainerHigh,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            '$pageNumber',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ),
       ),
     );
