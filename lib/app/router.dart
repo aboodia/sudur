@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../features/community/community_screen.dart';
 import '../features/home/home_screen.dart';
+import '../features/memorization/memorization_session_screen.dart';
+import '../features/memorization/passage_picker_screen.dart';
 import '../features/path/path_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
@@ -59,6 +61,20 @@ final appRouter = GoRouter(
           GoRoute(path: '/profil', builder: (context, state) => const ProfileScreen()),
         ]),
       ],
+    ),
+    // Mémorisation (Brique 3) : pas d'onglet dédié (volontaire, voir plus
+    // haut) — une session lancée depuis l'Accueil, hors du shell à onglets.
+    GoRoute(path: '/memorisation', builder: (context, state) => const PassagePickerScreen()),
+    GoRoute(
+      path: '/memorisation/session',
+      builder: (context, state) {
+        final params = state.uri.queryParameters;
+        return MemorizationSessionScreen(
+          surahNumber: int.parse(params['surah']!),
+          startAyah: int.parse(params['start']!),
+          endAyah: int.parse(params['end']!),
+        );
+      },
     ),
   ],
 );
