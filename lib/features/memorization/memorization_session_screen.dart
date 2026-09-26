@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/audio/audio_playback_controller.dart';
+import '../../core/memorization/ayah_display_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
-import '../../core/quran_text/quran_text_repository.dart';
 import 'memorization_session_controller.dart';
 
 /// Répétition guidée (Brique 3), un ayah à la fois : écoute → répétition
@@ -59,19 +59,17 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
     }
 
     final referenceAsync = ref.watch(quranReferenceProvider);
-    final textAsync = ref.watch(quranTextProvider);
+    final displayAsync = ref.watch(ayahDisplayRepositoryProvider);
     final controller = ref.read(memorizationSessionProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(referenceAsync.value?.surahByNumber(widget.surahNumber).englishName ?? 'Mémorisation'),
       ),
-      body: textAsync.when(
+      body: displayAsync.when(
         data: (repo) {
-          final ayah = repo
-              .surah(widget.surahNumber)
-              .ayahs
-              .firstWhere((a) => a.numberInSurah == session.currentAyah);
+          final raw = repo.rawText(widget.surahNumber, session.currentAyah!) ?? '';
+          final parsed = parseAyahDisplayText(raw);
 
           return Padding(
             padding: const EdgeInsets.all(24),
@@ -90,13 +88,14 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
                   child: Center(
                     child: session.stage == MemorizationStage.masking
                         ? _MaskedAyahText(
-                            arabic: ayah.arabic,
+                            words: parsed.words,
+                            marker: parsed.marker,
                             maskLevel: session.maskLevel,
                             revealedIndices: session.revealedWordIndices,
                             onWordTap: controller.revealWord,
                           )
                         : Text(
-                            ayah.arabic,
+                            [...parsed.words, if (parsed.marker != null) parsed.marker!].join(' '),
                             textDirection: TextDirection.rtl,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, height: 1.9),
@@ -118,13 +117,18 @@ class _MemorizationSessionScreenState extends ConsumerState<MemorizationSessionS
 
 class _MaskedAyahText extends StatelessWidget {
   const _MaskedAyahText({
-    required this.arabic,
+    required this.words,
+    required this.marker,
     required this.maskLevel,
     required this.revealedIndices,
     required this.onWordTap,
   });
 
-  final String arabic;
+  final List<String> words;
+
+  /// Le petit repère de fin de verset (chiffre arabe-indien) — jamais
+  /// masqué, ce n'est pas un mot à mémoriser.
+  final String? marker;
   final int maskLevel;
   final Set<int> revealedIndices;
   final ValueChanged<int> onWordTap;
@@ -143,7 +147,6 @@ class _MaskedAyahText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final words = arabic.split(RegExp(r'\s+'));
     final hidden = _hiddenIndices(words.length);
 
     return Wrap(
@@ -171,6 +174,17 @@ class _MaskedAyahText extends StatelessWidget {
               textDirection: TextDirection.rtl,
               style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 26, height: 1.9),
             ),
+        if (marker != null)
+          Text(
+            marker!,
+            textDirection: TextDirection.rtl,
+            style: TextStyle(
+              fontFamily: 'AmiriQuran',
+              fontSize: 22,
+              height: 1.9,
+              color: theme.colorScheme.primary,
+            ),
+          ),
       ],
     );
   }
@@ -186,19 +200,35 @@ class _StageControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (session.stage) {
       case MemorizationStage.listening:
+        final playback = ref.watch(audioPlaybackProvider);
+        final isPlayingThisAyah = playback.isPlaying &&
+            playback.surahNumber == session.surahNumber &&
+            playback.ayahNumber == session.currentAyah;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             OutlinedButton.icon(
-              onPressed: () => ref
-                  .read(audioPlaybackProvider.notifier)
-                  .playFrom(session.surahNumber!, session.currentAyah!),
-              icon: const Icon(Icons.play_circle_outline),
-              label: const Text('Écouter'),
+              onPressed: () {
+                final audio = ref.read(audioPlaybackProvider.notifier);
+                if (isPlayingThisAyah) {
+                  audio.stop();
+                } else {
+                  // Boucle confinée à ce seul verset : setRepeatRange(a, a)
+                  // ne dépasse jamais [a, a] (voir _onAyahCompleted), donc la
+                  // lecture ne peut pas déborder sur la suite de la sourate.
+                  audio.setRepeatRange(session.currentAyah!, session.currentAyah!);
+                  audio.playFrom(session.surahNumber!, session.currentAyah!);
+                }
+              },
+              icon: Icon(isPlayingThisAyah ? Icons.stop_circle : Icons.play_circle_outline),
+              label: Text(isPlayingThisAyah ? 'Arrêter' : 'Écouter'),
             ),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: controller.advanceStage,
+              onPressed: () {
+                ref.read(audioPlaybackProvider.notifier).stop();
+                controller.advanceStage();
+              },
               child: const Text('Suivant : répéter à voix haute'),
             ),
           ],

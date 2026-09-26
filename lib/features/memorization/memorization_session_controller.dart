@@ -129,6 +129,9 @@ class MemorizationSessionController extends Notifier<MemorizationSessionState> {
       );
     } else {
       await ref.read(memorizationRepositoryProvider).completeUnit(state.unitId!);
+      // Le picker de passage doit proposer le suivant, pas se souvenir de
+      // l'ancienne liste d'unités d'avant cette complétion.
+      ref.invalidate(memorizationUnitsProvider);
       state = state.copyWith(stage: MemorizationStage.complete);
     }
   }

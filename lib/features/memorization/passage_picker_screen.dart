@@ -37,7 +37,12 @@ class _PassagePickerScreenState extends ConsumerState<PassagePickerScreen> {
         data: (reference) => unitsAsync.when(
           data: (units) {
             final suggestion = suggestNextPassage(reference, units);
-            final manualSurah = reference.surahByNumber(_manualSurah ?? reference.surahs.first.number);
+            final fullyCovered = fullyCoveredSurahNumbers(reference.surahs, units);
+            final availableSurahs =
+                reference.surahs.where((s) => !fullyCovered.contains(s.number)).toList();
+            final manualSurah = availableSurahs.isEmpty
+                ? null
+                : reference.surahByNumber(_manualSurah ?? availableSurahs.first.number);
 
             return ListView(
               padding: const EdgeInsets.all(16),
@@ -55,33 +60,34 @@ class _PassagePickerScreenState extends ConsumerState<PassagePickerScreen> {
                       child: Text('Mashallah, tout le Coran est déjà couvert par vos passages !'),
                     ),
                   ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () => setState(() => _manual = !_manual),
-                    child: Text(_manual ? 'Masquer le choix manuel' : 'Choisir un autre passage'),
+                if (availableSurahs.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: () => setState(() => _manual = !_manual),
+                      child: Text(_manual ? 'Masquer le choix manuel' : 'Choisir un autre passage'),
+                    ),
                   ),
-                ),
-                if (_manual)
-                  _ManualPicker(
-                    reference: reference,
-                    surah: manualSurah,
-                    startAyah: _manualStart,
-                    endAyah: _manualEnd,
-                    onSurahChanged: (number) => setState(() {
-                      _manualSurah = number;
-                      _manualStart = 1;
-                      _manualEnd = 1;
-                    }),
-                    onStartChanged: (value) => setState(() {
-                      _manualStart = value;
-                      if (_manualEnd < value) _manualEnd = value;
-                      if (_manualEnd > value + 2) _manualEnd = value + 2;
-                    }),
-                    onEndChanged: (value) => setState(() => _manualEnd = value),
-                    onStart: () => _start(manualSurah.number, _manualStart, _manualEnd),
-                  ),
+                  if (_manual)
+                    _ManualPicker(
+                      availableSurahs: availableSurahs,
+                      surah: manualSurah!,
+                      startAyah: _manualStart,
+                      endAyah: _manualEnd,
+                      onSurahChanged: (number) => setState(() {
+                        _manualSurah = number;
+                        _manualStart = 1;
+                        _manualEnd = 1;
+                      }),
+                      onStartChanged: (value) => setState(() {
+                        _manualStart = value;
+                        if (_manualEnd < value) _manualEnd = value;
+                      }),
+                      onEndChanged: (value) => setState(() => _manualEnd = value),
+                      onStart: () => _start(manualSurah.number, _manualStart, _manualEnd),
+                    ),
+                ],
               ],
             );
           },
@@ -130,7 +136,7 @@ class _SuggestionCard extends StatelessWidget {
 
 class _ManualPicker extends StatelessWidget {
   const _ManualPicker({
-    required this.reference,
+    required this.availableSurahs,
     required this.surah,
     required this.startAyah,
     required this.endAyah,
@@ -140,7 +146,7 @@ class _ManualPicker extends StatelessWidget {
     required this.onStart,
   });
 
-  final QuranReferenceRepository reference;
+  final List<Surah> availableSurahs;
   final Surah surah;
   final int startAyah;
   final int endAyah;
@@ -151,8 +157,9 @@ class _ManualPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxEnd = (startAyah + 2).clamp(startAyah, surah.numberOfAyahs);
-    final theme = Theme.of(context);
+    // Le découpage assisté reste 1-3 versets, mais le choix manuel n'a pas
+    // cette limite : jusqu'à la sourate entière.
+    final maxEnd = surah.numberOfAyahs;
 
     return Card(
       child: Padding(
@@ -164,7 +171,7 @@ class _ManualPicker extends StatelessWidget {
               initialValue: surah.number,
               decoration: const InputDecoration(labelText: 'Sourate'),
               items: [
-                for (final s in reference.surahs)
+                for (final s in availableSurahs)
                   DropdownMenuItem(value: s.number, child: Text('${s.number}. ${s.englishName}')),
               ],
               onChanged: (value) {
@@ -201,11 +208,6 @@ class _ManualPicker extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Maximum 3 versets par passage.',
-              style: theme.textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
             FilledButton(onPressed: onStart, child: const Text('Commencer ce passage')),
