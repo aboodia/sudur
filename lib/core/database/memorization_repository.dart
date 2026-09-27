@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../review/spaced_repetition.dart';
 import 'app_database.dart';
 import 'profile_repository.dart';
 
@@ -27,6 +28,7 @@ class MemorizationRepository {
             masteryLevel: const Value('solid'),
             circle: const Value(3),
             lastReviewedAt: Value(now),
+            nextReviewDueAt: Value(nextReviewDate(now, 3)),
             createdAt: now,
             updatedAt: now,
           ),
@@ -67,6 +69,7 @@ class MemorizationRepository {
         status: const Value('memorized'),
         circle: const Value(1),
         lastReviewedAt: Value(now),
+        nextReviewDueAt: Value(nextReviewDate(now, 1)),
         updatedAt: Value(now),
       ),
     );

@@ -10,6 +10,8 @@ import '../features/profile/profile_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
 import '../features/reading/reading_screen.dart';
 import '../features/reading/surah_reading_screen.dart';
+import '../features/review/review_calendar_screen.dart';
+import '../features/review/review_session_screen.dart';
 
 /// Squelette de navigation (Brique 0) : les grands onglets existent, même
 /// si la plupart des écrans sont encore des placeholders. Mémorisation et
@@ -76,6 +78,9 @@ final appRouter = GoRouter(
         );
       },
     ),
+    // Révision (Brique 4) : même logique — pas d'onglet dédié.
+    GoRoute(path: '/revision', builder: (context, state) => const ReviewCalendarScreen()),
+    GoRoute(path: '/revision/session', builder: (context, state) => const ReviewSessionScreen()),
   ],
 );
 

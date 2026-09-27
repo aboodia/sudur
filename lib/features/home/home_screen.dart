@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Placeholder for the Tableau de bord (Brique 5) — porte déjà le point
-/// d'entrée de la Mémorisation (Brique 3), volontairement sans onglet dédié
-/// (voir router.dart) : "une session lancée depuis l'accueil".
+/// Placeholder for the Tableau de bord (Brique 5) — porte déjà les points
+/// d'entrée de la Mémorisation (Brique 3) et de la Révision (Brique 4),
+/// volontairement sans onglet dédié (voir router.dart) : "une session
+/// lancée depuis l'accueil".
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -23,6 +24,12 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () => context.push('/memorisation'),
                   icon: const Icon(Icons.school),
                   label: const Text('Démarrer une session de mémorisation'),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: () => context.push('/revision'),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Réviser'),
                 ),
               ],
             ),
