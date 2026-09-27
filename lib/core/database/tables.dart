@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart';
 
-/// Mutable user data only (profile, memorization state, review history).
-/// Kept separate from the static Quran reference content
-/// (core/quran_reference) so the two can evolve and sync independently,
-/// per §6.2 of the cahier des charges. Primary keys are UUID text (not
-/// autoincrement ints) and every row carries createdAt/updatedAt so that
-/// multi-device sync (Brique 9) can be added without a data migration.
+/// Mutable user data only (profile, memorization/review state). Kept
+/// separate from the static Quran reference content (core/quran_reference)
+/// so the two can evolve and sync independently, per §6.2 of the cahier des
+/// charges. Primary keys are UUID text (not autoincrement ints) and every
+/// row carries createdAt/updatedAt so that multi-device sync (Brique 9) can
+/// be added without a data migration.
 
 class UserProfiles extends Table {
   TextColumn get id => text()();
@@ -16,8 +16,10 @@ class UserProfiles extends Table {
       text().withDefault(const Constant('debutant'))();
 
   /// Bitmask over the 7 days of the week (bit 0 = Monday) for availability.
-  IntColumn get availableDaysMask => integer().withDefault(const Constant(127))();
-  IntColumn get dailyTargetMinutes => integer().withDefault(const Constant(10))();
+  IntColumn get availableDaysMask =>
+      integer().withDefault(const Constant(127))();
+  IntColumn get dailyTargetMinutes =>
+      integer().withDefault(const Constant(10))();
 
   TextColumn get preferredQariId => text().nullable()();
 
@@ -26,7 +28,8 @@ class UserProfiles extends Table {
 
   /// Whether the Onboarding (Brique 2) flow has been completed — gates
   /// whether the app shows it again on the next launch.
-  BoolColumn get hasCompletedOnboarding => boolean().withDefault(const Constant(false))();
+  BoolColumn get hasCompletedOnboarding =>
+      boolean().withDefault(const Constant(false))();
 
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
@@ -35,57 +38,109 @@ class UserProfiles extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-/// A memorized (or being-memorized) passage: a contiguous ayah range within
-/// one sourate. Granularity is deliberately small (down to 1 ayah) so the
-/// Mémorisation brique can découper a passage into 1-3 verset units.
-class MemorizationUnits extends Table {
+/// A memorization passage — a contiguous ayah range within one sourate, the
+/// unit the 7-screen guided flow (Découvrir → ... → Enchaîner) works
+/// through in one session (e.g. Al-Mulk 1-5).
+class Passages extends Table {
   TextColumn get id => text()();
   TextColumn get profileId =>
       text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get surahNumber => integer()();
-  IntColumn get startAyah => integer()();
-  IntColumn get endAyah => integer()();
-
-  /// 'not_started' | 'learning' | 'memorized'
-  TextColumn get status => text().withDefault(const Constant('not_started'))();
-
-  /// 'weak' | 'medium' | 'solid' — null until first review.
-  TextColumn get masteryLevel => text().nullable()();
-
-  /// Spaced-repetition circle ("Les Trois Cercles"): 1 = quotidien,
-  /// 2 = hebdomadaire, 3 = mensuel. Null until the unit is memorized.
-  IntColumn get circle => integer().nullable()();
-
-  DateTimeColumn get lastReviewedAt => dateTime().nullable()();
-  DateTimeColumn get nextReviewDueAt => dateTime().nullable()();
+  IntColumn get ayahStart => integer()();
+  IntColumn get ayahEnd => integer()();
 
   DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
-/// One completed review (murâja'a) event for a MemorizationUnit — the
-/// audit trail behind the spaced-repetition circle transitions.
-class ReviewHistoryEntries extends Table {
+/// Where a passage's guided session currently stands — read when the
+/// screen opens to resume at the exact same step/verset/mask level, written
+/// on every step change and whenever "Quitter" is pressed.
+class SessionProgressEntries extends Table {
   TextColumn get id => text()();
-  TextColumn get unitId =>
-      text().references(MemorizationUnits, #id, onDelete: KeyAction.cascade)();
+  TextColumn get passageId =>
+      text().references(Passages, #id, onDelete: KeyAction.cascade)();
 
-  DateTimeColumn get reviewedAt => dateTime()();
+  /// 0=Découvrir, 1=Répéter, 2=Masquer, 3=Réciter, 4=Enchaîner.
+  IntColumn get currentStepIndex => integer().withDefault(const Constant(0))();
+  IntColumn get currentAyah => integer()();
 
-  /// 'success' | 'fail'
-  TextColumn get result => text()();
+  /// 'light' | 'medium' | 'full' — only meaningful during Masquer.
+  TextColumn get maskLevel => text().nullable()();
 
-  IntColumn get circleBefore => integer().nullable()();
-  IntColumn get circleAfter => integer().nullable()();
-
-  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {passageId},
+  ];
+}
+
+/// Per-ayah memorization/review state — the finer-grained replacement for
+/// the old per-passage "circle"/"masteryLevel" (Brique 4). One row per ayah
+/// ever memorized.
+class AyahProgressEntries extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get surahNumber => integer()();
+  IntColumn get ayahNumber => integer()();
+
+  /// 'clean' | 'hesitant' | 'redo' — the last "Réciter" self-assessment.
+  TextColumn get lastOutcome => text().nullable()();
+
+  /// JSON-encoded list of word indices tapped during Masquer (revealed
+  /// early) — feeds ReviewScheduler's `hasFragileWords`.
+  TextColumn get fragileWordIndices =>
+      text().withDefault(const Constant('[]'))();
+
+  /// How many successful reviews so far — ReviewScheduler's `cycleStep`.
+  IntColumn get reviewCycleStep => integer().withDefault(const Constant(0))();
+
+  DateTimeColumn get memorizedAt => dateTime()();
+  DateTimeColumn get nextReviewAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {profileId, surahNumber, ayahNumber},
+  ];
+}
+
+/// How much of a sourate is memorized — a sourate only counts towards a
+/// profil/badge once every one of its ayahs is memorized (design "Les 8
+/// profils et badges" : "une sourate compte seulement quand tous ses
+/// versets sont mémorisés").
+class SurahProgressEntries extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get surahNumber => integer()();
+  IntColumn get memorizedAyahCount =>
+      integer().withDefault(const Constant(0))();
+  IntColumn get totalAyahCount => integer()();
+  DateTimeColumn get completedAt => dateTime().nullable()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {profileId, surahNumber},
+  ];
 }
 
 /// A signet (bookmark) on one ayah, shown in the Accueil lecture "Signets"

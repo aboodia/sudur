@@ -6,24 +6,46 @@ import 'tables.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [UserProfiles, MemorizationUnits, ReviewHistoryEntries, Bookmarks])
+@DriftDatabase(
+  tables: [
+    UserProfiles,
+    Passages,
+    SessionProgressEntries,
+    AyahProgressEntries,
+    SurahProgressEntries,
+    Bookmarks,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          if (from < 2) {
-            await m.addColumn(userProfiles, userProfiles.hasCompletedOnboarding);
-          }
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn(userProfiles, userProfiles.hasCompletedOnboarding);
+      }
+      if (from < 3) {
+        // Le parcours de mémorisation par verset (Passages/*ProgressEntries)
+        // remplace l'ancien modèle par passage (MemorizationUnits.circle/
+        // masteryLevel + ReviewHistoryEntries) — aucune donnée réelle en jeu
+        // à ce stade, un DROP + CREATE propre plutôt qu'une migration de
+        // données.
+        await m.deleteTable('review_history_entries');
+        await m.deleteTable('memorization_units');
+        await m.createTable(passages);
+        await m.createTable(sessionProgressEntries);
+        await m.createTable(ayahProgressEntries);
+        await m.createTable(surahProgressEntries);
+      }
+    },
+  );
 }
 
 QueryExecutor _openConnection() {

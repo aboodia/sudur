@@ -654,12 +654,11 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
   }
 }
 
-class $MemorizationUnitsTable extends MemorizationUnits
-    with TableInfo<$MemorizationUnitsTable, MemorizationUnit> {
+class $PassagesTable extends Passages with TableInfo<$PassagesTable, Passage> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $MemorizationUnitsTable(this.attachedDatabase, [this._alias]);
+  $PassagesTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -694,82 +693,28 @@ class $MemorizationUnitsTable extends MemorizationUnits
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _startAyahMeta = const VerificationMeta(
-    'startAyah',
+  static const VerificationMeta _ayahStartMeta = const VerificationMeta(
+    'ayahStart',
   );
   @override
-  late final GeneratedColumn<int> startAyah = GeneratedColumn<int>(
-    'start_ayah',
+  late final GeneratedColumn<int> ayahStart = GeneratedColumn<int>(
+    'ayah_start',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _endAyahMeta = const VerificationMeta(
-    'endAyah',
+  static const VerificationMeta _ayahEndMeta = const VerificationMeta(
+    'ayahEnd',
   );
   @override
-  late final GeneratedColumn<int> endAyah = GeneratedColumn<int>(
-    'end_ayah',
+  late final GeneratedColumn<int> ayahEnd = GeneratedColumn<int>(
+    'ayah_end',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _statusMeta = const VerificationMeta('status');
-  @override
-  late final GeneratedColumn<String> status = GeneratedColumn<String>(
-    'status',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('not_started'),
-  );
-  static const VerificationMeta _masteryLevelMeta = const VerificationMeta(
-    'masteryLevel',
-  );
-  @override
-  late final GeneratedColumn<String> masteryLevel = GeneratedColumn<String>(
-    'mastery_level',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _circleMeta = const VerificationMeta('circle');
-  @override
-  late final GeneratedColumn<int> circle = GeneratedColumn<int>(
-    'circle',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _lastReviewedAtMeta = const VerificationMeta(
-    'lastReviewedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastReviewedAt =
-      GeneratedColumn<DateTime>(
-        'last_reviewed_at',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _nextReviewDueAtMeta = const VerificationMeta(
-    'nextReviewDueAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> nextReviewDueAt =
-      GeneratedColumn<DateTime>(
-        'next_review_due_at',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -781,40 +726,23 @@ class $MemorizationUnitsTable extends MemorizationUnits
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     profileId,
     surahNumber,
-    startAyah,
-    endAyah,
-    status,
-    masteryLevel,
-    circle,
-    lastReviewedAt,
-    nextReviewDueAt,
+    ayahStart,
+    ayahEnd,
     createdAt,
-    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'memorization_units';
+  static const String $name = 'passages';
   @override
   VerificationContext validateIntegrity(
-    Insertable<MemorizationUnit> instance, {
+    Insertable<Passage> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -843,60 +771,21 @@ class $MemorizationUnitsTable extends MemorizationUnits
     } else if (isInserting) {
       context.missing(_surahNumberMeta);
     }
-    if (data.containsKey('start_ayah')) {
+    if (data.containsKey('ayah_start')) {
       context.handle(
-        _startAyahMeta,
-        startAyah.isAcceptableOrUnknown(data['start_ayah']!, _startAyahMeta),
+        _ayahStartMeta,
+        ayahStart.isAcceptableOrUnknown(data['ayah_start']!, _ayahStartMeta),
       );
     } else if (isInserting) {
-      context.missing(_startAyahMeta);
+      context.missing(_ayahStartMeta);
     }
-    if (data.containsKey('end_ayah')) {
+    if (data.containsKey('ayah_end')) {
       context.handle(
-        _endAyahMeta,
-        endAyah.isAcceptableOrUnknown(data['end_ayah']!, _endAyahMeta),
+        _ayahEndMeta,
+        ayahEnd.isAcceptableOrUnknown(data['ayah_end']!, _ayahEndMeta),
       );
     } else if (isInserting) {
-      context.missing(_endAyahMeta);
-    }
-    if (data.containsKey('status')) {
-      context.handle(
-        _statusMeta,
-        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
-      );
-    }
-    if (data.containsKey('mastery_level')) {
-      context.handle(
-        _masteryLevelMeta,
-        masteryLevel.isAcceptableOrUnknown(
-          data['mastery_level']!,
-          _masteryLevelMeta,
-        ),
-      );
-    }
-    if (data.containsKey('circle')) {
-      context.handle(
-        _circleMeta,
-        circle.isAcceptableOrUnknown(data['circle']!, _circleMeta),
-      );
-    }
-    if (data.containsKey('last_reviewed_at')) {
-      context.handle(
-        _lastReviewedAtMeta,
-        lastReviewedAt.isAcceptableOrUnknown(
-          data['last_reviewed_at']!,
-          _lastReviewedAtMeta,
-        ),
-      );
-    }
-    if (data.containsKey('next_review_due_at')) {
-      context.handle(
-        _nextReviewDueAtMeta,
-        nextReviewDueAt.isAcceptableOrUnknown(
-          data['next_review_due_at']!,
-          _nextReviewDueAtMeta,
-        ),
-      );
+      context.missing(_ayahEndMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -905,6 +794,436 @@ class $MemorizationUnitsTable extends MemorizationUnits
       );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Passage map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Passage(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      profileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}profile_id'],
+      )!,
+      surahNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_number'],
+      )!,
+      ayahStart: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah_start'],
+      )!,
+      ayahEnd: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah_end'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $PassagesTable createAlias(String alias) {
+    return $PassagesTable(attachedDatabase, alias);
+  }
+}
+
+class Passage extends DataClass implements Insertable<Passage> {
+  final String id;
+  final String profileId;
+  final int surahNumber;
+  final int ayahStart;
+  final int ayahEnd;
+  final DateTime createdAt;
+  const Passage({
+    required this.id,
+    required this.profileId,
+    required this.surahNumber,
+    required this.ayahStart,
+    required this.ayahEnd,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['profile_id'] = Variable<String>(profileId);
+    map['surah_number'] = Variable<int>(surahNumber);
+    map['ayah_start'] = Variable<int>(ayahStart);
+    map['ayah_end'] = Variable<int>(ayahEnd);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  PassagesCompanion toCompanion(bool nullToAbsent) {
+    return PassagesCompanion(
+      id: Value(id),
+      profileId: Value(profileId),
+      surahNumber: Value(surahNumber),
+      ayahStart: Value(ayahStart),
+      ayahEnd: Value(ayahEnd),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Passage.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Passage(
+      id: serializer.fromJson<String>(json['id']),
+      profileId: serializer.fromJson<String>(json['profileId']),
+      surahNumber: serializer.fromJson<int>(json['surahNumber']),
+      ayahStart: serializer.fromJson<int>(json['ayahStart']),
+      ayahEnd: serializer.fromJson<int>(json['ayahEnd']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'profileId': serializer.toJson<String>(profileId),
+      'surahNumber': serializer.toJson<int>(surahNumber),
+      'ayahStart': serializer.toJson<int>(ayahStart),
+      'ayahEnd': serializer.toJson<int>(ayahEnd),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Passage copyWith({
+    String? id,
+    String? profileId,
+    int? surahNumber,
+    int? ayahStart,
+    int? ayahEnd,
+    DateTime? createdAt,
+  }) => Passage(
+    id: id ?? this.id,
+    profileId: profileId ?? this.profileId,
+    surahNumber: surahNumber ?? this.surahNumber,
+    ayahStart: ayahStart ?? this.ayahStart,
+    ayahEnd: ayahEnd ?? this.ayahEnd,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  Passage copyWithCompanion(PassagesCompanion data) {
+    return Passage(
+      id: data.id.present ? data.id.value : this.id,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      surahNumber: data.surahNumber.present
+          ? data.surahNumber.value
+          : this.surahNumber,
+      ayahStart: data.ayahStart.present ? data.ayahStart.value : this.ayahStart,
+      ayahEnd: data.ayahEnd.present ? data.ayahEnd.value : this.ayahEnd,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Passage(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahStart: $ayahStart, ')
+          ..write('ayahEnd: $ayahEnd, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, profileId, surahNumber, ayahStart, ayahEnd, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Passage &&
+          other.id == this.id &&
+          other.profileId == this.profileId &&
+          other.surahNumber == this.surahNumber &&
+          other.ayahStart == this.ayahStart &&
+          other.ayahEnd == this.ayahEnd &&
+          other.createdAt == this.createdAt);
+}
+
+class PassagesCompanion extends UpdateCompanion<Passage> {
+  final Value<String> id;
+  final Value<String> profileId;
+  final Value<int> surahNumber;
+  final Value<int> ayahStart;
+  final Value<int> ayahEnd;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const PassagesCompanion({
+    this.id = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.surahNumber = const Value.absent(),
+    this.ayahStart = const Value.absent(),
+    this.ayahEnd = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PassagesCompanion.insert({
+    required String id,
+    required String profileId,
+    required int surahNumber,
+    required int ayahStart,
+    required int ayahEnd,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       profileId = Value(profileId),
+       surahNumber = Value(surahNumber),
+       ayahStart = Value(ayahStart),
+       ayahEnd = Value(ayahEnd),
+       createdAt = Value(createdAt);
+  static Insertable<Passage> custom({
+    Expression<String>? id,
+    Expression<String>? profileId,
+    Expression<int>? surahNumber,
+    Expression<int>? ayahStart,
+    Expression<int>? ayahEnd,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (profileId != null) 'profile_id': profileId,
+      if (surahNumber != null) 'surah_number': surahNumber,
+      if (ayahStart != null) 'ayah_start': ayahStart,
+      if (ayahEnd != null) 'ayah_end': ayahEnd,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PassagesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? profileId,
+    Value<int>? surahNumber,
+    Value<int>? ayahStart,
+    Value<int>? ayahEnd,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return PassagesCompanion(
+      id: id ?? this.id,
+      profileId: profileId ?? this.profileId,
+      surahNumber: surahNumber ?? this.surahNumber,
+      ayahStart: ayahStart ?? this.ayahStart,
+      ayahEnd: ayahEnd ?? this.ayahEnd,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (profileId.present) {
+      map['profile_id'] = Variable<String>(profileId.value);
+    }
+    if (surahNumber.present) {
+      map['surah_number'] = Variable<int>(surahNumber.value);
+    }
+    if (ayahStart.present) {
+      map['ayah_start'] = Variable<int>(ayahStart.value);
+    }
+    if (ayahEnd.present) {
+      map['ayah_end'] = Variable<int>(ayahEnd.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PassagesCompanion(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahStart: $ayahStart, ')
+          ..write('ayahEnd: $ayahEnd, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SessionProgressEntriesTable extends SessionProgressEntries
+    with TableInfo<$SessionProgressEntriesTable, SessionProgressEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SessionProgressEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _passageIdMeta = const VerificationMeta(
+    'passageId',
+  );
+  @override
+  late final GeneratedColumn<String> passageId = GeneratedColumn<String>(
+    'passage_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES passages (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _currentStepIndexMeta = const VerificationMeta(
+    'currentStepIndex',
+  );
+  @override
+  late final GeneratedColumn<int> currentStepIndex = GeneratedColumn<int>(
+    'current_step_index',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _currentAyahMeta = const VerificationMeta(
+    'currentAyah',
+  );
+  @override
+  late final GeneratedColumn<int> currentAyah = GeneratedColumn<int>(
+    'current_ayah',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maskLevelMeta = const VerificationMeta(
+    'maskLevel',
+  );
+  @override
+  late final GeneratedColumn<String> maskLevel = GeneratedColumn<String>(
+    'mask_level',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    passageId,
+    currentStepIndex,
+    currentAyah,
+    maskLevel,
+    startedAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'session_progress_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SessionProgressEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('passage_id')) {
+      context.handle(
+        _passageIdMeta,
+        passageId.isAcceptableOrUnknown(data['passage_id']!, _passageIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_passageIdMeta);
+    }
+    if (data.containsKey('current_step_index')) {
+      context.handle(
+        _currentStepIndexMeta,
+        currentStepIndex.isAcceptableOrUnknown(
+          data['current_step_index']!,
+          _currentStepIndexMeta,
+        ),
+      );
+    }
+    if (data.containsKey('current_ayah')) {
+      context.handle(
+        _currentAyahMeta,
+        currentAyah.isAcceptableOrUnknown(
+          data['current_ayah']!,
+          _currentAyahMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_currentAyahMeta);
+    }
+    if (data.containsKey('mask_level')) {
+      context.handle(
+        _maskLevelMeta,
+        maskLevel.isAcceptableOrUnknown(data['mask_level']!, _maskLevelMeta),
+      );
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
     }
     if (data.containsKey('updated_at')) {
       context.handle(
@@ -920,9 +1239,570 @@ class $MemorizationUnitsTable extends MemorizationUnits
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  MemorizationUnit map(Map<String, dynamic> data, {String? tablePrefix}) {
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {passageId},
+  ];
+  @override
+  SessionProgressEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return MemorizationUnit(
+    return SessionProgressEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      passageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}passage_id'],
+      )!,
+      currentStepIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}current_step_index'],
+      )!,
+      currentAyah: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}current_ayah'],
+      )!,
+      maskLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mask_level'],
+      ),
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SessionProgressEntriesTable createAlias(String alias) {
+    return $SessionProgressEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class SessionProgressEntry extends DataClass
+    implements Insertable<SessionProgressEntry> {
+  final String id;
+  final String passageId;
+
+  /// 0=Découvrir, 1=Répéter, 2=Masquer, 3=Réciter, 4=Enchaîner.
+  final int currentStepIndex;
+  final int currentAyah;
+
+  /// 'light' | 'medium' | 'full' — only meaningful during Masquer.
+  final String? maskLevel;
+  final DateTime startedAt;
+  final DateTime updatedAt;
+  const SessionProgressEntry({
+    required this.id,
+    required this.passageId,
+    required this.currentStepIndex,
+    required this.currentAyah,
+    this.maskLevel,
+    required this.startedAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['passage_id'] = Variable<String>(passageId);
+    map['current_step_index'] = Variable<int>(currentStepIndex);
+    map['current_ayah'] = Variable<int>(currentAyah);
+    if (!nullToAbsent || maskLevel != null) {
+      map['mask_level'] = Variable<String>(maskLevel);
+    }
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  SessionProgressEntriesCompanion toCompanion(bool nullToAbsent) {
+    return SessionProgressEntriesCompanion(
+      id: Value(id),
+      passageId: Value(passageId),
+      currentStepIndex: Value(currentStepIndex),
+      currentAyah: Value(currentAyah),
+      maskLevel: maskLevel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maskLevel),
+      startedAt: Value(startedAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory SessionProgressEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SessionProgressEntry(
+      id: serializer.fromJson<String>(json['id']),
+      passageId: serializer.fromJson<String>(json['passageId']),
+      currentStepIndex: serializer.fromJson<int>(json['currentStepIndex']),
+      currentAyah: serializer.fromJson<int>(json['currentAyah']),
+      maskLevel: serializer.fromJson<String?>(json['maskLevel']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'passageId': serializer.toJson<String>(passageId),
+      'currentStepIndex': serializer.toJson<int>(currentStepIndex),
+      'currentAyah': serializer.toJson<int>(currentAyah),
+      'maskLevel': serializer.toJson<String?>(maskLevel),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  SessionProgressEntry copyWith({
+    String? id,
+    String? passageId,
+    int? currentStepIndex,
+    int? currentAyah,
+    Value<String?> maskLevel = const Value.absent(),
+    DateTime? startedAt,
+    DateTime? updatedAt,
+  }) => SessionProgressEntry(
+    id: id ?? this.id,
+    passageId: passageId ?? this.passageId,
+    currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+    currentAyah: currentAyah ?? this.currentAyah,
+    maskLevel: maskLevel.present ? maskLevel.value : this.maskLevel,
+    startedAt: startedAt ?? this.startedAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  SessionProgressEntry copyWithCompanion(SessionProgressEntriesCompanion data) {
+    return SessionProgressEntry(
+      id: data.id.present ? data.id.value : this.id,
+      passageId: data.passageId.present ? data.passageId.value : this.passageId,
+      currentStepIndex: data.currentStepIndex.present
+          ? data.currentStepIndex.value
+          : this.currentStepIndex,
+      currentAyah: data.currentAyah.present
+          ? data.currentAyah.value
+          : this.currentAyah,
+      maskLevel: data.maskLevel.present ? data.maskLevel.value : this.maskLevel,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SessionProgressEntry(')
+          ..write('id: $id, ')
+          ..write('passageId: $passageId, ')
+          ..write('currentStepIndex: $currentStepIndex, ')
+          ..write('currentAyah: $currentAyah, ')
+          ..write('maskLevel: $maskLevel, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    passageId,
+    currentStepIndex,
+    currentAyah,
+    maskLevel,
+    startedAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SessionProgressEntry &&
+          other.id == this.id &&
+          other.passageId == this.passageId &&
+          other.currentStepIndex == this.currentStepIndex &&
+          other.currentAyah == this.currentAyah &&
+          other.maskLevel == this.maskLevel &&
+          other.startedAt == this.startedAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class SessionProgressEntriesCompanion
+    extends UpdateCompanion<SessionProgressEntry> {
+  final Value<String> id;
+  final Value<String> passageId;
+  final Value<int> currentStepIndex;
+  final Value<int> currentAyah;
+  final Value<String?> maskLevel;
+  final Value<DateTime> startedAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const SessionProgressEntriesCompanion({
+    this.id = const Value.absent(),
+    this.passageId = const Value.absent(),
+    this.currentStepIndex = const Value.absent(),
+    this.currentAyah = const Value.absent(),
+    this.maskLevel = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SessionProgressEntriesCompanion.insert({
+    required String id,
+    required String passageId,
+    this.currentStepIndex = const Value.absent(),
+    required int currentAyah,
+    this.maskLevel = const Value.absent(),
+    required DateTime startedAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       passageId = Value(passageId),
+       currentAyah = Value(currentAyah),
+       startedAt = Value(startedAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<SessionProgressEntry> custom({
+    Expression<String>? id,
+    Expression<String>? passageId,
+    Expression<int>? currentStepIndex,
+    Expression<int>? currentAyah,
+    Expression<String>? maskLevel,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (passageId != null) 'passage_id': passageId,
+      if (currentStepIndex != null) 'current_step_index': currentStepIndex,
+      if (currentAyah != null) 'current_ayah': currentAyah,
+      if (maskLevel != null) 'mask_level': maskLevel,
+      if (startedAt != null) 'started_at': startedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SessionProgressEntriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? passageId,
+    Value<int>? currentStepIndex,
+    Value<int>? currentAyah,
+    Value<String?>? maskLevel,
+    Value<DateTime>? startedAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return SessionProgressEntriesCompanion(
+      id: id ?? this.id,
+      passageId: passageId ?? this.passageId,
+      currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+      currentAyah: currentAyah ?? this.currentAyah,
+      maskLevel: maskLevel ?? this.maskLevel,
+      startedAt: startedAt ?? this.startedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (passageId.present) {
+      map['passage_id'] = Variable<String>(passageId.value);
+    }
+    if (currentStepIndex.present) {
+      map['current_step_index'] = Variable<int>(currentStepIndex.value);
+    }
+    if (currentAyah.present) {
+      map['current_ayah'] = Variable<int>(currentAyah.value);
+    }
+    if (maskLevel.present) {
+      map['mask_level'] = Variable<String>(maskLevel.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SessionProgressEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('passageId: $passageId, ')
+          ..write('currentStepIndex: $currentStepIndex, ')
+          ..write('currentAyah: $currentAyah, ')
+          ..write('maskLevel: $maskLevel, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AyahProgressEntriesTable extends AyahProgressEntries
+    with TableInfo<$AyahProgressEntriesTable, AyahProgressEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AyahProgressEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
+  @override
+  late final GeneratedColumn<String> profileId = GeneratedColumn<String>(
+    'profile_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_profiles (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
+    'surahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
+    'surah_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ayahNumberMeta = const VerificationMeta(
+    'ayahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> ayahNumber = GeneratedColumn<int>(
+    'ayah_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastOutcomeMeta = const VerificationMeta(
+    'lastOutcome',
+  );
+  @override
+  late final GeneratedColumn<String> lastOutcome = GeneratedColumn<String>(
+    'last_outcome',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _fragileWordIndicesMeta =
+      const VerificationMeta('fragileWordIndices');
+  @override
+  late final GeneratedColumn<String> fragileWordIndices =
+      GeneratedColumn<String>(
+        'fragile_word_indices',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      );
+  static const VerificationMeta _reviewCycleStepMeta = const VerificationMeta(
+    'reviewCycleStep',
+  );
+  @override
+  late final GeneratedColumn<int> reviewCycleStep = GeneratedColumn<int>(
+    'review_cycle_step',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _memorizedAtMeta = const VerificationMeta(
+    'memorizedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> memorizedAt = GeneratedColumn<DateTime>(
+    'memorized_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nextReviewAtMeta = const VerificationMeta(
+    'nextReviewAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> nextReviewAt = GeneratedColumn<DateTime>(
+    'next_review_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    profileId,
+    surahNumber,
+    ayahNumber,
+    lastOutcome,
+    fragileWordIndices,
+    reviewCycleStep,
+    memorizedAt,
+    nextReviewAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ayah_progress_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AyahProgressEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('profile_id')) {
+      context.handle(
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_profileIdMeta);
+    }
+    if (data.containsKey('surah_number')) {
+      context.handle(
+        _surahNumberMeta,
+        surahNumber.isAcceptableOrUnknown(
+          data['surah_number']!,
+          _surahNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_surahNumberMeta);
+    }
+    if (data.containsKey('ayah_number')) {
+      context.handle(
+        _ayahNumberMeta,
+        ayahNumber.isAcceptableOrUnknown(data['ayah_number']!, _ayahNumberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ayahNumberMeta);
+    }
+    if (data.containsKey('last_outcome')) {
+      context.handle(
+        _lastOutcomeMeta,
+        lastOutcome.isAcceptableOrUnknown(
+          data['last_outcome']!,
+          _lastOutcomeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('fragile_word_indices')) {
+      context.handle(
+        _fragileWordIndicesMeta,
+        fragileWordIndices.isAcceptableOrUnknown(
+          data['fragile_word_indices']!,
+          _fragileWordIndicesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('review_cycle_step')) {
+      context.handle(
+        _reviewCycleStepMeta,
+        reviewCycleStep.isAcceptableOrUnknown(
+          data['review_cycle_step']!,
+          _reviewCycleStepMeta,
+        ),
+      );
+    }
+    if (data.containsKey('memorized_at')) {
+      context.handle(
+        _memorizedAtMeta,
+        memorizedAt.isAcceptableOrUnknown(
+          data['memorized_at']!,
+          _memorizedAtMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_memorizedAtMeta);
+    }
+    if (data.containsKey('next_review_at')) {
+      context.handle(
+        _nextReviewAtMeta,
+        nextReviewAt.isAcceptableOrUnknown(
+          data['next_review_at']!,
+          _nextReviewAtMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_nextReviewAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {profileId, surahNumber, ayahNumber},
+  ];
+  @override
+  AyahProgressEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AyahProgressEntry(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -935,37 +1815,29 @@ class $MemorizationUnitsTable extends MemorizationUnits
         DriftSqlType.int,
         data['${effectivePrefix}surah_number'],
       )!,
-      startAyah: attachedDatabase.typeMapping.read(
+      ayahNumber: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}start_ayah'],
+        data['${effectivePrefix}ayah_number'],
       )!,
-      endAyah: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}end_ayah'],
-      )!,
-      status: attachedDatabase.typeMapping.read(
+      lastOutcome: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}status'],
-      )!,
-      masteryLevel: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}last_outcome'],
+      ),
+      fragileWordIndices: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}mastery_level'],
-      ),
-      circle: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}fragile_word_indices'],
+      )!,
+      reviewCycleStep: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}circle'],
-      ),
-      lastReviewedAt: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}review_cycle_step'],
+      )!,
+      memorizedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}last_reviewed_at'],
-      ),
-      nextReviewDueAt: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}memorized_at'],
+      )!,
+      nextReviewAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}next_review_due_at'],
-      ),
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}next_review_at'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -975,44 +1847,40 @@ class $MemorizationUnitsTable extends MemorizationUnits
   }
 
   @override
-  $MemorizationUnitsTable createAlias(String alias) {
-    return $MemorizationUnitsTable(attachedDatabase, alias);
+  $AyahProgressEntriesTable createAlias(String alias) {
+    return $AyahProgressEntriesTable(attachedDatabase, alias);
   }
 }
 
-class MemorizationUnit extends DataClass
-    implements Insertable<MemorizationUnit> {
+class AyahProgressEntry extends DataClass
+    implements Insertable<AyahProgressEntry> {
   final String id;
   final String profileId;
   final int surahNumber;
-  final int startAyah;
-  final int endAyah;
+  final int ayahNumber;
 
-  /// 'not_started' | 'learning' | 'memorized'
-  final String status;
+  /// 'clean' | 'hesitant' | 'redo' — the last "Réciter" self-assessment.
+  final String? lastOutcome;
 
-  /// 'weak' | 'medium' | 'solid' — null until first review.
-  final String? masteryLevel;
+  /// JSON-encoded list of word indices tapped during Masquer (revealed
+  /// early) — feeds ReviewScheduler's `hasFragileWords`.
+  final String fragileWordIndices;
 
-  /// Spaced-repetition circle ("Les Trois Cercles"): 1 = quotidien,
-  /// 2 = hebdomadaire, 3 = mensuel. Null until the unit is memorized.
-  final int? circle;
-  final DateTime? lastReviewedAt;
-  final DateTime? nextReviewDueAt;
-  final DateTime createdAt;
+  /// How many successful reviews so far — ReviewScheduler's `cycleStep`.
+  final int reviewCycleStep;
+  final DateTime memorizedAt;
+  final DateTime nextReviewAt;
   final DateTime updatedAt;
-  const MemorizationUnit({
+  const AyahProgressEntry({
     required this.id,
     required this.profileId,
     required this.surahNumber,
-    required this.startAyah,
-    required this.endAyah,
-    required this.status,
-    this.masteryLevel,
-    this.circle,
-    this.lastReviewedAt,
-    this.nextReviewDueAt,
-    required this.createdAt,
+    required this.ayahNumber,
+    this.lastOutcome,
+    required this.fragileWordIndices,
+    required this.reviewCycleStep,
+    required this.memorizedAt,
+    required this.nextReviewAt,
     required this.updatedAt,
   });
   @override
@@ -1021,68 +1889,52 @@ class MemorizationUnit extends DataClass
     map['id'] = Variable<String>(id);
     map['profile_id'] = Variable<String>(profileId);
     map['surah_number'] = Variable<int>(surahNumber);
-    map['start_ayah'] = Variable<int>(startAyah);
-    map['end_ayah'] = Variable<int>(endAyah);
-    map['status'] = Variable<String>(status);
-    if (!nullToAbsent || masteryLevel != null) {
-      map['mastery_level'] = Variable<String>(masteryLevel);
+    map['ayah_number'] = Variable<int>(ayahNumber);
+    if (!nullToAbsent || lastOutcome != null) {
+      map['last_outcome'] = Variable<String>(lastOutcome);
     }
-    if (!nullToAbsent || circle != null) {
-      map['circle'] = Variable<int>(circle);
-    }
-    if (!nullToAbsent || lastReviewedAt != null) {
-      map['last_reviewed_at'] = Variable<DateTime>(lastReviewedAt);
-    }
-    if (!nullToAbsent || nextReviewDueAt != null) {
-      map['next_review_due_at'] = Variable<DateTime>(nextReviewDueAt);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
+    map['fragile_word_indices'] = Variable<String>(fragileWordIndices);
+    map['review_cycle_step'] = Variable<int>(reviewCycleStep);
+    map['memorized_at'] = Variable<DateTime>(memorizedAt);
+    map['next_review_at'] = Variable<DateTime>(nextReviewAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
-  MemorizationUnitsCompanion toCompanion(bool nullToAbsent) {
-    return MemorizationUnitsCompanion(
+  AyahProgressEntriesCompanion toCompanion(bool nullToAbsent) {
+    return AyahProgressEntriesCompanion(
       id: Value(id),
       profileId: Value(profileId),
       surahNumber: Value(surahNumber),
-      startAyah: Value(startAyah),
-      endAyah: Value(endAyah),
-      status: Value(status),
-      masteryLevel: masteryLevel == null && nullToAbsent
+      ayahNumber: Value(ayahNumber),
+      lastOutcome: lastOutcome == null && nullToAbsent
           ? const Value.absent()
-          : Value(masteryLevel),
-      circle: circle == null && nullToAbsent
-          ? const Value.absent()
-          : Value(circle),
-      lastReviewedAt: lastReviewedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastReviewedAt),
-      nextReviewDueAt: nextReviewDueAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(nextReviewDueAt),
-      createdAt: Value(createdAt),
+          : Value(lastOutcome),
+      fragileWordIndices: Value(fragileWordIndices),
+      reviewCycleStep: Value(reviewCycleStep),
+      memorizedAt: Value(memorizedAt),
+      nextReviewAt: Value(nextReviewAt),
       updatedAt: Value(updatedAt),
     );
   }
 
-  factory MemorizationUnit.fromJson(
+  factory AyahProgressEntry.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return MemorizationUnit(
+    return AyahProgressEntry(
       id: serializer.fromJson<String>(json['id']),
       profileId: serializer.fromJson<String>(json['profileId']),
       surahNumber: serializer.fromJson<int>(json['surahNumber']),
-      startAyah: serializer.fromJson<int>(json['startAyah']),
-      endAyah: serializer.fromJson<int>(json['endAyah']),
-      status: serializer.fromJson<String>(json['status']),
-      masteryLevel: serializer.fromJson<String?>(json['masteryLevel']),
-      circle: serializer.fromJson<int?>(json['circle']),
-      lastReviewedAt: serializer.fromJson<DateTime?>(json['lastReviewedAt']),
-      nextReviewDueAt: serializer.fromJson<DateTime?>(json['nextReviewDueAt']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      ayahNumber: serializer.fromJson<int>(json['ayahNumber']),
+      lastOutcome: serializer.fromJson<String?>(json['lastOutcome']),
+      fragileWordIndices: serializer.fromJson<String>(
+        json['fragileWordIndices'],
+      ),
+      reviewCycleStep: serializer.fromJson<int>(json['reviewCycleStep']),
+      memorizedAt: serializer.fromJson<DateTime>(json['memorizedAt']),
+      nextReviewAt: serializer.fromJson<DateTime>(json['nextReviewAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -1093,88 +1945,80 @@ class MemorizationUnit extends DataClass
       'id': serializer.toJson<String>(id),
       'profileId': serializer.toJson<String>(profileId),
       'surahNumber': serializer.toJson<int>(surahNumber),
-      'startAyah': serializer.toJson<int>(startAyah),
-      'endAyah': serializer.toJson<int>(endAyah),
-      'status': serializer.toJson<String>(status),
-      'masteryLevel': serializer.toJson<String?>(masteryLevel),
-      'circle': serializer.toJson<int?>(circle),
-      'lastReviewedAt': serializer.toJson<DateTime?>(lastReviewedAt),
-      'nextReviewDueAt': serializer.toJson<DateTime?>(nextReviewDueAt),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'ayahNumber': serializer.toJson<int>(ayahNumber),
+      'lastOutcome': serializer.toJson<String?>(lastOutcome),
+      'fragileWordIndices': serializer.toJson<String>(fragileWordIndices),
+      'reviewCycleStep': serializer.toJson<int>(reviewCycleStep),
+      'memorizedAt': serializer.toJson<DateTime>(memorizedAt),
+      'nextReviewAt': serializer.toJson<DateTime>(nextReviewAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
-  MemorizationUnit copyWith({
+  AyahProgressEntry copyWith({
     String? id,
     String? profileId,
     int? surahNumber,
-    int? startAyah,
-    int? endAyah,
-    String? status,
-    Value<String?> masteryLevel = const Value.absent(),
-    Value<int?> circle = const Value.absent(),
-    Value<DateTime?> lastReviewedAt = const Value.absent(),
-    Value<DateTime?> nextReviewDueAt = const Value.absent(),
-    DateTime? createdAt,
+    int? ayahNumber,
+    Value<String?> lastOutcome = const Value.absent(),
+    String? fragileWordIndices,
+    int? reviewCycleStep,
+    DateTime? memorizedAt,
+    DateTime? nextReviewAt,
     DateTime? updatedAt,
-  }) => MemorizationUnit(
+  }) => AyahProgressEntry(
     id: id ?? this.id,
     profileId: profileId ?? this.profileId,
     surahNumber: surahNumber ?? this.surahNumber,
-    startAyah: startAyah ?? this.startAyah,
-    endAyah: endAyah ?? this.endAyah,
-    status: status ?? this.status,
-    masteryLevel: masteryLevel.present ? masteryLevel.value : this.masteryLevel,
-    circle: circle.present ? circle.value : this.circle,
-    lastReviewedAt: lastReviewedAt.present
-        ? lastReviewedAt.value
-        : this.lastReviewedAt,
-    nextReviewDueAt: nextReviewDueAt.present
-        ? nextReviewDueAt.value
-        : this.nextReviewDueAt,
-    createdAt: createdAt ?? this.createdAt,
+    ayahNumber: ayahNumber ?? this.ayahNumber,
+    lastOutcome: lastOutcome.present ? lastOutcome.value : this.lastOutcome,
+    fragileWordIndices: fragileWordIndices ?? this.fragileWordIndices,
+    reviewCycleStep: reviewCycleStep ?? this.reviewCycleStep,
+    memorizedAt: memorizedAt ?? this.memorizedAt,
+    nextReviewAt: nextReviewAt ?? this.nextReviewAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
-  MemorizationUnit copyWithCompanion(MemorizationUnitsCompanion data) {
-    return MemorizationUnit(
+  AyahProgressEntry copyWithCompanion(AyahProgressEntriesCompanion data) {
+    return AyahProgressEntry(
       id: data.id.present ? data.id.value : this.id,
       profileId: data.profileId.present ? data.profileId.value : this.profileId,
       surahNumber: data.surahNumber.present
           ? data.surahNumber.value
           : this.surahNumber,
-      startAyah: data.startAyah.present ? data.startAyah.value : this.startAyah,
-      endAyah: data.endAyah.present ? data.endAyah.value : this.endAyah,
-      status: data.status.present ? data.status.value : this.status,
-      masteryLevel: data.masteryLevel.present
-          ? data.masteryLevel.value
-          : this.masteryLevel,
-      circle: data.circle.present ? data.circle.value : this.circle,
-      lastReviewedAt: data.lastReviewedAt.present
-          ? data.lastReviewedAt.value
-          : this.lastReviewedAt,
-      nextReviewDueAt: data.nextReviewDueAt.present
-          ? data.nextReviewDueAt.value
-          : this.nextReviewDueAt,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      ayahNumber: data.ayahNumber.present
+          ? data.ayahNumber.value
+          : this.ayahNumber,
+      lastOutcome: data.lastOutcome.present
+          ? data.lastOutcome.value
+          : this.lastOutcome,
+      fragileWordIndices: data.fragileWordIndices.present
+          ? data.fragileWordIndices.value
+          : this.fragileWordIndices,
+      reviewCycleStep: data.reviewCycleStep.present
+          ? data.reviewCycleStep.value
+          : this.reviewCycleStep,
+      memorizedAt: data.memorizedAt.present
+          ? data.memorizedAt.value
+          : this.memorizedAt,
+      nextReviewAt: data.nextReviewAt.present
+          ? data.nextReviewAt.value
+          : this.nextReviewAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('MemorizationUnit(')
+    return (StringBuffer('AyahProgressEntry(')
           ..write('id: $id, ')
           ..write('profileId: $profileId, ')
           ..write('surahNumber: $surahNumber, ')
-          ..write('startAyah: $startAyah, ')
-          ..write('endAyah: $endAyah, ')
-          ..write('status: $status, ')
-          ..write('masteryLevel: $masteryLevel, ')
-          ..write('circle: $circle, ')
-          ..write('lastReviewedAt: $lastReviewedAt, ')
-          ..write('nextReviewDueAt: $nextReviewDueAt, ')
-          ..write('createdAt: $createdAt, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('lastOutcome: $lastOutcome, ')
+          ..write('fragileWordIndices: $fragileWordIndices, ')
+          ..write('reviewCycleStep: $reviewCycleStep, ')
+          ..write('memorizedAt: $memorizedAt, ')
+          ..write('nextReviewAt: $nextReviewAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -1185,96 +2029,84 @@ class MemorizationUnit extends DataClass
     id,
     profileId,
     surahNumber,
-    startAyah,
-    endAyah,
-    status,
-    masteryLevel,
-    circle,
-    lastReviewedAt,
-    nextReviewDueAt,
-    createdAt,
+    ayahNumber,
+    lastOutcome,
+    fragileWordIndices,
+    reviewCycleStep,
+    memorizedAt,
+    nextReviewAt,
     updatedAt,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MemorizationUnit &&
+      (other is AyahProgressEntry &&
           other.id == this.id &&
           other.profileId == this.profileId &&
           other.surahNumber == this.surahNumber &&
-          other.startAyah == this.startAyah &&
-          other.endAyah == this.endAyah &&
-          other.status == this.status &&
-          other.masteryLevel == this.masteryLevel &&
-          other.circle == this.circle &&
-          other.lastReviewedAt == this.lastReviewedAt &&
-          other.nextReviewDueAt == this.nextReviewDueAt &&
-          other.createdAt == this.createdAt &&
+          other.ayahNumber == this.ayahNumber &&
+          other.lastOutcome == this.lastOutcome &&
+          other.fragileWordIndices == this.fragileWordIndices &&
+          other.reviewCycleStep == this.reviewCycleStep &&
+          other.memorizedAt == this.memorizedAt &&
+          other.nextReviewAt == this.nextReviewAt &&
           other.updatedAt == this.updatedAt);
 }
 
-class MemorizationUnitsCompanion extends UpdateCompanion<MemorizationUnit> {
+class AyahProgressEntriesCompanion extends UpdateCompanion<AyahProgressEntry> {
   final Value<String> id;
   final Value<String> profileId;
   final Value<int> surahNumber;
-  final Value<int> startAyah;
-  final Value<int> endAyah;
-  final Value<String> status;
-  final Value<String?> masteryLevel;
-  final Value<int?> circle;
-  final Value<DateTime?> lastReviewedAt;
-  final Value<DateTime?> nextReviewDueAt;
-  final Value<DateTime> createdAt;
+  final Value<int> ayahNumber;
+  final Value<String?> lastOutcome;
+  final Value<String> fragileWordIndices;
+  final Value<int> reviewCycleStep;
+  final Value<DateTime> memorizedAt;
+  final Value<DateTime> nextReviewAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
-  const MemorizationUnitsCompanion({
+  const AyahProgressEntriesCompanion({
     this.id = const Value.absent(),
     this.profileId = const Value.absent(),
     this.surahNumber = const Value.absent(),
-    this.startAyah = const Value.absent(),
-    this.endAyah = const Value.absent(),
-    this.status = const Value.absent(),
-    this.masteryLevel = const Value.absent(),
-    this.circle = const Value.absent(),
-    this.lastReviewedAt = const Value.absent(),
-    this.nextReviewDueAt = const Value.absent(),
-    this.createdAt = const Value.absent(),
+    this.ayahNumber = const Value.absent(),
+    this.lastOutcome = const Value.absent(),
+    this.fragileWordIndices = const Value.absent(),
+    this.reviewCycleStep = const Value.absent(),
+    this.memorizedAt = const Value.absent(),
+    this.nextReviewAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  MemorizationUnitsCompanion.insert({
+  AyahProgressEntriesCompanion.insert({
     required String id,
     required String profileId,
     required int surahNumber,
-    required int startAyah,
-    required int endAyah,
-    this.status = const Value.absent(),
-    this.masteryLevel = const Value.absent(),
-    this.circle = const Value.absent(),
-    this.lastReviewedAt = const Value.absent(),
-    this.nextReviewDueAt = const Value.absent(),
-    required DateTime createdAt,
+    required int ayahNumber,
+    this.lastOutcome = const Value.absent(),
+    this.fragileWordIndices = const Value.absent(),
+    this.reviewCycleStep = const Value.absent(),
+    required DateTime memorizedAt,
+    required DateTime nextReviewAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        profileId = Value(profileId),
        surahNumber = Value(surahNumber),
-       startAyah = Value(startAyah),
-       endAyah = Value(endAyah),
-       createdAt = Value(createdAt),
+       ayahNumber = Value(ayahNumber),
+       memorizedAt = Value(memorizedAt),
+       nextReviewAt = Value(nextReviewAt),
        updatedAt = Value(updatedAt);
-  static Insertable<MemorizationUnit> custom({
+  static Insertable<AyahProgressEntry> custom({
     Expression<String>? id,
     Expression<String>? profileId,
     Expression<int>? surahNumber,
-    Expression<int>? startAyah,
-    Expression<int>? endAyah,
-    Expression<String>? status,
-    Expression<String>? masteryLevel,
-    Expression<int>? circle,
-    Expression<DateTime>? lastReviewedAt,
-    Expression<DateTime>? nextReviewDueAt,
-    Expression<DateTime>? createdAt,
+    Expression<int>? ayahNumber,
+    Expression<String>? lastOutcome,
+    Expression<String>? fragileWordIndices,
+    Expression<int>? reviewCycleStep,
+    Expression<DateTime>? memorizedAt,
+    Expression<DateTime>? nextReviewAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
@@ -1282,46 +2114,41 @@ class MemorizationUnitsCompanion extends UpdateCompanion<MemorizationUnit> {
       if (id != null) 'id': id,
       if (profileId != null) 'profile_id': profileId,
       if (surahNumber != null) 'surah_number': surahNumber,
-      if (startAyah != null) 'start_ayah': startAyah,
-      if (endAyah != null) 'end_ayah': endAyah,
-      if (status != null) 'status': status,
-      if (masteryLevel != null) 'mastery_level': masteryLevel,
-      if (circle != null) 'circle': circle,
-      if (lastReviewedAt != null) 'last_reviewed_at': lastReviewedAt,
-      if (nextReviewDueAt != null) 'next_review_due_at': nextReviewDueAt,
-      if (createdAt != null) 'created_at': createdAt,
+      if (ayahNumber != null) 'ayah_number': ayahNumber,
+      if (lastOutcome != null) 'last_outcome': lastOutcome,
+      if (fragileWordIndices != null)
+        'fragile_word_indices': fragileWordIndices,
+      if (reviewCycleStep != null) 'review_cycle_step': reviewCycleStep,
+      if (memorizedAt != null) 'memorized_at': memorizedAt,
+      if (nextReviewAt != null) 'next_review_at': nextReviewAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  MemorizationUnitsCompanion copyWith({
+  AyahProgressEntriesCompanion copyWith({
     Value<String>? id,
     Value<String>? profileId,
     Value<int>? surahNumber,
-    Value<int>? startAyah,
-    Value<int>? endAyah,
-    Value<String>? status,
-    Value<String?>? masteryLevel,
-    Value<int?>? circle,
-    Value<DateTime?>? lastReviewedAt,
-    Value<DateTime?>? nextReviewDueAt,
-    Value<DateTime>? createdAt,
+    Value<int>? ayahNumber,
+    Value<String?>? lastOutcome,
+    Value<String>? fragileWordIndices,
+    Value<int>? reviewCycleStep,
+    Value<DateTime>? memorizedAt,
+    Value<DateTime>? nextReviewAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
-    return MemorizationUnitsCompanion(
+    return AyahProgressEntriesCompanion(
       id: id ?? this.id,
       profileId: profileId ?? this.profileId,
       surahNumber: surahNumber ?? this.surahNumber,
-      startAyah: startAyah ?? this.startAyah,
-      endAyah: endAyah ?? this.endAyah,
-      status: status ?? this.status,
-      masteryLevel: masteryLevel ?? this.masteryLevel,
-      circle: circle ?? this.circle,
-      lastReviewedAt: lastReviewedAt ?? this.lastReviewedAt,
-      nextReviewDueAt: nextReviewDueAt ?? this.nextReviewDueAt,
-      createdAt: createdAt ?? this.createdAt,
+      ayahNumber: ayahNumber ?? this.ayahNumber,
+      lastOutcome: lastOutcome ?? this.lastOutcome,
+      fragileWordIndices: fragileWordIndices ?? this.fragileWordIndices,
+      reviewCycleStep: reviewCycleStep ?? this.reviewCycleStep,
+      memorizedAt: memorizedAt ?? this.memorizedAt,
+      nextReviewAt: nextReviewAt ?? this.nextReviewAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -1339,29 +2166,23 @@ class MemorizationUnitsCompanion extends UpdateCompanion<MemorizationUnit> {
     if (surahNumber.present) {
       map['surah_number'] = Variable<int>(surahNumber.value);
     }
-    if (startAyah.present) {
-      map['start_ayah'] = Variable<int>(startAyah.value);
+    if (ayahNumber.present) {
+      map['ayah_number'] = Variable<int>(ayahNumber.value);
     }
-    if (endAyah.present) {
-      map['end_ayah'] = Variable<int>(endAyah.value);
+    if (lastOutcome.present) {
+      map['last_outcome'] = Variable<String>(lastOutcome.value);
     }
-    if (status.present) {
-      map['status'] = Variable<String>(status.value);
+    if (fragileWordIndices.present) {
+      map['fragile_word_indices'] = Variable<String>(fragileWordIndices.value);
     }
-    if (masteryLevel.present) {
-      map['mastery_level'] = Variable<String>(masteryLevel.value);
+    if (reviewCycleStep.present) {
+      map['review_cycle_step'] = Variable<int>(reviewCycleStep.value);
     }
-    if (circle.present) {
-      map['circle'] = Variable<int>(circle.value);
+    if (memorizedAt.present) {
+      map['memorized_at'] = Variable<DateTime>(memorizedAt.value);
     }
-    if (lastReviewedAt.present) {
-      map['last_reviewed_at'] = Variable<DateTime>(lastReviewedAt.value);
-    }
-    if (nextReviewDueAt.present) {
-      map['next_review_due_at'] = Variable<DateTime>(nextReviewDueAt.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+    if (nextReviewAt.present) {
+      map['next_review_at'] = Variable<DateTime>(nextReviewAt.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
@@ -1374,18 +2195,16 @@ class MemorizationUnitsCompanion extends UpdateCompanion<MemorizationUnit> {
 
   @override
   String toString() {
-    return (StringBuffer('MemorizationUnitsCompanion(')
+    return (StringBuffer('AyahProgressEntriesCompanion(')
           ..write('id: $id, ')
           ..write('profileId: $profileId, ')
           ..write('surahNumber: $surahNumber, ')
-          ..write('startAyah: $startAyah, ')
-          ..write('endAyah: $endAyah, ')
-          ..write('status: $status, ')
-          ..write('masteryLevel: $masteryLevel, ')
-          ..write('circle: $circle, ')
-          ..write('lastReviewedAt: $lastReviewedAt, ')
-          ..write('nextReviewDueAt: $nextReviewDueAt, ')
-          ..write('createdAt: $createdAt, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('lastOutcome: $lastOutcome, ')
+          ..write('fragileWordIndices: $fragileWordIndices, ')
+          ..write('reviewCycleStep: $reviewCycleStep, ')
+          ..write('memorizedAt: $memorizedAt, ')
+          ..write('nextReviewAt: $nextReviewAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1393,12 +2212,12 @@ class MemorizationUnitsCompanion extends UpdateCompanion<MemorizationUnit> {
   }
 }
 
-class $ReviewHistoryEntriesTable extends ReviewHistoryEntries
-    with TableInfo<$ReviewHistoryEntriesTable, ReviewHistoryEntry> {
+class $SurahProgressEntriesTable extends SurahProgressEntries
+    with TableInfo<$SurahProgressEntriesTable, SurahProgressEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ReviewHistoryEntriesTable(this.attachedDatabase, [this._alias]);
+  $SurahProgressEntriesTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -1408,66 +2227,70 @@ class $ReviewHistoryEntriesTable extends ReviewHistoryEntries
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _unitIdMeta = const VerificationMeta('unitId');
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
   @override
-  late final GeneratedColumn<String> unitId = GeneratedColumn<String>(
-    'unit_id',
+  late final GeneratedColumn<String> profileId = GeneratedColumn<String>(
+    'profile_id',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES memorization_units (id) ON DELETE CASCADE',
+      'REFERENCES user_profiles (id) ON DELETE CASCADE',
     ),
   );
-  static const VerificationMeta _reviewedAtMeta = const VerificationMeta(
-    'reviewedAt',
+  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
+    'surahNumber',
   );
   @override
-  late final GeneratedColumn<DateTime> reviewedAt = GeneratedColumn<DateTime>(
-    'reviewed_at',
+  late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
+    'surah_number',
     aliasedName,
     false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _memorizedAyahCountMeta =
+      const VerificationMeta('memorizedAyahCount');
+  @override
+  late final GeneratedColumn<int> memorizedAyahCount = GeneratedColumn<int>(
+    'memorized_ayah_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _totalAyahCountMeta = const VerificationMeta(
+    'totalAyahCount',
+  );
+  @override
+  late final GeneratedColumn<int> totalAyahCount = GeneratedColumn<int>(
+    'total_ayah_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedAtMeta = const VerificationMeta(
+    'completedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+    'completed_at',
+    aliasedName,
+    true,
     type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _resultMeta = const VerificationMeta('result');
-  @override
-  late final GeneratedColumn<String> result = GeneratedColumn<String>(
-    'result',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _circleBeforeMeta = const VerificationMeta(
-    'circleBefore',
-  );
-  @override
-  late final GeneratedColumn<int> circleBefore = GeneratedColumn<int>(
-    'circle_before',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _circleAfterMeta = const VerificationMeta(
-    'circleAfter',
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
   );
   @override
-  late final GeneratedColumn<int> circleAfter = GeneratedColumn<int>(
-    'circle_after',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1476,21 +2299,21 @@ class $ReviewHistoryEntriesTable extends ReviewHistoryEntries
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    unitId,
-    reviewedAt,
-    result,
-    circleBefore,
-    circleAfter,
-    createdAt,
+    profileId,
+    surahNumber,
+    memorizedAyahCount,
+    totalAyahCount,
+    completedAt,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'review_history_entries';
+  static const String $name = 'surah_progress_entries';
   @override
   VerificationContext validateIntegrity(
-    Insertable<ReviewHistoryEntry> instance, {
+    Insertable<SurahProgressEntry> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1500,55 +2323,61 @@ class $ReviewHistoryEntriesTable extends ReviewHistoryEntries
     } else if (isInserting) {
       context.missing(_idMeta);
     }
-    if (data.containsKey('unit_id')) {
+    if (data.containsKey('profile_id')) {
       context.handle(
-        _unitIdMeta,
-        unitId.isAcceptableOrUnknown(data['unit_id']!, _unitIdMeta),
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_unitIdMeta);
+      context.missing(_profileIdMeta);
     }
-    if (data.containsKey('reviewed_at')) {
+    if (data.containsKey('surah_number')) {
       context.handle(
-        _reviewedAtMeta,
-        reviewedAt.isAcceptableOrUnknown(data['reviewed_at']!, _reviewedAtMeta),
+        _surahNumberMeta,
+        surahNumber.isAcceptableOrUnknown(
+          data['surah_number']!,
+          _surahNumberMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_reviewedAtMeta);
+      context.missing(_surahNumberMeta);
     }
-    if (data.containsKey('result')) {
+    if (data.containsKey('memorized_ayah_count')) {
       context.handle(
-        _resultMeta,
-        result.isAcceptableOrUnknown(data['result']!, _resultMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_resultMeta);
-    }
-    if (data.containsKey('circle_before')) {
-      context.handle(
-        _circleBeforeMeta,
-        circleBefore.isAcceptableOrUnknown(
-          data['circle_before']!,
-          _circleBeforeMeta,
+        _memorizedAyahCountMeta,
+        memorizedAyahCount.isAcceptableOrUnknown(
+          data['memorized_ayah_count']!,
+          _memorizedAyahCountMeta,
         ),
       );
     }
-    if (data.containsKey('circle_after')) {
+    if (data.containsKey('total_ayah_count')) {
       context.handle(
-        _circleAfterMeta,
-        circleAfter.isAcceptableOrUnknown(
-          data['circle_after']!,
-          _circleAfterMeta,
+        _totalAyahCountMeta,
+        totalAyahCount.isAcceptableOrUnknown(
+          data['total_ayah_count']!,
+          _totalAyahCountMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalAyahCountMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+        _completedAtMeta,
+        completedAt.isAcceptableOrUnknown(
+          data['completed_at']!,
+          _completedAtMeta,
         ),
       );
     }
-    if (data.containsKey('created_at')) {
+    if (data.containsKey('updated_at')) {
       context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     } else if (isInserting) {
-      context.missing(_createdAtMeta);
+      context.missing(_updatedAtMeta);
     }
     return context;
   }
@@ -1556,112 +2385,110 @@ class $ReviewHistoryEntriesTable extends ReviewHistoryEntries
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ReviewHistoryEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {profileId, surahNumber},
+  ];
+  @override
+  SurahProgressEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ReviewHistoryEntry(
+    return SurahProgressEntry(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
-      unitId: attachedDatabase.typeMapping.read(
+      profileId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}unit_id'],
+        data['${effectivePrefix}profile_id'],
       )!,
-      reviewedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}reviewed_at'],
-      )!,
-      result: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}result'],
-      )!,
-      circleBefore: attachedDatabase.typeMapping.read(
+      surahNumber: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}circle_before'],
-      ),
-      circleAfter: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}surah_number'],
+      )!,
+      memorizedAyahCount: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}circle_after'],
-      ),
-      createdAt: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}memorized_ayah_count'],
+      )!,
+      totalAyahCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_ayah_count'],
+      )!,
+      completedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}completed_at'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
       )!,
     );
   }
 
   @override
-  $ReviewHistoryEntriesTable createAlias(String alias) {
-    return $ReviewHistoryEntriesTable(attachedDatabase, alias);
+  $SurahProgressEntriesTable createAlias(String alias) {
+    return $SurahProgressEntriesTable(attachedDatabase, alias);
   }
 }
 
-class ReviewHistoryEntry extends DataClass
-    implements Insertable<ReviewHistoryEntry> {
+class SurahProgressEntry extends DataClass
+    implements Insertable<SurahProgressEntry> {
   final String id;
-  final String unitId;
-  final DateTime reviewedAt;
-
-  /// 'success' | 'fail'
-  final String result;
-  final int? circleBefore;
-  final int? circleAfter;
-  final DateTime createdAt;
-  const ReviewHistoryEntry({
+  final String profileId;
+  final int surahNumber;
+  final int memorizedAyahCount;
+  final int totalAyahCount;
+  final DateTime? completedAt;
+  final DateTime updatedAt;
+  const SurahProgressEntry({
     required this.id,
-    required this.unitId,
-    required this.reviewedAt,
-    required this.result,
-    this.circleBefore,
-    this.circleAfter,
-    required this.createdAt,
+    required this.profileId,
+    required this.surahNumber,
+    required this.memorizedAyahCount,
+    required this.totalAyahCount,
+    this.completedAt,
+    required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
-    map['unit_id'] = Variable<String>(unitId);
-    map['reviewed_at'] = Variable<DateTime>(reviewedAt);
-    map['result'] = Variable<String>(result);
-    if (!nullToAbsent || circleBefore != null) {
-      map['circle_before'] = Variable<int>(circleBefore);
+    map['profile_id'] = Variable<String>(profileId);
+    map['surah_number'] = Variable<int>(surahNumber);
+    map['memorized_ayah_count'] = Variable<int>(memorizedAyahCount);
+    map['total_ayah_count'] = Variable<int>(totalAyahCount);
+    if (!nullToAbsent || completedAt != null) {
+      map['completed_at'] = Variable<DateTime>(completedAt);
     }
-    if (!nullToAbsent || circleAfter != null) {
-      map['circle_after'] = Variable<int>(circleAfter);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
-  ReviewHistoryEntriesCompanion toCompanion(bool nullToAbsent) {
-    return ReviewHistoryEntriesCompanion(
+  SurahProgressEntriesCompanion toCompanion(bool nullToAbsent) {
+    return SurahProgressEntriesCompanion(
       id: Value(id),
-      unitId: Value(unitId),
-      reviewedAt: Value(reviewedAt),
-      result: Value(result),
-      circleBefore: circleBefore == null && nullToAbsent
+      profileId: Value(profileId),
+      surahNumber: Value(surahNumber),
+      memorizedAyahCount: Value(memorizedAyahCount),
+      totalAyahCount: Value(totalAyahCount),
+      completedAt: completedAt == null && nullToAbsent
           ? const Value.absent()
-          : Value(circleBefore),
-      circleAfter: circleAfter == null && nullToAbsent
-          ? const Value.absent()
-          : Value(circleAfter),
-      createdAt: Value(createdAt),
+          : Value(completedAt),
+      updatedAt: Value(updatedAt),
     );
   }
 
-  factory ReviewHistoryEntry.fromJson(
+  factory SurahProgressEntry.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ReviewHistoryEntry(
+    return SurahProgressEntry(
       id: serializer.fromJson<String>(json['id']),
-      unitId: serializer.fromJson<String>(json['unitId']),
-      reviewedAt: serializer.fromJson<DateTime>(json['reviewedAt']),
-      result: serializer.fromJson<String>(json['result']),
-      circleBefore: serializer.fromJson<int?>(json['circleBefore']),
-      circleAfter: serializer.fromJson<int?>(json['circleAfter']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      profileId: serializer.fromJson<String>(json['profileId']),
+      surahNumber: serializer.fromJson<int>(json['surahNumber']),
+      memorizedAyahCount: serializer.fromJson<int>(json['memorizedAyahCount']),
+      totalAyahCount: serializer.fromJson<int>(json['totalAyahCount']),
+      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
   @override
@@ -1669,60 +2496,62 @@ class ReviewHistoryEntry extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
-      'unitId': serializer.toJson<String>(unitId),
-      'reviewedAt': serializer.toJson<DateTime>(reviewedAt),
-      'result': serializer.toJson<String>(result),
-      'circleBefore': serializer.toJson<int?>(circleBefore),
-      'circleAfter': serializer.toJson<int?>(circleAfter),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'profileId': serializer.toJson<String>(profileId),
+      'surahNumber': serializer.toJson<int>(surahNumber),
+      'memorizedAyahCount': serializer.toJson<int>(memorizedAyahCount),
+      'totalAyahCount': serializer.toJson<int>(totalAyahCount),
+      'completedAt': serializer.toJson<DateTime?>(completedAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
-  ReviewHistoryEntry copyWith({
+  SurahProgressEntry copyWith({
     String? id,
-    String? unitId,
-    DateTime? reviewedAt,
-    String? result,
-    Value<int?> circleBefore = const Value.absent(),
-    Value<int?> circleAfter = const Value.absent(),
-    DateTime? createdAt,
-  }) => ReviewHistoryEntry(
+    String? profileId,
+    int? surahNumber,
+    int? memorizedAyahCount,
+    int? totalAyahCount,
+    Value<DateTime?> completedAt = const Value.absent(),
+    DateTime? updatedAt,
+  }) => SurahProgressEntry(
     id: id ?? this.id,
-    unitId: unitId ?? this.unitId,
-    reviewedAt: reviewedAt ?? this.reviewedAt,
-    result: result ?? this.result,
-    circleBefore: circleBefore.present ? circleBefore.value : this.circleBefore,
-    circleAfter: circleAfter.present ? circleAfter.value : this.circleAfter,
-    createdAt: createdAt ?? this.createdAt,
+    profileId: profileId ?? this.profileId,
+    surahNumber: surahNumber ?? this.surahNumber,
+    memorizedAyahCount: memorizedAyahCount ?? this.memorizedAyahCount,
+    totalAyahCount: totalAyahCount ?? this.totalAyahCount,
+    completedAt: completedAt.present ? completedAt.value : this.completedAt,
+    updatedAt: updatedAt ?? this.updatedAt,
   );
-  ReviewHistoryEntry copyWithCompanion(ReviewHistoryEntriesCompanion data) {
-    return ReviewHistoryEntry(
+  SurahProgressEntry copyWithCompanion(SurahProgressEntriesCompanion data) {
+    return SurahProgressEntry(
       id: data.id.present ? data.id.value : this.id,
-      unitId: data.unitId.present ? data.unitId.value : this.unitId,
-      reviewedAt: data.reviewedAt.present
-          ? data.reviewedAt.value
-          : this.reviewedAt,
-      result: data.result.present ? data.result.value : this.result,
-      circleBefore: data.circleBefore.present
-          ? data.circleBefore.value
-          : this.circleBefore,
-      circleAfter: data.circleAfter.present
-          ? data.circleAfter.value
-          : this.circleAfter,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      surahNumber: data.surahNumber.present
+          ? data.surahNumber.value
+          : this.surahNumber,
+      memorizedAyahCount: data.memorizedAyahCount.present
+          ? data.memorizedAyahCount.value
+          : this.memorizedAyahCount,
+      totalAyahCount: data.totalAyahCount.present
+          ? data.totalAyahCount.value
+          : this.totalAyahCount,
+      completedAt: data.completedAt.present
+          ? data.completedAt.value
+          : this.completedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('ReviewHistoryEntry(')
+    return (StringBuffer('SurahProgressEntry(')
           ..write('id: $id, ')
-          ..write('unitId: $unitId, ')
-          ..write('reviewedAt: $reviewedAt, ')
-          ..write('result: $result, ')
-          ..write('circleBefore: $circleBefore, ')
-          ..write('circleAfter: $circleAfter, ')
-          ..write('createdAt: $createdAt')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('memorizedAyahCount: $memorizedAyahCount, ')
+          ..write('totalAyahCount: $totalAyahCount, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -1730,100 +2559,101 @@ class ReviewHistoryEntry extends DataClass
   @override
   int get hashCode => Object.hash(
     id,
-    unitId,
-    reviewedAt,
-    result,
-    circleBefore,
-    circleAfter,
-    createdAt,
+    profileId,
+    surahNumber,
+    memorizedAyahCount,
+    totalAyahCount,
+    completedAt,
+    updatedAt,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ReviewHistoryEntry &&
+      (other is SurahProgressEntry &&
           other.id == this.id &&
-          other.unitId == this.unitId &&
-          other.reviewedAt == this.reviewedAt &&
-          other.result == this.result &&
-          other.circleBefore == this.circleBefore &&
-          other.circleAfter == this.circleAfter &&
-          other.createdAt == this.createdAt);
+          other.profileId == this.profileId &&
+          other.surahNumber == this.surahNumber &&
+          other.memorizedAyahCount == this.memorizedAyahCount &&
+          other.totalAyahCount == this.totalAyahCount &&
+          other.completedAt == this.completedAt &&
+          other.updatedAt == this.updatedAt);
 }
 
-class ReviewHistoryEntriesCompanion
-    extends UpdateCompanion<ReviewHistoryEntry> {
+class SurahProgressEntriesCompanion
+    extends UpdateCompanion<SurahProgressEntry> {
   final Value<String> id;
-  final Value<String> unitId;
-  final Value<DateTime> reviewedAt;
-  final Value<String> result;
-  final Value<int?> circleBefore;
-  final Value<int?> circleAfter;
-  final Value<DateTime> createdAt;
+  final Value<String> profileId;
+  final Value<int> surahNumber;
+  final Value<int> memorizedAyahCount;
+  final Value<int> totalAyahCount;
+  final Value<DateTime?> completedAt;
+  final Value<DateTime> updatedAt;
   final Value<int> rowid;
-  const ReviewHistoryEntriesCompanion({
+  const SurahProgressEntriesCompanion({
     this.id = const Value.absent(),
-    this.unitId = const Value.absent(),
-    this.reviewedAt = const Value.absent(),
-    this.result = const Value.absent(),
-    this.circleBefore = const Value.absent(),
-    this.circleAfter = const Value.absent(),
-    this.createdAt = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.surahNumber = const Value.absent(),
+    this.memorizedAyahCount = const Value.absent(),
+    this.totalAyahCount = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  ReviewHistoryEntriesCompanion.insert({
+  SurahProgressEntriesCompanion.insert({
     required String id,
-    required String unitId,
-    required DateTime reviewedAt,
-    required String result,
-    this.circleBefore = const Value.absent(),
-    this.circleAfter = const Value.absent(),
-    required DateTime createdAt,
+    required String profileId,
+    required int surahNumber,
+    this.memorizedAyahCount = const Value.absent(),
+    required int totalAyahCount,
+    this.completedAt = const Value.absent(),
+    required DateTime updatedAt,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
-       unitId = Value(unitId),
-       reviewedAt = Value(reviewedAt),
-       result = Value(result),
-       createdAt = Value(createdAt);
-  static Insertable<ReviewHistoryEntry> custom({
+       profileId = Value(profileId),
+       surahNumber = Value(surahNumber),
+       totalAyahCount = Value(totalAyahCount),
+       updatedAt = Value(updatedAt);
+  static Insertable<SurahProgressEntry> custom({
     Expression<String>? id,
-    Expression<String>? unitId,
-    Expression<DateTime>? reviewedAt,
-    Expression<String>? result,
-    Expression<int>? circleBefore,
-    Expression<int>? circleAfter,
-    Expression<DateTime>? createdAt,
+    Expression<String>? profileId,
+    Expression<int>? surahNumber,
+    Expression<int>? memorizedAyahCount,
+    Expression<int>? totalAyahCount,
+    Expression<DateTime>? completedAt,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (unitId != null) 'unit_id': unitId,
-      if (reviewedAt != null) 'reviewed_at': reviewedAt,
-      if (result != null) 'result': result,
-      if (circleBefore != null) 'circle_before': circleBefore,
-      if (circleAfter != null) 'circle_after': circleAfter,
-      if (createdAt != null) 'created_at': createdAt,
+      if (profileId != null) 'profile_id': profileId,
+      if (surahNumber != null) 'surah_number': surahNumber,
+      if (memorizedAyahCount != null)
+        'memorized_ayah_count': memorizedAyahCount,
+      if (totalAyahCount != null) 'total_ayah_count': totalAyahCount,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  ReviewHistoryEntriesCompanion copyWith({
+  SurahProgressEntriesCompanion copyWith({
     Value<String>? id,
-    Value<String>? unitId,
-    Value<DateTime>? reviewedAt,
-    Value<String>? result,
-    Value<int?>? circleBefore,
-    Value<int?>? circleAfter,
-    Value<DateTime>? createdAt,
+    Value<String>? profileId,
+    Value<int>? surahNumber,
+    Value<int>? memorizedAyahCount,
+    Value<int>? totalAyahCount,
+    Value<DateTime?>? completedAt,
+    Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
-    return ReviewHistoryEntriesCompanion(
+    return SurahProgressEntriesCompanion(
       id: id ?? this.id,
-      unitId: unitId ?? this.unitId,
-      reviewedAt: reviewedAt ?? this.reviewedAt,
-      result: result ?? this.result,
-      circleBefore: circleBefore ?? this.circleBefore,
-      circleAfter: circleAfter ?? this.circleAfter,
-      createdAt: createdAt ?? this.createdAt,
+      profileId: profileId ?? this.profileId,
+      surahNumber: surahNumber ?? this.surahNumber,
+      memorizedAyahCount: memorizedAyahCount ?? this.memorizedAyahCount,
+      totalAyahCount: totalAyahCount ?? this.totalAyahCount,
+      completedAt: completedAt ?? this.completedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1834,23 +2664,23 @@ class ReviewHistoryEntriesCompanion
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
-    if (unitId.present) {
-      map['unit_id'] = Variable<String>(unitId.value);
+    if (profileId.present) {
+      map['profile_id'] = Variable<String>(profileId.value);
     }
-    if (reviewedAt.present) {
-      map['reviewed_at'] = Variable<DateTime>(reviewedAt.value);
+    if (surahNumber.present) {
+      map['surah_number'] = Variable<int>(surahNumber.value);
     }
-    if (result.present) {
-      map['result'] = Variable<String>(result.value);
+    if (memorizedAyahCount.present) {
+      map['memorized_ayah_count'] = Variable<int>(memorizedAyahCount.value);
     }
-    if (circleBefore.present) {
-      map['circle_before'] = Variable<int>(circleBefore.value);
+    if (totalAyahCount.present) {
+      map['total_ayah_count'] = Variable<int>(totalAyahCount.value);
     }
-    if (circleAfter.present) {
-      map['circle_after'] = Variable<int>(circleAfter.value);
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
     }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1860,14 +2690,14 @@ class ReviewHistoryEntriesCompanion
 
   @override
   String toString() {
-    return (StringBuffer('ReviewHistoryEntriesCompanion(')
+    return (StringBuffer('SurahProgressEntriesCompanion(')
           ..write('id: $id, ')
-          ..write('unitId: $unitId, ')
-          ..write('reviewedAt: $reviewedAt, ')
-          ..write('result: $result, ')
-          ..write('circleBefore: $circleBefore, ')
-          ..write('circleAfter: $circleAfter, ')
-          ..write('createdAt: $createdAt, ')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('memorizedAyahCount: $memorizedAyahCount, ')
+          ..write('totalAyahCount: $totalAyahCount, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2295,10 +3125,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserProfilesTable userProfiles = $UserProfilesTable(this);
-  late final $MemorizationUnitsTable memorizationUnits =
-      $MemorizationUnitsTable(this);
-  late final $ReviewHistoryEntriesTable reviewHistoryEntries =
-      $ReviewHistoryEntriesTable(this);
+  late final $PassagesTable passages = $PassagesTable(this);
+  late final $SessionProgressEntriesTable sessionProgressEntries =
+      $SessionProgressEntriesTable(this);
+  late final $AyahProgressEntriesTable ayahProgressEntries =
+      $AyahProgressEntriesTable(this);
+  late final $SurahProgressEntriesTable surahProgressEntries =
+      $SurahProgressEntriesTable(this);
   late final $BookmarksTable bookmarks = $BookmarksTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2306,8 +3139,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     userProfiles,
-    memorizationUnits,
-    reviewHistoryEntries,
+    passages,
+    sessionProgressEntries,
+    ayahProgressEntries,
+    surahProgressEntries,
     bookmarks,
   ];
   @override
@@ -2317,14 +3152,30 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         'user_profiles',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('memorization_units', kind: UpdateKind.delete)],
+      result: [TableUpdate('passages', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'memorization_units',
+        'passages',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('review_history_entries', kind: UpdateKind.delete)],
+      result: [
+        TableUpdate('session_progress_entries', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('ayah_progress_entries', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('surah_progress_entries', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -2369,21 +3220,65 @@ final class $$UserProfilesTableReferences
     extends BaseReferences<_$AppDatabase, $UserProfilesTable, UserProfile> {
   $$UserProfilesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$MemorizationUnitsTable, List<MemorizationUnit>>
-  _memorizationUnitsRefsTable(_$AppDatabase db) =>
+  static MultiTypedResultKey<$PassagesTable, List<Passage>> _passagesRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.passages,
+    aliasName: 'user_profiles__id__passages__profile_id',
+  );
+
+  $$PassagesTableProcessedTableManager get passagesRefs {
+    final manager = $$PassagesTableTableManager(
+      $_db,
+      $_db.passages,
+    ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_passagesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$AyahProgressEntriesTable, List<AyahProgressEntry>>
+  _ayahProgressEntriesRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
-        db.memorizationUnits,
-        aliasName: 'user_profiles__id__memorization_units__profile_id',
+        db.ayahProgressEntries,
+        aliasName: 'user_profiles__id__ayah_progress_entries__profile_id',
       );
 
-  $$MemorizationUnitsTableProcessedTableManager get memorizationUnitsRefs {
-    final manager = $$MemorizationUnitsTableTableManager(
+  $$AyahProgressEntriesTableProcessedTableManager get ayahProgressEntriesRefs {
+    final manager = $$AyahProgressEntriesTableTableManager(
       $_db,
-      $_db.memorizationUnits,
+      $_db.ayahProgressEntries,
     ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(
-      _memorizationUnitsRefsTable($_db),
+      _ayahProgressEntriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SurahProgressEntriesTable,
+    List<SurahProgressEntry>
+  >
+  _surahProgressEntriesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.surahProgressEntries,
+        aliasName: 'user_profiles__id__surah_progress_entries__profile_id',
+      );
+
+  $$SurahProgressEntriesTableProcessedTableManager
+  get surahProgressEntriesRefs {
+    final manager = $$SurahProgressEntriesTableTableManager(
+      $_db,
+      $_db.surahProgressEntries,
+    ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _surahProgressEntriesRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -2468,22 +3363,72 @@ class $$UserProfilesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  Expression<bool> memorizationUnitsRefs(
-    Expression<bool> Function($$MemorizationUnitsTableFilterComposer f) f,
+  Expression<bool> passagesRefs(
+    Expression<bool> Function($$PassagesTableFilterComposer f) f,
   ) {
-    final $$MemorizationUnitsTableFilterComposer composer = $composerBuilder(
+    final $$PassagesTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.memorizationUnits,
+      referencedTable: $db.passages,
       getReferencedColumn: (t) => t.profileId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$MemorizationUnitsTableFilterComposer(
+          }) => $$PassagesTableFilterComposer(
             $db: $db,
-            $table: $db.memorizationUnits,
+            $table: $db.passages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> ayahProgressEntriesRefs(
+    Expression<bool> Function($$AyahProgressEntriesTableFilterComposer f) f,
+  ) {
+    final $$AyahProgressEntriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.ayahProgressEntries,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AyahProgressEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.ayahProgressEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> surahProgressEntriesRefs(
+    Expression<bool> Function($$SurahProgressEntriesTableFilterComposer f) f,
+  ) {
+    final $$SurahProgressEntriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.surahProgressEntries,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SurahProgressEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.surahProgressEntries,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2632,23 +3577,74 @@ class $$UserProfilesTableAnnotationComposer
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
-  Expression<T> memorizationUnitsRefs<T extends Object>(
-    Expression<T> Function($$MemorizationUnitsTableAnnotationComposer a) f,
+  Expression<T> passagesRefs<T extends Object>(
+    Expression<T> Function($$PassagesTableAnnotationComposer a) f,
   ) {
-    final $$MemorizationUnitsTableAnnotationComposer composer =
+    final $$PassagesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.passages,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PassagesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.passages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> ayahProgressEntriesRefs<T extends Object>(
+    Expression<T> Function($$AyahProgressEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$AyahProgressEntriesTableAnnotationComposer composer =
         $composerBuilder(
           composer: this,
           getCurrentColumn: (t) => t.id,
-          referencedTable: $db.memorizationUnits,
+          referencedTable: $db.ayahProgressEntries,
           getReferencedColumn: (t) => t.profileId,
           builder:
               (
                 joinBuilder, {
                 $addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer,
-              }) => $$MemorizationUnitsTableAnnotationComposer(
+              }) => $$AyahProgressEntriesTableAnnotationComposer(
                 $db: $db,
-                $table: $db.memorizationUnits,
+                $table: $db.ayahProgressEntries,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> surahProgressEntriesRefs<T extends Object>(
+    Expression<T> Function($$SurahProgressEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$SurahProgressEntriesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.surahProgressEntries,
+          getReferencedColumn: (t) => t.profileId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SurahProgressEntriesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.surahProgressEntries,
                 $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
                 joinBuilder: joinBuilder,
                 $removeJoinBuilderFromRootComposer:
@@ -2698,7 +3694,9 @@ class $$UserProfilesTableTableManager
           (UserProfile, $$UserProfilesTableReferences),
           UserProfile,
           PrefetchHooks Function({
-            bool memorizationUnitsRefs,
+            bool passagesRefs,
+            bool ayahProgressEntriesRefs,
+            bool surahProgressEntriesRefs,
             bool bookmarksRefs,
           })
         > {
@@ -2774,31 +3772,80 @@ class $$UserProfilesTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({memorizationUnitsRefs = false, bookmarksRefs = false}) {
+              ({
+                passagesRefs = false,
+                ayahProgressEntriesRefs = false,
+                surahProgressEntriesRefs = false,
+                bookmarksRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
-                    if (memorizationUnitsRefs) db.memorizationUnits,
+                    if (passagesRefs) db.passages,
+                    if (ayahProgressEntriesRefs) db.ayahProgressEntries,
+                    if (surahProgressEntriesRefs) db.surahProgressEntries,
                     if (bookmarksRefs) db.bookmarks,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
                     return [
-                      if (memorizationUnitsRefs)
+                      if (passagesRefs)
                         await $_getPrefetchedData<
                           UserProfile,
                           $UserProfilesTable,
-                          MemorizationUnit
+                          Passage
                         >(
                           currentTable: table,
                           referencedTable: $$UserProfilesTableReferences
-                              ._memorizationUnitsRefsTable(db),
+                              ._passagesRefsTable(db),
                           managerFromTypedResult: (p0) =>
                               $$UserProfilesTableReferences(
                                 db,
                                 table,
                                 p0,
-                              ).memorizationUnitsRefs,
+                              ).passagesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.profileId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (ayahProgressEntriesRefs)
+                        await $_getPrefetchedData<
+                          UserProfile,
+                          $UserProfilesTable,
+                          AyahProgressEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserProfilesTableReferences
+                              ._ayahProgressEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserProfilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).ayahProgressEntriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.profileId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (surahProgressEntriesRefs)
+                        await $_getPrefetchedData<
+                          UserProfile,
+                          $UserProfilesTable,
+                          SurahProgressEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserProfilesTableReferences
+                              ._surahProgressEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserProfilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).surahProgressEntriesRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
                                 (e) => e.profileId == item.id,
@@ -2846,56 +3893,38 @@ typedef $$UserProfilesTableProcessedTableManager =
       $$UserProfilesTableUpdateCompanionBuilder,
       (UserProfile, $$UserProfilesTableReferences),
       UserProfile,
-      PrefetchHooks Function({bool memorizationUnitsRefs, bool bookmarksRefs})
+      PrefetchHooks Function({
+        bool passagesRefs,
+        bool ayahProgressEntriesRefs,
+        bool surahProgressEntriesRefs,
+        bool bookmarksRefs,
+      })
     >;
-typedef $$MemorizationUnitsTableCreateCompanionBuilder =
-    MemorizationUnitsCompanion Function({
-      required String id,
-      required String profileId,
-      required int surahNumber,
-      required int startAyah,
-      required int endAyah,
-      Value<String> status,
-      Value<String?> masteryLevel,
-      Value<int?> circle,
-      Value<DateTime?> lastReviewedAt,
-      Value<DateTime?> nextReviewDueAt,
-      required DateTime createdAt,
-      required DateTime updatedAt,
-      Value<int> rowid,
-    });
-typedef $$MemorizationUnitsTableUpdateCompanionBuilder =
-    MemorizationUnitsCompanion Function({
-      Value<String> id,
-      Value<String> profileId,
-      Value<int> surahNumber,
-      Value<int> startAyah,
-      Value<int> endAyah,
-      Value<String> status,
-      Value<String?> masteryLevel,
-      Value<int?> circle,
-      Value<DateTime?> lastReviewedAt,
-      Value<DateTime?> nextReviewDueAt,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<int> rowid,
-    });
+typedef $$PassagesTableCreateCompanionBuilder = PassagesCompanion Function({
+  required String id,
+  required String profileId,
+  required int surahNumber,
+  required int ayahStart,
+  required int ayahEnd,
+  required DateTime createdAt,
+  Value<int> rowid,
+});
+typedef $$PassagesTableUpdateCompanionBuilder = PassagesCompanion Function({
+  Value<String> id,
+  Value<String> profileId,
+  Value<int> surahNumber,
+  Value<int> ayahStart,
+  Value<int> ayahEnd,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
 
-final class $$MemorizationUnitsTableReferences
-    extends
-        BaseReferences<
-          _$AppDatabase,
-          $MemorizationUnitsTable,
-          MemorizationUnit
-        > {
-  $$MemorizationUnitsTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
+final class $$PassagesTableReferences
+    extends BaseReferences<_$AppDatabase, $PassagesTable, Passage> {
+  $$PassagesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UserProfilesTable _profileIdTable(_$AppDatabase db) => db.userProfiles
-      .createAlias('memorization_units__profile_id__user_profiles__id');
+  static $UserProfilesTable _profileIdTable(_$AppDatabase db) =>
+      db.userProfiles.createAlias('passages__profile_id__user_profiles__id');
 
   $$UserProfilesTableProcessedTableManager get profileId {
     final $_column = $_itemColumn<String>('profile_id')!;
@@ -2912,24 +3941,24 @@ final class $$MemorizationUnitsTableReferences
   }
 
   static MultiTypedResultKey<
-    $ReviewHistoryEntriesTable,
-    List<ReviewHistoryEntry>
+    $SessionProgressEntriesTable,
+    List<SessionProgressEntry>
   >
-  _reviewHistoryEntriesRefsTable(_$AppDatabase db) =>
+  _sessionProgressEntriesRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
-        db.reviewHistoryEntries,
-        aliasName: 'memorization_units__id__review_history_entries__unit_id',
+        db.sessionProgressEntries,
+        aliasName: 'passages__id__session_progress_entries__passage_id',
       );
 
-  $$ReviewHistoryEntriesTableProcessedTableManager
-  get reviewHistoryEntriesRefs {
-    final manager = $$ReviewHistoryEntriesTableTableManager(
+  $$SessionProgressEntriesTableProcessedTableManager
+  get sessionProgressEntriesRefs {
+    final manager = $$SessionProgressEntriesTableTableManager(
       $_db,
-      $_db.reviewHistoryEntries,
-    ).filter((f) => f.unitId.id.sqlEquals($_itemColumn<String>('id')!));
+      $_db.sessionProgressEntries,
+    ).filter((f) => f.passageId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(
-      _reviewHistoryEntriesRefsTable($_db),
+      _sessionProgressEntriesRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -2937,9 +3966,9 @@ final class $$MemorizationUnitsTableReferences
   }
 }
 
-class $$MemorizationUnitsTableFilterComposer
-    extends Composer<_$AppDatabase, $MemorizationUnitsTable> {
-  $$MemorizationUnitsTableFilterComposer({
+class $$PassagesTableFilterComposer
+    extends Composer<_$AppDatabase, $PassagesTable> {
+  $$PassagesTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2956,43 +3985,847 @@ class $$MemorizationUnitsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get startAyah => $composableBuilder(
-    column: $table.startAyah,
+  ColumnFilters<int> get ayahStart => $composableBuilder(
+    column: $table.ayahStart,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get endAyah => $composableBuilder(
-    column: $table.endAyah,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get masteryLevel => $composableBuilder(
-    column: $table.masteryLevel,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get circle => $composableBuilder(
-    column: $table.circle,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get lastReviewedAt => $composableBuilder(
-    column: $table.lastReviewedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get nextReviewDueAt => $composableBuilder(
-    column: $table.nextReviewDueAt,
+  ColumnFilters<int> get ayahEnd => $composableBuilder(
+    column: $table.ayahEnd,
     builder: (column) => ColumnFilters(column),
   );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserProfilesTableFilterComposer get profileId {
+    final $$UserProfilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableFilterComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> sessionProgressEntriesRefs(
+    Expression<bool> Function($$SessionProgressEntriesTableFilterComposer f) f,
+  ) {
+    final $$SessionProgressEntriesTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.sessionProgressEntries,
+          getReferencedColumn: (t) => t.passageId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SessionProgressEntriesTableFilterComposer(
+                $db: $db,
+                $table: $db.sessionProgressEntries,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$PassagesTableOrderingComposer
+    extends Composer<_$AppDatabase, $PassagesTable> {
+  $$PassagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get ayahStart => $composableBuilder(
+    column: $table.ayahStart,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get ayahEnd => $composableBuilder(
+    column: $table.ayahEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserProfilesTableOrderingComposer get profileId {
+    final $$UserProfilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PassagesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PassagesTable> {
+  $$PassagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get ayahStart =>
+      $composableBuilder(column: $table.ayahStart, builder: (column) => column);
+
+  GeneratedColumn<int> get ayahEnd =>
+      $composableBuilder(column: $table.ayahEnd, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$UserProfilesTableAnnotationComposer get profileId {
+    final $$UserProfilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> sessionProgressEntriesRefs<T extends Object>(
+    Expression<T> Function($$SessionProgressEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$SessionProgressEntriesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.sessionProgressEntries,
+          getReferencedColumn: (t) => t.passageId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SessionProgressEntriesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.sessionProgressEntries,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$PassagesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PassagesTable,
+          Passage,
+          $$PassagesTableFilterComposer,
+          $$PassagesTableOrderingComposer,
+          $$PassagesTableAnnotationComposer,
+          $$PassagesTableCreateCompanionBuilder,
+          $$PassagesTableUpdateCompanionBuilder,
+          (Passage, $$PassagesTableReferences),
+          Passage,
+          PrefetchHooks Function({
+            bool profileId,
+            bool sessionProgressEntriesRefs,
+          })
+        > {
+  $$PassagesTableTableManager(_$AppDatabase db, $PassagesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PassagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PassagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PassagesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> profileId = const Value.absent(),
+                Value<int> surahNumber = const Value.absent(),
+                Value<int> ayahStart = const Value.absent(),
+                Value<int> ayahEnd = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PassagesCompanion(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                ayahStart: ayahStart,
+                ayahEnd: ayahEnd,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String profileId,
+                required int surahNumber,
+                required int ayahStart,
+                required int ayahEnd,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => PassagesCompanion.insert(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                ayahStart: ayahStart,
+                ayahEnd: ayahEnd,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$PassagesTable, Passage>(table),
+                  $$PassagesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({profileId = false, sessionProgressEntriesRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (sessionProgressEntriesRefs) db.sessionProgressEntries,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (profileId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.profileId,
+                            referencedTable: $$PassagesTableReferences
+                                ._profileIdTable(db),
+                            referencedColumn: $$PassagesTableReferences
+                                ._profileIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (sessionProgressEntriesRefs)
+                        await $_getPrefetchedData<
+                          Passage,
+                          $PassagesTable,
+                          SessionProgressEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$PassagesTableReferences
+                              ._sessionProgressEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$PassagesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).sessionProgressEntriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.passageId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$PassagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PassagesTable,
+      Passage,
+      $$PassagesTableFilterComposer,
+      $$PassagesTableOrderingComposer,
+      $$PassagesTableAnnotationComposer,
+      $$PassagesTableCreateCompanionBuilder,
+      $$PassagesTableUpdateCompanionBuilder,
+      (Passage, $$PassagesTableReferences),
+      Passage,
+      PrefetchHooks Function({bool profileId, bool sessionProgressEntriesRefs})
+    >;
+typedef $$SessionProgressEntriesTableCreateCompanionBuilder =
+    SessionProgressEntriesCompanion Function({
+      required String id,
+      required String passageId,
+      Value<int> currentStepIndex,
+      required int currentAyah,
+      Value<String?> maskLevel,
+      required DateTime startedAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SessionProgressEntriesTableUpdateCompanionBuilder =
+    SessionProgressEntriesCompanion Function({
+      Value<String> id,
+      Value<String> passageId,
+      Value<int> currentStepIndex,
+      Value<int> currentAyah,
+      Value<String?> maskLevel,
+      Value<DateTime> startedAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$SessionProgressEntriesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SessionProgressEntriesTable,
+          SessionProgressEntry
+        > {
+  $$SessionProgressEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $PassagesTable _passageIdTable(_$AppDatabase db) => db.passages
+      .createAlias('session_progress_entries__passage_id__passages__id');
+
+  $$PassagesTableProcessedTableManager get passageId {
+    final $_column = $_itemColumn<String>('passage_id')!;
+
+    final manager = $$PassagesTableTableManager(
+      $_db,
+      $_db.passages,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_passageIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$SessionProgressEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $SessionProgressEntriesTable> {
+  $$SessionProgressEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get currentStepIndex => $composableBuilder(
+    column: $table.currentStepIndex,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get currentAyah => $composableBuilder(
+    column: $table.currentAyah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get maskLevel => $composableBuilder(
+    column: $table.maskLevel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$PassagesTableFilterComposer get passageId {
+    final $$PassagesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.passageId,
+      referencedTable: $db.passages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PassagesTableFilterComposer(
+            $db: $db,
+            $table: $db.passages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SessionProgressEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $SessionProgressEntriesTable> {
+  $$SessionProgressEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get currentStepIndex => $composableBuilder(
+    column: $table.currentStepIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get currentAyah => $composableBuilder(
+    column: $table.currentAyah,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get maskLevel => $composableBuilder(
+    column: $table.maskLevel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$PassagesTableOrderingComposer get passageId {
+    final $$PassagesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.passageId,
+      referencedTable: $db.passages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PassagesTableOrderingComposer(
+            $db: $db,
+            $table: $db.passages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SessionProgressEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SessionProgressEntriesTable> {
+  $$SessionProgressEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get currentStepIndex => $composableBuilder(
+    column: $table.currentStepIndex,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get currentAyah => $composableBuilder(
+    column: $table.currentAyah,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get maskLevel =>
+      $composableBuilder(column: $table.maskLevel, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$PassagesTableAnnotationComposer get passageId {
+    final $$PassagesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.passageId,
+      referencedTable: $db.passages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PassagesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.passages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SessionProgressEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SessionProgressEntriesTable,
+          SessionProgressEntry,
+          $$SessionProgressEntriesTableFilterComposer,
+          $$SessionProgressEntriesTableOrderingComposer,
+          $$SessionProgressEntriesTableAnnotationComposer,
+          $$SessionProgressEntriesTableCreateCompanionBuilder,
+          $$SessionProgressEntriesTableUpdateCompanionBuilder,
+          (SessionProgressEntry, $$SessionProgressEntriesTableReferences),
+          SessionProgressEntry,
+          PrefetchHooks Function({bool passageId})
+        > {
+  $$SessionProgressEntriesTableTableManager(
+    _$AppDatabase db,
+    $SessionProgressEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SessionProgressEntriesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$SessionProgressEntriesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$SessionProgressEntriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> passageId = const Value.absent(),
+                Value<int> currentStepIndex = const Value.absent(),
+                Value<int> currentAyah = const Value.absent(),
+                Value<String?> maskLevel = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SessionProgressEntriesCompanion(
+                id: id,
+                passageId: passageId,
+                currentStepIndex: currentStepIndex,
+                currentAyah: currentAyah,
+                maskLevel: maskLevel,
+                startedAt: startedAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String passageId,
+                Value<int> currentStepIndex = const Value.absent(),
+                required int currentAyah,
+                Value<String?> maskLevel = const Value.absent(),
+                required DateTime startedAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SessionProgressEntriesCompanion.insert(
+                id: id,
+                passageId: passageId,
+                currentStepIndex: currentStepIndex,
+                currentAyah: currentAyah,
+                maskLevel: maskLevel,
+                startedAt: startedAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $SessionProgressEntriesTable,
+                    SessionProgressEntry
+                  >(table),
+                  $$SessionProgressEntriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({passageId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (passageId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.passageId,
+                        referencedTable: $$SessionProgressEntriesTableReferences
+                            ._passageIdTable(db),
+                        referencedColumn:
+                            $$SessionProgressEntriesTableReferences
+                                ._passageIdTable(db)
+                                .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SessionProgressEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SessionProgressEntriesTable,
+      SessionProgressEntry,
+      $$SessionProgressEntriesTableFilterComposer,
+      $$SessionProgressEntriesTableOrderingComposer,
+      $$SessionProgressEntriesTableAnnotationComposer,
+      $$SessionProgressEntriesTableCreateCompanionBuilder,
+      $$SessionProgressEntriesTableUpdateCompanionBuilder,
+      (SessionProgressEntry, $$SessionProgressEntriesTableReferences),
+      SessionProgressEntry,
+      PrefetchHooks Function({bool passageId})
+    >;
+typedef $$AyahProgressEntriesTableCreateCompanionBuilder =
+    AyahProgressEntriesCompanion Function({
+      required String id,
+      required String profileId,
+      required int surahNumber,
+      required int ayahNumber,
+      Value<String?> lastOutcome,
+      Value<String> fragileWordIndices,
+      Value<int> reviewCycleStep,
+      required DateTime memorizedAt,
+      required DateTime nextReviewAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$AyahProgressEntriesTableUpdateCompanionBuilder =
+    AyahProgressEntriesCompanion Function({
+      Value<String> id,
+      Value<String> profileId,
+      Value<int> surahNumber,
+      Value<int> ayahNumber,
+      Value<String?> lastOutcome,
+      Value<String> fragileWordIndices,
+      Value<int> reviewCycleStep,
+      Value<DateTime> memorizedAt,
+      Value<DateTime> nextReviewAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$AyahProgressEntriesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $AyahProgressEntriesTable,
+          AyahProgressEntry
+        > {
+  $$AyahProgressEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserProfilesTable _profileIdTable(_$AppDatabase db) => db.userProfiles
+      .createAlias('ayah_progress_entries__profile_id__user_profiles__id');
+
+  $$UserProfilesTableProcessedTableManager get profileId {
+    final $_column = $_itemColumn<String>('profile_id')!;
+
+    final manager = $$UserProfilesTableTableManager(
+      $_db,
+      $_db.userProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_profileIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$AyahProgressEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $AyahProgressEntriesTable> {
+  $$AyahProgressEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastOutcome => $composableBuilder(
+    column: $table.lastOutcome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fragileWordIndices => $composableBuilder(
+    column: $table.fragileWordIndices,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get reviewCycleStep => $composableBuilder(
+    column: $table.reviewCycleStep,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get memorizedAt => $composableBuilder(
+    column: $table.memorizedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get nextReviewAt => $composableBuilder(
+    column: $table.nextReviewAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3023,36 +4856,11 @@ class $$MemorizationUnitsTableFilterComposer
     );
     return composer;
   }
-
-  Expression<bool> reviewHistoryEntriesRefs(
-    Expression<bool> Function($$ReviewHistoryEntriesTableFilterComposer f) f,
-  ) {
-    final $$ReviewHistoryEntriesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.reviewHistoryEntries,
-      getReferencedColumn: (t) => t.unitId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ReviewHistoryEntriesTableFilterComposer(
-            $db: $db,
-            $table: $db.reviewHistoryEntries,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
-class $$MemorizationUnitsTableOrderingComposer
-    extends Composer<_$AppDatabase, $MemorizationUnitsTable> {
-  $$MemorizationUnitsTableOrderingComposer({
+class $$AyahProgressEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AyahProgressEntriesTable> {
+  $$AyahProgressEntriesTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -3069,43 +4877,33 @@ class $$MemorizationUnitsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get startAyah => $composableBuilder(
-    column: $table.startAyah,
+  ColumnOrderings<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get endAyah => $composableBuilder(
-    column: $table.endAyah,
+  ColumnOrderings<String> get lastOutcome => $composableBuilder(
+    column: $table.lastOutcome,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get status => $composableBuilder(
-    column: $table.status,
+  ColumnOrderings<String> get fragileWordIndices => $composableBuilder(
+    column: $table.fragileWordIndices,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get masteryLevel => $composableBuilder(
-    column: $table.masteryLevel,
+  ColumnOrderings<int> get reviewCycleStep => $composableBuilder(
+    column: $table.reviewCycleStep,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get circle => $composableBuilder(
-    column: $table.circle,
+  ColumnOrderings<DateTime> get memorizedAt => $composableBuilder(
+    column: $table.memorizedAt,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get lastReviewedAt => $composableBuilder(
-    column: $table.lastReviewedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get nextReviewDueAt => $composableBuilder(
-    column: $table.nextReviewDueAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
+  ColumnOrderings<DateTime> get nextReviewAt => $composableBuilder(
+    column: $table.nextReviewAt,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3138,9 +4936,9 @@ class $$MemorizationUnitsTableOrderingComposer
   }
 }
 
-class $$MemorizationUnitsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $MemorizationUnitsTable> {
-  $$MemorizationUnitsTableAnnotationComposer({
+class $$AyahProgressEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AyahProgressEntriesTable> {
+  $$AyahProgressEntriesTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -3155,35 +4953,35 @@ class $$MemorizationUnitsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get startAyah =>
-      $composableBuilder(column: $table.startAyah, builder: (column) => column);
-
-  GeneratedColumn<int> get endAyah =>
-      $composableBuilder(column: $table.endAyah, builder: (column) => column);
-
-  GeneratedColumn<String> get status =>
-      $composableBuilder(column: $table.status, builder: (column) => column);
-
-  GeneratedColumn<String> get masteryLevel => $composableBuilder(
-    column: $table.masteryLevel,
+  GeneratedColumn<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get circle =>
-      $composableBuilder(column: $table.circle, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get lastReviewedAt => $composableBuilder(
-    column: $table.lastReviewedAt,
+  GeneratedColumn<String> get lastOutcome => $composableBuilder(
+    column: $table.lastOutcome,
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get nextReviewDueAt => $composableBuilder(
-    column: $table.nextReviewDueAt,
+  GeneratedColumn<String> get fragileWordIndices => $composableBuilder(
+    column: $table.fragileWordIndices,
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+  GeneratedColumn<int> get reviewCycleStep => $composableBuilder(
+    column: $table.reviewCycleStep,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get memorizedAt => $composableBuilder(
+    column: $table.memorizedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get nextReviewAt => $composableBuilder(
+    column: $table.nextReviewAt,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -3210,65 +5008,39 @@ class $$MemorizationUnitsTableAnnotationComposer
     );
     return composer;
   }
-
-  Expression<T> reviewHistoryEntriesRefs<T extends Object>(
-    Expression<T> Function($$ReviewHistoryEntriesTableAnnotationComposer a) f,
-  ) {
-    final $$ReviewHistoryEntriesTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.id,
-          referencedTable: $db.reviewHistoryEntries,
-          getReferencedColumn: (t) => t.unitId,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$ReviewHistoryEntriesTableAnnotationComposer(
-                $db: $db,
-                $table: $db.reviewHistoryEntries,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return f(composer);
-  }
 }
 
-class $$MemorizationUnitsTableTableManager
+class $$AyahProgressEntriesTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $MemorizationUnitsTable,
-          MemorizationUnit,
-          $$MemorizationUnitsTableFilterComposer,
-          $$MemorizationUnitsTableOrderingComposer,
-          $$MemorizationUnitsTableAnnotationComposer,
-          $$MemorizationUnitsTableCreateCompanionBuilder,
-          $$MemorizationUnitsTableUpdateCompanionBuilder,
-          (MemorizationUnit, $$MemorizationUnitsTableReferences),
-          MemorizationUnit,
-          PrefetchHooks Function({
-            bool profileId,
-            bool reviewHistoryEntriesRefs,
-          })
+          $AyahProgressEntriesTable,
+          AyahProgressEntry,
+          $$AyahProgressEntriesTableFilterComposer,
+          $$AyahProgressEntriesTableOrderingComposer,
+          $$AyahProgressEntriesTableAnnotationComposer,
+          $$AyahProgressEntriesTableCreateCompanionBuilder,
+          $$AyahProgressEntriesTableUpdateCompanionBuilder,
+          (AyahProgressEntry, $$AyahProgressEntriesTableReferences),
+          AyahProgressEntry,
+          PrefetchHooks Function({bool profileId})
         > {
-  $$MemorizationUnitsTableTableManager(
+  $$AyahProgressEntriesTableTableManager(
     _$AppDatabase db,
-    $MemorizationUnitsTable table,
+    $AyahProgressEntriesTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$MemorizationUnitsTableFilterComposer($db: db, $table: table),
+              $$AyahProgressEntriesTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$MemorizationUnitsTableOrderingComposer($db: db, $table: table),
+              $$AyahProgressEntriesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
-              $$MemorizationUnitsTableAnnotationComposer(
+              $$AyahProgressEntriesTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -3277,28 +5049,24 @@ class $$MemorizationUnitsTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> profileId = const Value.absent(),
                 Value<int> surahNumber = const Value.absent(),
-                Value<int> startAyah = const Value.absent(),
-                Value<int> endAyah = const Value.absent(),
-                Value<String> status = const Value.absent(),
-                Value<String?> masteryLevel = const Value.absent(),
-                Value<int?> circle = const Value.absent(),
-                Value<DateTime?> lastReviewedAt = const Value.absent(),
-                Value<DateTime?> nextReviewDueAt = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> ayahNumber = const Value.absent(),
+                Value<String?> lastOutcome = const Value.absent(),
+                Value<String> fragileWordIndices = const Value.absent(),
+                Value<int> reviewCycleStep = const Value.absent(),
+                Value<DateTime> memorizedAt = const Value.absent(),
+                Value<DateTime> nextReviewAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => MemorizationUnitsCompanion(
+              }) => AyahProgressEntriesCompanion(
                 id: id,
                 profileId: profileId,
                 surahNumber: surahNumber,
-                startAyah: startAyah,
-                endAyah: endAyah,
-                status: status,
-                masteryLevel: masteryLevel,
-                circle: circle,
-                lastReviewedAt: lastReviewedAt,
-                nextReviewDueAt: nextReviewDueAt,
-                createdAt: createdAt,
+                ayahNumber: ayahNumber,
+                lastOutcome: lastOutcome,
+                fragileWordIndices: fragileWordIndices,
+                reviewCycleStep: reviewCycleStep,
+                memorizedAt: memorizedAt,
+                nextReviewAt: nextReviewAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
@@ -3307,445 +5075,38 @@ class $$MemorizationUnitsTableTableManager
                 required String id,
                 required String profileId,
                 required int surahNumber,
-                required int startAyah,
-                required int endAyah,
-                Value<String> status = const Value.absent(),
-                Value<String?> masteryLevel = const Value.absent(),
-                Value<int?> circle = const Value.absent(),
-                Value<DateTime?> lastReviewedAt = const Value.absent(),
-                Value<DateTime?> nextReviewDueAt = const Value.absent(),
-                required DateTime createdAt,
+                required int ayahNumber,
+                Value<String?> lastOutcome = const Value.absent(),
+                Value<String> fragileWordIndices = const Value.absent(),
+                Value<int> reviewCycleStep = const Value.absent(),
+                required DateTime memorizedAt,
+                required DateTime nextReviewAt,
                 required DateTime updatedAt,
                 Value<int> rowid = const Value.absent(),
-              }) => MemorizationUnitsCompanion.insert(
+              }) => AyahProgressEntriesCompanion.insert(
                 id: id,
                 profileId: profileId,
                 surahNumber: surahNumber,
-                startAyah: startAyah,
-                endAyah: endAyah,
-                status: status,
-                masteryLevel: masteryLevel,
-                circle: circle,
-                lastReviewedAt: lastReviewedAt,
-                nextReviewDueAt: nextReviewDueAt,
-                createdAt: createdAt,
+                ayahNumber: ayahNumber,
+                lastOutcome: lastOutcome,
+                fragileWordIndices: fragileWordIndices,
+                reviewCycleStep: reviewCycleStep,
+                memorizedAt: memorizedAt,
+                nextReviewAt: nextReviewAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$MemorizationUnitsTable, MemorizationUnit>(table),
-                  $$MemorizationUnitsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback:
-              ({profileId = false, reviewHistoryEntriesRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (reviewHistoryEntriesRefs) db.reviewHistoryEntries,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (profileId) {
-                          state = state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.profileId,
-                            referencedTable: $$MemorizationUnitsTableReferences
-                                ._profileIdTable(db),
-                            referencedColumn: $$MemorizationUnitsTableReferences
-                                ._profileIdTable(db)
-                                .id,
-                          ) as T;
-                        }
-
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (reviewHistoryEntriesRefs)
-                        await $_getPrefetchedData<
-                          MemorizationUnit,
-                          $MemorizationUnitsTable,
-                          ReviewHistoryEntry
-                        >(
-                          currentTable: table,
-                          referencedTable: $$MemorizationUnitsTableReferences
-                              ._reviewHistoryEntriesRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$MemorizationUnitsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).reviewHistoryEntriesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.unitId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
-              },
-        ),
-      );
-}
-
-typedef $$MemorizationUnitsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $MemorizationUnitsTable,
-      MemorizationUnit,
-      $$MemorizationUnitsTableFilterComposer,
-      $$MemorizationUnitsTableOrderingComposer,
-      $$MemorizationUnitsTableAnnotationComposer,
-      $$MemorizationUnitsTableCreateCompanionBuilder,
-      $$MemorizationUnitsTableUpdateCompanionBuilder,
-      (MemorizationUnit, $$MemorizationUnitsTableReferences),
-      MemorizationUnit,
-      PrefetchHooks Function({bool profileId, bool reviewHistoryEntriesRefs})
-    >;
-typedef $$ReviewHistoryEntriesTableCreateCompanionBuilder =
-    ReviewHistoryEntriesCompanion Function({
-      required String id,
-      required String unitId,
-      required DateTime reviewedAt,
-      required String result,
-      Value<int?> circleBefore,
-      Value<int?> circleAfter,
-      required DateTime createdAt,
-      Value<int> rowid,
-    });
-typedef $$ReviewHistoryEntriesTableUpdateCompanionBuilder =
-    ReviewHistoryEntriesCompanion Function({
-      Value<String> id,
-      Value<String> unitId,
-      Value<DateTime> reviewedAt,
-      Value<String> result,
-      Value<int?> circleBefore,
-      Value<int?> circleAfter,
-      Value<DateTime> createdAt,
-      Value<int> rowid,
-    });
-
-final class $$ReviewHistoryEntriesTableReferences
-    extends
-        BaseReferences<
-          _$AppDatabase,
-          $ReviewHistoryEntriesTable,
-          ReviewHistoryEntry
-        > {
-  $$ReviewHistoryEntriesTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
-
-  static $MemorizationUnitsTable _unitIdTable(_$AppDatabase db) => db
-      .memorizationUnits
-      .createAlias('review_history_entries__unit_id__memorization_units__id');
-
-  $$MemorizationUnitsTableProcessedTableManager get unitId {
-    final $_column = $_itemColumn<String>('unit_id')!;
-
-    final manager = $$MemorizationUnitsTableTableManager(
-      $_db,
-      $_db.memorizationUnits,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_unitIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-}
-
-class $$ReviewHistoryEntriesTableFilterComposer
-    extends Composer<_$AppDatabase, $ReviewHistoryEntriesTable> {
-  $$ReviewHistoryEntriesTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get reviewedAt => $composableBuilder(
-    column: $table.reviewedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get result => $composableBuilder(
-    column: $table.result,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get circleBefore => $composableBuilder(
-    column: $table.circleBefore,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get circleAfter => $composableBuilder(
-    column: $table.circleAfter,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  $$MemorizationUnitsTableFilterComposer get unitId {
-    final $$MemorizationUnitsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.unitId,
-      referencedTable: $db.memorizationUnits,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$MemorizationUnitsTableFilterComposer(
-            $db: $db,
-            $table: $db.memorizationUnits,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-}
-
-class $$ReviewHistoryEntriesTableOrderingComposer
-    extends Composer<_$AppDatabase, $ReviewHistoryEntriesTable> {
-  $$ReviewHistoryEntriesTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get reviewedAt => $composableBuilder(
-    column: $table.reviewedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get result => $composableBuilder(
-    column: $table.result,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get circleBefore => $composableBuilder(
-    column: $table.circleBefore,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get circleAfter => $composableBuilder(
-    column: $table.circleAfter,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  $$MemorizationUnitsTableOrderingComposer get unitId {
-    final $$MemorizationUnitsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.unitId,
-      referencedTable: $db.memorizationUnits,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$MemorizationUnitsTableOrderingComposer(
-            $db: $db,
-            $table: $db.memorizationUnits,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-}
-
-class $$ReviewHistoryEntriesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $ReviewHistoryEntriesTable> {
-  $$ReviewHistoryEntriesTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get reviewedAt => $composableBuilder(
-    column: $table.reviewedAt,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get result =>
-      $composableBuilder(column: $table.result, builder: (column) => column);
-
-  GeneratedColumn<int> get circleBefore => $composableBuilder(
-    column: $table.circleBefore,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get circleAfter => $composableBuilder(
-    column: $table.circleAfter,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  $$MemorizationUnitsTableAnnotationComposer get unitId {
-    final $$MemorizationUnitsTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.unitId,
-          referencedTable: $db.memorizationUnits,
-          getReferencedColumn: (t) => t.id,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$MemorizationUnitsTableAnnotationComposer(
-                $db: $db,
-                $table: $db.memorizationUnits,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return composer;
-  }
-}
-
-class $$ReviewHistoryEntriesTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ReviewHistoryEntriesTable,
-          ReviewHistoryEntry,
-          $$ReviewHistoryEntriesTableFilterComposer,
-          $$ReviewHistoryEntriesTableOrderingComposer,
-          $$ReviewHistoryEntriesTableAnnotationComposer,
-          $$ReviewHistoryEntriesTableCreateCompanionBuilder,
-          $$ReviewHistoryEntriesTableUpdateCompanionBuilder,
-          (ReviewHistoryEntry, $$ReviewHistoryEntriesTableReferences),
-          ReviewHistoryEntry,
-          PrefetchHooks Function({bool unitId})
-        > {
-  $$ReviewHistoryEntriesTableTableManager(
-    _$AppDatabase db,
-    $ReviewHistoryEntriesTable table,
-  ) : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ReviewHistoryEntriesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ReviewHistoryEntriesTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer: () =>
-              $$ReviewHistoryEntriesTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> unitId = const Value.absent(),
-                Value<DateTime> reviewedAt = const Value.absent(),
-                Value<String> result = const Value.absent(),
-                Value<int?> circleBefore = const Value.absent(),
-                Value<int?> circleAfter = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReviewHistoryEntriesCompanion(
-                id: id,
-                unitId: unitId,
-                reviewedAt: reviewedAt,
-                result: result,
-                circleBefore: circleBefore,
-                circleAfter: circleAfter,
-                createdAt: createdAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String unitId,
-                required DateTime reviewedAt,
-                required String result,
-                Value<int?> circleBefore = const Value.absent(),
-                Value<int?> circleAfter = const Value.absent(),
-                required DateTime createdAt,
-                Value<int> rowid = const Value.absent(),
-              }) => ReviewHistoryEntriesCompanion.insert(
-                id: id,
-                unitId: unitId,
-                reviewedAt: reviewedAt,
-                result: result,
-                circleBefore: circleBefore,
-                circleAfter: circleAfter,
-                createdAt: createdAt,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$ReviewHistoryEntriesTable, ReviewHistoryEntry>(
+                  e.readTable<$AyahProgressEntriesTable, AyahProgressEntry>(
                     table,
                   ),
-                  $$ReviewHistoryEntriesTableReferences(db, table, e),
+                  $$AyahProgressEntriesTableReferences(db, table, e),
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({unitId = false}) {
+          prefetchHooksCallback: ({profileId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -3765,14 +5126,14 @@ class $$ReviewHistoryEntriesTableTableManager
                       dynamic
                     >
                   >(state) {
-                    if (unitId) {
+                    if (profileId) {
                       state = state.withJoin(
                         currentTable: table,
-                        currentColumn: table.unitId,
-                        referencedTable: $$ReviewHistoryEntriesTableReferences
-                            ._unitIdTable(db),
-                        referencedColumn: $$ReviewHistoryEntriesTableReferences
-                            ._unitIdTable(db)
+                        currentColumn: table.profileId,
+                        referencedTable: $$AyahProgressEntriesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$AyahProgressEntriesTableReferences
+                            ._profileIdTable(db)
                             .id,
                       ) as T;
                     }
@@ -3788,19 +5149,399 @@ class $$ReviewHistoryEntriesTableTableManager
       );
 }
 
-typedef $$ReviewHistoryEntriesTableProcessedTableManager =
+typedef $$AyahProgressEntriesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $ReviewHistoryEntriesTable,
-      ReviewHistoryEntry,
-      $$ReviewHistoryEntriesTableFilterComposer,
-      $$ReviewHistoryEntriesTableOrderingComposer,
-      $$ReviewHistoryEntriesTableAnnotationComposer,
-      $$ReviewHistoryEntriesTableCreateCompanionBuilder,
-      $$ReviewHistoryEntriesTableUpdateCompanionBuilder,
-      (ReviewHistoryEntry, $$ReviewHistoryEntriesTableReferences),
-      ReviewHistoryEntry,
-      PrefetchHooks Function({bool unitId})
+      $AyahProgressEntriesTable,
+      AyahProgressEntry,
+      $$AyahProgressEntriesTableFilterComposer,
+      $$AyahProgressEntriesTableOrderingComposer,
+      $$AyahProgressEntriesTableAnnotationComposer,
+      $$AyahProgressEntriesTableCreateCompanionBuilder,
+      $$AyahProgressEntriesTableUpdateCompanionBuilder,
+      (AyahProgressEntry, $$AyahProgressEntriesTableReferences),
+      AyahProgressEntry,
+      PrefetchHooks Function({bool profileId})
+    >;
+typedef $$SurahProgressEntriesTableCreateCompanionBuilder =
+    SurahProgressEntriesCompanion Function({
+      required String id,
+      required String profileId,
+      required int surahNumber,
+      Value<int> memorizedAyahCount,
+      required int totalAyahCount,
+      Value<DateTime?> completedAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SurahProgressEntriesTableUpdateCompanionBuilder =
+    SurahProgressEntriesCompanion Function({
+      Value<String> id,
+      Value<String> profileId,
+      Value<int> surahNumber,
+      Value<int> memorizedAyahCount,
+      Value<int> totalAyahCount,
+      Value<DateTime?> completedAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$SurahProgressEntriesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SurahProgressEntriesTable,
+          SurahProgressEntry
+        > {
+  $$SurahProgressEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserProfilesTable _profileIdTable(_$AppDatabase db) => db.userProfiles
+      .createAlias('surah_progress_entries__profile_id__user_profiles__id');
+
+  $$UserProfilesTableProcessedTableManager get profileId {
+    final $_column = $_itemColumn<String>('profile_id')!;
+
+    final manager = $$UserProfilesTableTableManager(
+      $_db,
+      $_db.userProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_profileIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$SurahProgressEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $SurahProgressEntriesTable> {
+  $$SurahProgressEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get memorizedAyahCount => $composableBuilder(
+    column: $table.memorizedAyahCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalAyahCount => $composableBuilder(
+    column: $table.totalAyahCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserProfilesTableFilterComposer get profileId {
+    final $$UserProfilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableFilterComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SurahProgressEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $SurahProgressEntriesTable> {
+  $$SurahProgressEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get memorizedAyahCount => $composableBuilder(
+    column: $table.memorizedAyahCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalAyahCount => $composableBuilder(
+    column: $table.totalAyahCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserProfilesTableOrderingComposer get profileId {
+    final $$UserProfilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SurahProgressEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SurahProgressEntriesTable> {
+  $$SurahProgressEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get memorizedAyahCount => $composableBuilder(
+    column: $table.memorizedAyahCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalAyahCount => $composableBuilder(
+    column: $table.totalAyahCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$UserProfilesTableAnnotationComposer get profileId {
+    final $$UserProfilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SurahProgressEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SurahProgressEntriesTable,
+          SurahProgressEntry,
+          $$SurahProgressEntriesTableFilterComposer,
+          $$SurahProgressEntriesTableOrderingComposer,
+          $$SurahProgressEntriesTableAnnotationComposer,
+          $$SurahProgressEntriesTableCreateCompanionBuilder,
+          $$SurahProgressEntriesTableUpdateCompanionBuilder,
+          (SurahProgressEntry, $$SurahProgressEntriesTableReferences),
+          SurahProgressEntry,
+          PrefetchHooks Function({bool profileId})
+        > {
+  $$SurahProgressEntriesTableTableManager(
+    _$AppDatabase db,
+    $SurahProgressEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SurahProgressEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SurahProgressEntriesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$SurahProgressEntriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> profileId = const Value.absent(),
+                Value<int> surahNumber = const Value.absent(),
+                Value<int> memorizedAyahCount = const Value.absent(),
+                Value<int> totalAyahCount = const Value.absent(),
+                Value<DateTime?> completedAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SurahProgressEntriesCompanion(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                memorizedAyahCount: memorizedAyahCount,
+                totalAyahCount: totalAyahCount,
+                completedAt: completedAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String profileId,
+                required int surahNumber,
+                Value<int> memorizedAyahCount = const Value.absent(),
+                required int totalAyahCount,
+                Value<DateTime?> completedAt = const Value.absent(),
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SurahProgressEntriesCompanion.insert(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                memorizedAyahCount: memorizedAyahCount,
+                totalAyahCount: totalAyahCount,
+                completedAt: completedAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SurahProgressEntriesTable, SurahProgressEntry>(
+                    table,
+                  ),
+                  $$SurahProgressEntriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({profileId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (profileId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$SurahProgressEntriesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$SurahProgressEntriesTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SurahProgressEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SurahProgressEntriesTable,
+      SurahProgressEntry,
+      $$SurahProgressEntriesTableFilterComposer,
+      $$SurahProgressEntriesTableOrderingComposer,
+      $$SurahProgressEntriesTableAnnotationComposer,
+      $$SurahProgressEntriesTableCreateCompanionBuilder,
+      $$SurahProgressEntriesTableUpdateCompanionBuilder,
+      (SurahProgressEntry, $$SurahProgressEntriesTableReferences),
+      SurahProgressEntry,
+      PrefetchHooks Function({bool profileId})
     >;
 typedef $$BookmarksTableCreateCompanionBuilder = BookmarksCompanion Function({
   required String id,
@@ -4144,10 +5885,17 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$UserProfilesTableTableManager get userProfiles =>
       $$UserProfilesTableTableManager(_db, _db.userProfiles);
-  $$MemorizationUnitsTableTableManager get memorizationUnits =>
-      $$MemorizationUnitsTableTableManager(_db, _db.memorizationUnits);
-  $$ReviewHistoryEntriesTableTableManager get reviewHistoryEntries =>
-      $$ReviewHistoryEntriesTableTableManager(_db, _db.reviewHistoryEntries);
+  $$PassagesTableTableManager get passages =>
+      $$PassagesTableTableManager(_db, _db.passages);
+  $$SessionProgressEntriesTableTableManager get sessionProgressEntries =>
+      $$SessionProgressEntriesTableTableManager(
+        _db,
+        _db.sessionProgressEntries,
+      );
+  $$AyahProgressEntriesTableTableManager get ayahProgressEntries =>
+      $$AyahProgressEntriesTableTableManager(_db, _db.ayahProgressEntries);
+  $$SurahProgressEntriesTableTableManager get surahProgressEntries =>
+      $$SurahProgressEntriesTableTableManager(_db, _db.surahProgressEntries);
   $$BookmarksTableTableManager get bookmarks =>
       $$BookmarksTableTableManager(_db, _db.bookmarks);
 }

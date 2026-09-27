@@ -1,25 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sudur/core/database/app_database.dart';
 import 'package:sudur/core/memorization/passage_suggestion.dart';
 import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
-
-MemorizationUnit _unit(int surah, int start, int end) {
-  final now = DateTime.now();
-  return MemorizationUnit(
-    id: 'u-$surah-$start-$end',
-    profileId: 'local',
-    surahNumber: surah,
-    startAyah: start,
-    endAyah: end,
-    status: 'learning',
-    masteryLevel: null,
-    circle: null,
-    lastReviewedAt: null,
-    nextReviewDueAt: null,
-    createdAt: now,
-    updatedAt: now,
-  );
-}
 
 void main() {
   late QuranReferenceRepository reference;
@@ -29,65 +10,57 @@ void main() {
     reference = await QuranReferenceRepository.load();
   });
 
-  test('suggests Al-Fatiha 1-3 when nothing is memorized yet', () {
-    final suggestion = suggestNextPassage(reference, []);
+  Set<String> keysFor(int surah, int start, int end) => {
+    for (var a = start; a <= end; a++) '$surah:$a',
+  };
+
+  test('suggests Al-Fatiha 1-5 when nothing is memorized yet', () {
+    final suggestion = suggestNextPassage(reference, {});
     expect(suggestion, isNotNull);
     expect(suggestion!.surahNumber, 1);
     expect(suggestion.startAyah, 1);
-    expect(suggestion.endAyah, 3);
+    expect(suggestion.endAyah, 5);
   });
 
-  test('continues into the next sourate once the current one is fully covered', () {
-    final units = [_unit(1, 1, 7)];
-    final suggestion = suggestNextPassage(reference, units);
-    expect(suggestion, isNotNull);
-    expect(suggestion!.surahNumber, 2);
-    expect(suggestion.startAyah, 1);
-    expect(suggestion.endAyah, 3);
-  });
+  test(
+    'caps at the sourate boundary even with room left in maxAyahsPerPassage',
+    () {
+      // Al-Fatiha has 7 ayahs: covering 1-5 leaves 6-7, fewer than the default cap.
+      final suggestion = suggestNextPassage(reference, keysFor(1, 1, 5));
+      expect(suggestion!.surahNumber, 1);
+      expect(suggestion.startAyah, 6);
+      expect(suggestion.endAyah, 7);
+    },
+  );
+
+  test(
+    'continues into the next sourate once the current one is fully covered',
+    () {
+      final suggestion = suggestNextPassage(reference, keysFor(1, 1, 7));
+      expect(suggestion!.surahNumber, 2);
+      expect(suggestion.startAyah, 1);
+      expect(suggestion.endAyah, 5);
+    },
+  );
 
   test('continues correctly from a partial mid-sourate coverage', () {
-    final units = [_unit(1, 1, 7), _unit(2, 1, 5)];
-    final suggestion = suggestNextPassage(reference, units);
-    expect(suggestion, isNotNull);
+    final covered = {...keysFor(1, 1, 7), ...keysFor(2, 1, 5)};
+    final suggestion = suggestNextPassage(reference, covered);
     expect(suggestion!.surahNumber, 2);
     expect(suggestion.startAyah, 6);
-    expect(suggestion.endAyah, 8);
+    expect(suggestion.endAyah, 10);
   });
 
-  test('never crosses a sourate boundary even with fewer than 3 ayahs left', () {
-    // Al-Fatiha has 7 ayahs: covering 1-6 leaves only ayah 7 uncovered.
-    final units = [_unit(1, 1, 6)];
-    final suggestion = suggestNextPassage(reference, units);
-    expect(suggestion, isNotNull);
-    expect(suggestion!.surahNumber, 1);
-    expect(suggestion.startAyah, 7);
-    expect(suggestion.endAyah, 7);
-  });
-
-  test('treats already-memorized and in-progress units the same as covered', () {
-    final now = DateTime.now();
-    final memorized = MemorizationUnit(
-      id: 'm-1',
-      profileId: 'local',
-      surahNumber: 1,
-      startAyah: 1,
-      endAyah: 7,
-      status: 'memorized',
-      masteryLevel: 'solid',
-      circle: 3,
-      lastReviewedAt: now,
-      nextReviewDueAt: null,
-      createdAt: now,
-      updatedAt: now,
-    );
-    final suggestion = suggestNextPassage(reference, [memorized]);
-    expect(suggestion!.surahNumber, 2);
-    expect(suggestion.startAyah, 1);
+  test('respects a smaller maxAyahsPerPassage', () {
+    final suggestion = suggestNextPassage(reference, {}, maxAyahsPerPassage: 3);
+    expect(suggestion!.endAyah, 3);
   });
 
   test('returns null once every ayah of the Quran is covered', () {
-    final units = [for (final surah in reference.surahs) _unit(surah.number, 1, surah.numberOfAyahs)];
-    expect(suggestNextPassage(reference, units), isNull);
+    final all = <String>{
+      for (final surah in reference.surahs)
+        for (var a = 1; a <= surah.numberOfAyahs; a++) '${surah.number}:$a',
+    };
+    expect(suggestNextPassage(reference, all), isNull);
   });
 }
