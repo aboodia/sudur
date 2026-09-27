@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/community/community_screen.dart';
 import '../features/home/home_screen.dart';
+import '../features/memorization/memorization_flow_screen.dart';
 import '../features/path/path_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
@@ -88,7 +89,12 @@ final appRouter = GoRouter(
         ),
       ],
     ),
-    // Le nouveau parcours de mémorisation (7 écrans) est branché en Phase 4.
+    // Parcours de mémorisation (7 écrans) : pas d'onglet dédié (volontaire,
+    // voir plus haut) — une session lancée depuis l'Accueil, hors du shell.
+    GoRoute(
+      path: '/memoriser',
+      builder: (context, state) => const MemorizationFlowScreen(),
+    ),
   ],
 );
 

@@ -19,5 +19,104 @@
       "total": {"type": "int"},
       "name": {"type": "String"}
     }
-  }
+  },
+
+  "discoverTitle": "Écoute le passage en entier",
+  "discoverSubtitle": "Suis le texte des yeux, sans chercher à retenir. Tu prends simplement contact avec les versets.",
+  "listeningToAyah": "Verset {ayah} en lecture",
+  "@listeningToAyah": {"placeholders": {"ayah": {"type": "int"}}},
+  "finishedListening": "J'ai écouté le passage",
+  "listenAgain": "Écouter une seconde fois",
+
+  "verseOfTotal": "Verset {n} sur {total}",
+  "@verseOfTotal": {"placeholders": {"n": {"type": "int"}, "total": {"type": "int"}}},
+  "repeatAloudBadge": "Répète à voix haute",
+  "listenXOfY": "Écoute {x} sur {y} · puis répète",
+  "@listenXOfY": {"placeholders": {"x": {"type": "int"}, "y": {"type": "int"}}},
+  "noHesitation": "Je le répète sans hésiter",
+
+  "maskInstructions": "Récite en complétant les mots masqués. Touche un mot pour le révéler.",
+  "levelLight": "Léger",
+  "levelMedium": "Moyen",
+  "levelFull": "Complet",
+  "noWordRevealedYet": "Aucun mot révélé pour l'instant. Prends ton temps.",
+  "someWordsRevealed": "{n} mot(s) révélé(s) — ils seront à surveiller à la révision.",
+  "@someWordsRevealed": {"placeholders": {"n": {"type": "int"}}},
+  "restartStep": "Recommencer",
+  "iKnowIt": "Je le connais",
+
+  "reciteVerseNoHelp": "Récite le verset {n} sans aide",
+  "@reciteVerseNoHelp": {"placeholders": {"n": {"type": "int"}}},
+  "reciteInstructions": "Seul le premier mot reste visible. Récite, puis vérifie.",
+  "showVerse": "Afficher le verset",
+  "hideVerse": "Masquer le verset",
+  "howWasRecitation": "Comment s'est passée ta récitation ?",
+  "outcomeClean": "Sans erreur",
+  "outcomeCleanSub": "Verset validé",
+  "outcomeHesitant": "Quelques hésitations",
+  "outcomeHesitantSub": "Validé, revu plus tôt",
+  "outcomeRedo": "À reprendre",
+  "outcomeRedoSub": "On le repasse au masquage",
+  "continueLabel": "Continuer",
+
+  "chainTitle": "Récite le passage d'un seul tenant",
+  "chainSubtitle": "Relie les versets entre eux : c'est ce qui fixe le passage dans la mémoire.",
+  "chainVerseLabel": "Verset {n}",
+  "@chainVerseLabel": {"placeholders": {"n": {"type": "int"}}},
+  "chainStatusValidated": "Sans erreur",
+  "chainStatusHesitant": "1 hésitation",
+  "chainStatusCurrent": "En cours",
+  "finishPassageButton": "Terminer le passage",
+
+  "passageMemorizedBadge": "PASSAGE MÉMORISÉ",
+  "passageMemorizedTitle": "{surah}, versets {start} à {end}",
+  "@passageMemorizedTitle": {
+    "placeholders": {"surah": {"type": "String"}, "start": {"type": "int"}, "end": {"type": "int"}}
+  },
+  "passageMemorizedTitleSingle": "{surah}, verset {start}",
+  "@passageMemorizedTitleSingle": {
+    "placeholders": {"surah": {"type": "String"}, "start": {"type": "int"}}
+  },
+  "barakAllahuFik": "بارك الله فيك",
+  "passageMemorizedSubtitle": "Ces versets sont maintenant dans ton cœur. La révision va les y ancrer durablement.",
+  "statVerses": "{n} verset(s)",
+  "@statVerses": {"placeholders": {"n": {"type": "int"}}},
+  "statDuration": "{min} min de pratique",
+  "@statDuration": {"placeholders": {"min": {"type": "int"}}},
+  "statToWatch": "{n} verset(s) à surveiller",
+  "@statToWatch": {"placeholders": {"n": {"type": "int"}}},
+  "reviewCycleTitle": "Ton cycle de révision",
+  "reviewCycleTomorrow": "Demain",
+  "surahProgressLabel": "Sourate {name}",
+  "@surahProgressLabel": {"placeholders": {"name": {"type": "String"}}},
+  "surahProgressCount": "{n} / {total} versets",
+  "@surahProgressCount": {"placeholders": {"n": {"type": "int"}, "total": {"type": "int"}}},
+  "surahProgressRemaining": "Encore {n} verset(s) pour compléter la sourate : elle comptera pour ton prochain badge.",
+  "@surahProgressRemaining": {"placeholders": {"n": {"type": "int"}}},
+  "surahAlreadyComplete": "Sourate complète, mabrouk !",
+  "backToHome": "Retour à l'accueil",
+  "replayPassage": "Réécouter le passage",
+
+  "greeting": "Assalamu alaykum",
+  "todaysSessionLabel": "SESSION DU JOUR · MÉMORISATION",
+  "estimatedDuration": "≈ {min} min",
+  "@estimatedDuration": {"placeholders": {"min": {"type": "int"}}},
+  "surahVersesLabel": "Sourate {surah} · versets {start} à {end}",
+  "@surahVersesLabel": {
+    "placeholders": {"surah": {"type": "int"}, "start": {"type": "int"}, "end": {"type": "int"}}
+  },
+  "surahVerseLabelSingle": "Sourate {surah} · verset {start}",
+  "@surahVerseLabelSingle": {
+    "placeholders": {"surah": {"type": "int"}, "start": {"type": "int"}}
+  },
+  "startSession": "Commencer la session",
+  "alsoToday": "AUSSI AUJOURD'HUI",
+  "reviewDueToday": "{n} verset(s) à réviser aujourd'hui",
+  "@reviewDueToday": {"placeholders": {"n": {"type": "int"}}},
+  "allMemorizedCongrats": "Tout le Coran est mémorisé, mabrouk !",
+  "profileRemaining": "{n} sourate(s) restante(s) pour {nextName}",
+  "@profileRemaining": {
+    "placeholders": {"n": {"type": "int"}, "nextName": {"type": "String"}}
+  },
+  "profileMaxed": "Le sommet est atteint, mabrouk !"
 }

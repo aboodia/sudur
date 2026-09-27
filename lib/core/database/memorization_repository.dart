@@ -4,7 +4,9 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../memorization/passage_suggestion.dart';
 import '../memorization/review_scheduler.dart';
+import '../quran_reference/quran_reference_repository.dart';
 import 'app_database.dart';
 import 'profile_repository.dart';
 
@@ -319,6 +321,36 @@ final surahProgressProvider = FutureProvider<List<SurahProgressEntry>>((
   final profile = await ref.watch(currentProfileProvider.future);
   return ref.watch(memorizationRepositoryProvider).allSurahProgress(profile.id);
 });
+
+/// What the Accueil "session du jour" card should show: the passage left
+/// mid-session if there is one, otherwise today's fresh suggestion — null
+/// only once every ayah of the Quran is already memorized.
+final todaysPassagePreviewProvider =
+    FutureProvider<({int surahNumber, int ayahStart, int ayahEnd})?>((
+      ref,
+    ) async {
+      final profile = await ref.watch(currentProfileProvider.future);
+      final repo = ref.watch(memorizationRepositoryProvider);
+
+      final active = await repo.activeSession(profile.id);
+      if (active != null) {
+        return (
+          surahNumber: active.passage.surahNumber,
+          ayahStart: active.passage.ayahStart,
+          ayahEnd: active.passage.ayahEnd,
+        );
+      }
+
+      final reference = await ref.watch(quranReferenceProvider.future);
+      final memorized = await repo.memorizedAyahKeys(profile.id);
+      final suggestion = suggestNextPassage(reference, memorized);
+      if (suggestion == null) return null;
+      return (
+        surahNumber: suggestion.surahNumber,
+        ayahStart: suggestion.startAyah,
+        ayahEnd: suggestion.endAyah,
+      );
+    });
 
 final dueReviewsProvider = FutureProvider<List<AyahProgressEntry>>((ref) async {
   final profile = await ref.watch(currentProfileProvider.future);

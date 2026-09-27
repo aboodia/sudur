@@ -37,7 +37,8 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   void _onPlayerStateChanged(PlayerState playerState) {
     state = state.copyWith(
       isPlaying: playerState.playing,
-      isLoading: playerState.processingState == ProcessingState.loading ||
+      isLoading:
+          playerState.processingState == ProcessingState.loading ||
           playerState.processingState == ProcessingState.buffering,
     );
     if (playerState.processingState == ProcessingState.completed) {
@@ -104,6 +105,13 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     }
   }
 
+  /// Live playback position/duration — kept as raw streams rather than in
+  /// [ReadingPlaybackState] since they tick many times a second and would
+  /// otherwise force a full state rebuild on every frame. Used by the
+  /// Découvrir step's elapsed/total time readout.
+  Stream<Duration> get positionStream => _player.positionStream;
+  Stream<Duration?> get durationStream => _player.durationStream;
+
   Future<void> pause() => _player.pause();
 
   /// Bouton play du mini-lecteur : reprend un ayah déjà chargé (mis en
@@ -155,7 +163,10 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   /// Repeat the current ayah forever — the mini-player's "boucle infinie"
   /// option.
   void setInfiniteRepeat() {
-    state = state.copyWith(repeatMode: RepeatMode.repeatAyah, repeatProgress: 0);
+    state = state.copyWith(
+      repeatMode: RepeatMode.repeatAyah,
+      repeatProgress: 0,
+    );
   }
 
   /// Reserved for a future "répéter cette plage" passage-repeat feature in
@@ -219,5 +230,5 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
 
 final audioPlaybackProvider =
     NotifierProvider<AudioPlaybackController, ReadingPlaybackState>(
-  AudioPlaybackController.new,
-);
+      AudioPlaybackController.new,
+    );
