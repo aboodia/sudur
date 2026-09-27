@@ -1,0 +1,23 @@
+{
+  "@@locale": "fr",
+
+  "sessionQuitTooltip": "Quitter (la progression est sauvegardée)",
+  "@sessionQuitTooltip": {
+    "description": "Tooltip for the close button on the first step of the guided memorization flow (no previous step to go back to)."
+  },
+
+  "sessionBackTooltip": "Retour à l'étape précédente",
+  "@sessionBackTooltip": {
+    "description": "Tooltip for the back button on steps 2-5 of the guided memorization flow."
+  },
+
+  "stepOfTotal": "Étape {step} sur {total} · {name}",
+  "@stepOfTotal": {
+    "description": "Header subtitle of a guided memorization step, e.g. 'Étape 1 sur 5 · Découvrir'.",
+    "placeholders": {
+      "step": {"type": "int"},
+      "total": {"type": "int"},
+      "name": {"type": "String"}
+    }
+  }
+}

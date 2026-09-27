@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../core/settings/theme_settings.dart';
+import 'sudur_tokens.dart';
 
 /// Calm, uncluttered chrome per §7 of the cahier des charges (interface
 /// épurée, apaisante — gamification stays on peripheral elements, never on
 /// the Quranic content itself). The Quran text always renders in AmiriQuran
 /// regardless of [SudurThemeVariant]; only the app's own UI is themed here.
 class SudurTheme {
-  static ThemeData light(SudurThemeVariant variant) => _build(variant, Brightness.light);
+  static ThemeData light(SudurThemeVariant variant) =>
+      _build(variant, Brightness.light);
 
-  static ThemeData dark(SudurThemeVariant variant) => _build(variant, Brightness.dark);
+  static ThemeData dark(SudurThemeVariant variant) =>
+      _build(variant, Brightness.dark);
 
   static ThemeData _build(SudurThemeVariant variant, Brightness brightness) {
     final config = kThemeVariantConfigs[variant]!;
@@ -20,21 +23,39 @@ class SudurTheme {
             brightness: brightness,
             dynamicSchemeVariant: config.schemeVariant!,
           );
-    final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(config.cornerRadius));
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(config.cornerRadius),
+    );
+    final tokens = config.schemeBuilder != null
+        ? SudurTokens.brand()
+        : SudurTokens.fromScheme(scheme);
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       brightness: brightness,
       fontFamily: config.uiFontFamily,
-      textTheme: config.headlineFontFamily == null ? null : _headlineSplitTextTheme(config.headlineFontFamily!),
+      textTheme: config.headlineFontFamily == null
+          ? null
+          : _headlineSplitTextTheme(config.headlineFontFamily!),
       cardTheme: CardThemeData(shape: shape),
-      elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: shape)),
-      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: shape)),
-      inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.circular(config.cornerRadius))),
-      navigationBarTheme: NavigationBarThemeData(
-        indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(config.cornerRadius)),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(shape: shape),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(shape: shape),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(config.cornerRadius),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(config.cornerRadius),
+        ),
+      ),
+      extensions: [tokens],
     );
   }
 

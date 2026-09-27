@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/database/profile_repository.dart';
 import '../core/settings/theme_settings.dart';
 import '../features/onboarding/onboarding_flow.dart';
+import '../l10n/app_localizations.dart';
 import 'router.dart';
 import 'theme.dart';
 
@@ -25,6 +26,8 @@ class SudurApp extends ConsumerWidget {
               debugShowCheckedModeBanner: false,
               theme: SudurTheme.light(variant),
               darkTheme: SudurTheme.dark(variant),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: const OnboardingFlow(),
             )
           : MaterialApp.router(
@@ -32,12 +35,16 @@ class SudurApp extends ConsumerWidget {
               debugShowCheckedModeBanner: false,
               theme: SudurTheme.light(variant),
               darkTheme: SudurTheme.dark(variant),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               routerConfig: appRouter,
             ),
       loading: () => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: SudurTheme.light(variant),
         darkTheme: SudurTheme.dark(variant),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const Scaffold(body: SizedBox.shrink()),
       ),
       // Lecture du profil local en échec : on ne bloque pas l'utilisateur
@@ -47,6 +54,8 @@ class SudurApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: SudurTheme.light(variant),
         darkTheme: SudurTheme.dark(variant),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         routerConfig: appRouter,
       ),
     );
