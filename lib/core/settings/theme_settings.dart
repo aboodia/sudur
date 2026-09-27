@@ -2,43 +2,88 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Three chartes graphiques the user can try and switch between. Each pairs
-/// a seed color with a Material 3 [DynamicSchemeVariant] (not just a hue
-/// swap — the variant changes how the whole tonal palette is generated, so
-/// each option genuinely feels different, not just "same UI, different
-/// accent"). The Quran text itself always stays in AmiriQuran regardless of
-/// variant — this only styles the app chrome, never the Mushaf content.
-enum WirdThemeVariant { emeraude, ivoire, nuitBleue }
+/// Three chartes graphiques the user can try and switch between. Émeraude
+/// and Ivoire & Or are seed-derived Material 3 palettes (each pairs a seed
+/// color with a [DynamicSchemeVariant] so they genuinely feel different, not
+/// just "same UI, different accent"). Sudur is the brand's own identity
+/// board ("Sudur bleu · planche d'identité", 2026) — its colors are exact
+/// hex values from that board, not seed-derived, so it's built from a
+/// hand-set [ColorScheme] instead (see [ThemeVariantConfig.schemeBuilder]).
+/// The Quran text itself always stays in AmiriQuran regardless of variant —
+/// this only styles the app chrome, never the Mushaf content.
+enum SudurThemeVariant { emeraude, ivoire, sudur }
 
 class ThemeVariantConfig {
   const ThemeVariantConfig({
     required this.label,
     required this.description,
-    required this.seed,
-    required this.schemeVariant,
     required this.cornerRadius,
+    this.seed,
+    this.schemeVariant,
+    this.schemeBuilder,
     this.uiFontFamily,
+    this.headlineFontFamily,
   });
 
   final String label;
   final String description;
-  final Color seed;
-  final DynamicSchemeVariant schemeVariant;
   final double cornerRadius;
+
+  /// Seed-derived variants (Émeraude, Ivoire & Or) set these two.
+  final Color? seed;
+  final DynamicSchemeVariant? schemeVariant;
+
+  /// Brand variants (Sudur) set this instead, bypassing `fromSeed` entirely
+  /// so the exact identity-board hex values are used verbatim.
+  final ColorScheme Function(Brightness)? schemeBuilder;
 
   /// null = Material default (Roboto-ish system font).
   final String? uiFontFamily;
+
+  /// When set, headline/display/title text styles use this font instead of
+  /// [uiFontFamily] — Sudur's "Cormorant Garamond pour les titres, Inter
+  /// pour l'interface" split. Null for variants with a single flat font.
+  final String? headlineFontFamily;
+}
+
+const _sudurPrimary = Color(0xFF24427C); // Bleu Sudur
+const _sudurSecondary = Color(0xFFDCE4EF); // Bleu brume
+const _sudurTertiary = Color(0xFFB57A64); // Terre cuite
+const _sudurBackground = Color(0xFFF4EFE7); // Neutre chaud
+const _sudurInk = Color(0xFF181D24); // Encre
+const _sudurNight = Color(0xFF101A2C); // Nuit bleue (mode sombre)
+
+ColorScheme _sudurScheme(Brightness brightness) {
+  if (brightness == Brightness.light) {
+    return ColorScheme.fromSeed(seedColor: _sudurPrimary).copyWith(
+      brightness: Brightness.light,
+      primary: _sudurPrimary,
+      onPrimary: Colors.white,
+      secondary: _sudurSecondary,
+      onSecondary: _sudurInk,
+      tertiary: _sudurTertiary,
+      onTertiary: Colors.white,
+      surface: _sudurBackground,
+      onSurface: _sudurInk,
+    );
+  }
+  return ColorScheme.fromSeed(seedColor: _sudurPrimary, brightness: Brightness.dark).copyWith(
+    surface: _sudurNight,
+    onSurface: _sudurBackground,
+    tertiary: _sudurTertiary,
+    onTertiary: Colors.white,
+  );
 }
 
 const kThemeVariantConfigs = {
-  WirdThemeVariant.emeraude: ThemeVariantConfig(
+  SudurThemeVariant.emeraude: ThemeVariantConfig(
     label: 'Émeraude',
-    description: 'Vert profond et apaisant, l\'identité par défaut de Wird.',
+    description: 'Vert profond et apaisant.',
     seed: Color(0xFF2F6F5E),
     schemeVariant: DynamicSchemeVariant.tonalSpot,
     cornerRadius: 16,
   ),
-  WirdThemeVariant.ivoire: ThemeVariantConfig(
+  SudurThemeVariant.ivoire: ThemeVariantConfig(
     label: 'Ivoire & Or',
     description: 'Tons chauds de manuscrit ancien, avec la police Amiri.',
     seed: Color(0xFFA9781E),
@@ -46,38 +91,39 @@ const kThemeVariantConfigs = {
     cornerRadius: 10,
     uiFontFamily: 'Amiri',
   ),
-  WirdThemeVariant.nuitBleue: ThemeVariantConfig(
-    label: 'Nuit Bleue',
-    description: 'Bleu nocturne contrasté, confortable pour lire le soir.',
-    seed: Color(0xFF223A70),
-    schemeVariant: DynamicSchemeVariant.vibrant,
-    cornerRadius: 22,
+  SudurThemeVariant.sudur: ThemeVariantConfig(
+    label: 'Sudur',
+    description: 'Bleu profond et terre cuite — l\'identité officielle de l\'application.',
+    schemeBuilder: _sudurScheme,
+    cornerRadius: 18,
+    uiFontFamily: 'Inter',
+    headlineFontFamily: 'CormorantGaramond',
   ),
 };
 
 const _kThemeVariantKey = 'app.themeVariant';
 
-class ThemeVariantController extends Notifier<WirdThemeVariant> {
+class ThemeVariantController extends Notifier<SudurThemeVariant> {
   @override
-  WirdThemeVariant build() {
+  SudurThemeVariant build() {
     _restore();
-    return WirdThemeVariant.emeraude;
+    return SudurThemeVariant.sudur;
   }
 
   Future<void> _restore() async {
     final prefs = await SharedPreferences.getInstance();
     final stored = prefs.getString(_kThemeVariantKey);
-    final match = WirdThemeVariant.values.where((v) => v.name == stored);
+    final match = SudurThemeVariant.values.where((v) => v.name == stored);
     if (match.isNotEmpty) state = match.first;
   }
 
-  Future<void> setVariant(WirdThemeVariant variant) async {
+  Future<void> setVariant(SudurThemeVariant variant) async {
     state = variant;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_kThemeVariantKey, variant.name);
   }
 }
 
-final themeVariantProvider = NotifierProvider<ThemeVariantController, WirdThemeVariant>(
+final themeVariantProvider = NotifierProvider<ThemeVariantController, SudurThemeVariant>(
   ThemeVariantController.new,
 );

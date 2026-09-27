@@ -22,7 +22,7 @@ class ThemeVariantPicker extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text('Charte graphique', style: Theme.of(context).textTheme.titleMedium),
         ),
-        for (final variant in WirdThemeVariant.values)
+        for (final variant in SudurThemeVariant.values)
           _ThemeVariantCard(
             variant: variant,
             isSelected: variant == selected,
@@ -42,7 +42,7 @@ class _ThemeVariantCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final WirdThemeVariant variant;
+  final SudurThemeVariant variant;
   final bool isSelected;
   final Brightness brightness;
   final VoidCallback onTap;
@@ -50,11 +50,13 @@ class _ThemeVariantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = kThemeVariantConfigs[variant]!;
-    final previewScheme = ColorScheme.fromSeed(
-      seedColor: config.seed,
-      brightness: brightness,
-      dynamicSchemeVariant: config.schemeVariant,
-    );
+    final previewScheme = config.schemeBuilder != null
+        ? config.schemeBuilder!(brightness)
+        : ColorScheme.fromSeed(
+            seedColor: config.seed!,
+            brightness: brightness,
+            dynamicSchemeVariant: config.schemeVariant!,
+          );
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -76,7 +78,7 @@ class _ThemeVariantCard extends StatelessWidget {
                     Text(
                       config.label,
                       style: TextStyle(
-                        fontFamily: config.uiFontFamily,
+                        fontFamily: config.headlineFontFamily ?? config.uiFontFamily,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),

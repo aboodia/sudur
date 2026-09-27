@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/quran_text/quran_text_repository.dart';
+import 'package:sudur/core/quran_text/quran_text_repository.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

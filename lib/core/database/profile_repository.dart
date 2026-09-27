@@ -62,7 +62,7 @@ final currentProfileProvider = FutureProvider<UserProfile>((ref) {
 });
 
 /// Whether the Onboarding flow (Brique 2) still needs to run before the
-/// rest of the app is shown — see [WirdApp].
+/// rest of the app is shown — see [SudurApp].
 final needsOnboardingProvider = FutureProvider<bool>((ref) async {
   final profile = await ref.watch(currentProfileProvider.future);
   return !profile.hasCompletedOnboarding;

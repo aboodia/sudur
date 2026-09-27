@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/audio/reciter.dart';
+import 'package:sudur/core/audio/reciter.dart';
 
 void main() {
   test('builds a valid cdn.islamic.network URL for a given reciter and ayah', () {

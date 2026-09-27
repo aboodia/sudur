@@ -3,7 +3,7 @@
 // table: "surah001".."surah114" -> uniE001..uniE072).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/mushaf/surah_name_glyph.dart';
+import 'package:sudur/core/mushaf/surah_name_glyph.dart';
 
 void main() {
   test('pads surah numbers to 3 digits', () {

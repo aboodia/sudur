@@ -1,8 +1,8 @@
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/database/app_database.dart';
-import 'package:wird/features/memorization/memorization_session_controller.dart';
+import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/features/memorization/memorization_session_controller.dart';
 
 // Each test gets its own in-memory AppDatabase — see test/widget_test.dart
 // for why the real appDatabaseProvider (an on-disk file) isn't safe here.

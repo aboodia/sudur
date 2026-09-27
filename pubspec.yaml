@@ -1,5 +1,5 @@
-name: wird
-description: "A new Flutter project."
+name: sudur
+description: "Sudur — compagnon quotidien de mémorisation et de révision du Coran."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -58,6 +58,14 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.16.1
   drift_dev: ^2.35.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#24427C"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,6 +100,12 @@ flutter:
     - family: QuranCommon
       fonts:
         - asset: assets/fonts/QuranCommon.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+    - family: CormorantGaramond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond-Variable.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

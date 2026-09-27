@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/database/app_database.dart';
-import 'package:wird/core/review/review_grouping.dart';
+import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/core/review/review_grouping.dart';
 
 MemorizationUnit _unit({required String id, DateTime? nextReviewDueAt}) {
   final now = DateTime.now();

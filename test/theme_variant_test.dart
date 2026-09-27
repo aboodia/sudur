@@ -1,5 +1,5 @@
 // Verifies the 3 chartes graphiques end-to-end, testing ThemeVariantPicker
-// in isolation (not through the full WirdApp/router) so this stays a fast,
+// in isolation (not through the full SudurApp/router) so this stays a fast,
 // self-contained widget test with no dependency on the native Drift/sqlite3
 // database, which flutter_test's headless harness can't provide.
 
@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:wird/core/settings/theme_settings.dart';
-import 'package:wird/features/profile/widgets/theme_variant_picker.dart';
+import 'package:sudur/core/settings/theme_settings.dart';
+import 'package:sudur/features/profile/widgets/theme_variant_picker.dart';
 
 Widget _harness() {
   return const ProviderScope(
@@ -26,18 +26,18 @@ void main() {
     await tester.pumpWidget(_harness());
     await tester.pump();
 
-    for (final variant in WirdThemeVariant.values) {
+    for (final variant in SudurThemeVariant.values) {
       expect(find.text(kThemeVariantConfigs[variant]!.label), findsOneWidget);
     }
   });
 
-  testWidgets('Émeraude is selected by default, tapping another selects it instead', (tester) async {
+  testWidgets('Sudur is selected by default, tapping another selects it instead', (tester) async {
     await tester.pumpWidget(_harness());
     await tester.pump();
 
     expect(find.byIcon(Icons.check_circle), findsOneWidget);
 
-    await tester.tap(find.text('Nuit Bleue'));
+    await tester.tap(find.text('Émeraude'));
     await tester.pump();
 
     expect(find.byIcon(Icons.check_circle), findsOneWidget);
@@ -53,17 +53,18 @@ void main() {
     await tester.pump();
 
     final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('app.themeVariant'), WirdThemeVariant.ivoire.name);
+    expect(prefs.getString('app.themeVariant'), SudurThemeVariant.ivoire.name);
   });
 
   test('each variant produces a genuinely different primary color', () {
-    final primaries = WirdThemeVariant.values.map((v) {
+    final primaries = SudurThemeVariant.values.map((v) {
       final config = kThemeVariantConfigs[v]!;
+      if (config.schemeBuilder != null) return config.schemeBuilder!(Brightness.light).primary;
       return ColorScheme.fromSeed(
-        seedColor: config.seed,
-        dynamicSchemeVariant: config.schemeVariant,
+        seedColor: config.seed!,
+        dynamicSchemeVariant: config.schemeVariant!,
       ).primary;
     }).toSet();
-    expect(primaries, hasLength(WirdThemeVariant.values.length));
+    expect(primaries, hasLength(SudurThemeVariant.values.length));
   });
 }

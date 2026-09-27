@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/review/spaced_repetition.dart';
+import 'package:sudur/core/review/spaced_repetition.dart';
 
 void main() {
   group('reviewIntervalDays / nextReviewDate', () {

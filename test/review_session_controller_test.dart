@@ -2,11 +2,11 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/database/app_database.dart';
-import 'package:wird/core/database/profile_repository.dart';
-import 'package:wird/core/database/review_repository.dart';
-import 'package:wird/core/review/spaced_repetition.dart';
-import 'package:wird/features/review/review_session_controller.dart';
+import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/core/database/profile_repository.dart';
+import 'package:sudur/core/database/review_repository.dart';
+import 'package:sudur/core/review/spaced_repetition.dart';
+import 'package:sudur/features/review/review_session_controller.dart';
 
 // Same in-memory-DB pattern as memorization_session_controller_test.dart.
 ProviderContainer _freshContainer() => ProviderContainer(

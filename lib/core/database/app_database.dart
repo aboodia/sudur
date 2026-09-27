@@ -27,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
 }
 
 QueryExecutor _openConnection() {
-  return driftDatabase(name: 'wird');
+  return driftDatabase(name: 'sudur');
 }
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {

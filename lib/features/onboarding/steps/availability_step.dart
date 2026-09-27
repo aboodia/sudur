@@ -20,7 +20,7 @@ class AvailabilityStep extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Quels jours pouvez-vous vous consacrer à Wird ?', style: theme.textTheme.titleMedium),
+          Text('Quels jours pouvez-vous vous consacrer à Sudur ?', style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,

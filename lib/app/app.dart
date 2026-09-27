@@ -7,8 +7,8 @@ import '../features/onboarding/onboarding_flow.dart';
 import 'router.dart';
 import 'theme.dart';
 
-class WirdApp extends ConsumerWidget {
-  const WirdApp({super.key});
+class SudurApp extends ConsumerWidget {
+  const SudurApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,32 +21,32 @@ class WirdApp extends ConsumerWidget {
     return needsOnboardingAsync.when(
       data: (needsOnboarding) => needsOnboarding
           ? MaterialApp(
-              title: 'Wird',
+              title: 'Sudur',
               debugShowCheckedModeBanner: false,
-              theme: WirdTheme.light(variant),
-              darkTheme: WirdTheme.dark(variant),
+              theme: SudurTheme.light(variant),
+              darkTheme: SudurTheme.dark(variant),
               home: const OnboardingFlow(),
             )
           : MaterialApp.router(
-              title: 'Wird',
+              title: 'Sudur',
               debugShowCheckedModeBanner: false,
-              theme: WirdTheme.light(variant),
-              darkTheme: WirdTheme.dark(variant),
+              theme: SudurTheme.light(variant),
+              darkTheme: SudurTheme.dark(variant),
               routerConfig: appRouter,
             ),
       loading: () => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: WirdTheme.light(variant),
-        darkTheme: WirdTheme.dark(variant),
+        theme: SudurTheme.light(variant),
+        darkTheme: SudurTheme.dark(variant),
         home: const Scaffold(body: SizedBox.shrink()),
       ),
       // Lecture du profil local en échec : on ne bloque pas l'utilisateur
       // sur un écran cassé, on le laisse entrer dans l'app normale.
       error: (_, _) => MaterialApp.router(
-        title: 'Wird',
+        title: 'Sudur',
         debugShowCheckedModeBanner: false,
-        theme: WirdTheme.light(variant),
-        darkTheme: WirdTheme.dark(variant),
+        theme: SudurTheme.light(variant),
+        darkTheme: SudurTheme.dark(variant),
         routerConfig: appRouter,
       ),
     );

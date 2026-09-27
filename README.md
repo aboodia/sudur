@@ -1,6 +1,6 @@
-# wird
+# Sudur
 
-A new Flutter project.
+Compagnon quotidien de mémorisation et de révision du Coran.
 
 ## Getting Started
 

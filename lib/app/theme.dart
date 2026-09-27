@@ -5,19 +5,21 @@ import '../core/settings/theme_settings.dart';
 /// Calm, uncluttered chrome per §7 of the cahier des charges (interface
 /// épurée, apaisante — gamification stays on peripheral elements, never on
 /// the Quranic content itself). The Quran text always renders in AmiriQuran
-/// regardless of [WirdThemeVariant]; only the app's own UI is themed here.
-class WirdTheme {
-  static ThemeData light(WirdThemeVariant variant) => _build(variant, Brightness.light);
+/// regardless of [SudurThemeVariant]; only the app's own UI is themed here.
+class SudurTheme {
+  static ThemeData light(SudurThemeVariant variant) => _build(variant, Brightness.light);
 
-  static ThemeData dark(WirdThemeVariant variant) => _build(variant, Brightness.dark);
+  static ThemeData dark(SudurThemeVariant variant) => _build(variant, Brightness.dark);
 
-  static ThemeData _build(WirdThemeVariant variant, Brightness brightness) {
+  static ThemeData _build(SudurThemeVariant variant, Brightness brightness) {
     final config = kThemeVariantConfigs[variant]!;
-    final scheme = ColorScheme.fromSeed(
-      seedColor: config.seed,
-      brightness: brightness,
-      dynamicSchemeVariant: config.schemeVariant,
-    );
+    final scheme = config.schemeBuilder != null
+        ? config.schemeBuilder!(brightness)
+        : ColorScheme.fromSeed(
+            seedColor: config.seed!,
+            brightness: brightness,
+            dynamicSchemeVariant: config.schemeVariant!,
+          );
     final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(config.cornerRadius));
 
     return ThemeData(
@@ -25,6 +27,7 @@ class WirdTheme {
       colorScheme: scheme,
       brightness: brightness,
       fontFamily: config.uiFontFamily,
+      textTheme: config.headlineFontFamily == null ? null : _headlineSplitTextTheme(config.headlineFontFamily!),
       cardTheme: CardThemeData(shape: shape),
       elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: shape)),
       outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: shape)),
@@ -32,6 +35,23 @@ class WirdTheme {
       navigationBarTheme: NavigationBarThemeData(
         indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(config.cornerRadius)),
       ),
+    );
+  }
+
+  /// Sudur's "Cormorant Garamond pour les titres, Inter pour l'interface" —
+  /// only the display/headline/title roles switch font; body/label text
+  /// stays on the variant's flat `uiFontFamily` (set separately via
+  /// [ThemeData.fontFamily]).
+  static TextTheme _headlineSplitTextTheme(String headlineFontFamily) {
+    final style = TextStyle(fontFamily: headlineFontFamily);
+    return TextTheme(
+      displayLarge: style,
+      displayMedium: style,
+      displaySmall: style,
+      headlineLarge: style,
+      headlineMedium: style,
+      headlineSmall: style,
+      titleLarge: style,
     );
   }
 }

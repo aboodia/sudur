@@ -4,7 +4,7 @@
 // here must be caught by a test, not discovered later in the UI.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/quran_reference/quran_reference_repository.dart';
+import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

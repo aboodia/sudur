@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/database/app_database.dart';
-import 'package:wird/core/memorization/passage_suggestion.dart';
-import 'package:wird/core/quran_reference/quran_reference_repository.dart';
+import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/core/memorization/passage_suggestion.dart';
+import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
 
 MemorizationUnit _unit(int surah, int start, int end) {
   final now = DateTime.now();

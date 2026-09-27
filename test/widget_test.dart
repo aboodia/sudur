@@ -4,7 +4,7 @@
 //
 // Each test gets its own in-memory AppDatabase override — the real
 // appDatabaseProvider persists to an on-disk file (driftDatabase(name:
-// 'wird')) that survives across separate `flutter test` runs, which would
+// 'sudur')) that survives across separate `flutter test` runs, which would
 // make "fresh profile" assertions depend on whatever a previous run last
 // wrote (e.g. hasCompletedOnboarding already true).
 
@@ -12,8 +12,8 @@ import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:wird/app/app.dart';
-import 'package:wird/core/database/app_database.dart';
+import 'package:sudur/app/app.dart';
+import 'package:sudur/core/database/app_database.dart';
 
 void main() {
   testWidgets('a fresh profile boots straight into Onboarding', (tester) async {
@@ -22,12 +22,12 @@ void main() {
         overrides: [
           appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
         ],
-        child: const WirdApp(),
+        child: const SudurApp(),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Bienvenue sur Wird'), findsOneWidget);
+    expect(find.text('Bienvenue sur Sudur'), findsOneWidget);
     expect(find.text('Accueil'), findsNothing);
   });
 
@@ -37,7 +37,7 @@ void main() {
         overrides: [
           appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
         ],
-        child: const WirdApp(),
+        child: const SudurApp(),
       ),
     );
     await tester.pumpAndSettle();

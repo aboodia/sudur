@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/gamification/memorizer_profile.dart';
+import 'package:sudur/core/gamification/memorizer_profile.dart';
 
 void main() {
   test('memorizerBadgeForCount matches each tier boundary from the design', () {

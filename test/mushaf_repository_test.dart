@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/core/mushaf/mushaf_repository.dart';
+import 'package:sudur/core/mushaf/mushaf_repository.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

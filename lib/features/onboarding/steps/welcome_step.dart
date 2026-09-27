@@ -15,7 +15,7 @@ class WelcomeStep extends StatelessWidget {
             Icon(Icons.menu_book, size: 72, color: theme.colorScheme.primary),
             const SizedBox(height: 24),
             Text(
-              'Bienvenue sur Wird',
+              'Bienvenue sur Sudur',
               style: theme.textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),

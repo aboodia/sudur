@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wird/features/onboarding/onboarding_draft.dart';
+import 'package:sudur/features/onboarding/onboarding_draft.dart';
 
 void main() {
   test('derivedLevel is debutant with nothing memorized', () {

@@ -21,7 +21,7 @@ const _kSteps = [
 
 /// Brique 2 : accueil, sélection des sourates déjà mémorisées (le niveau en
 /// est dérivé, pas demandé), disponibilités, puis plan estimé. Flux linéaire
-/// interne — pas de go_router, voir WirdApp pour le point d'entrée.
+/// interne — pas de go_router, voir SudurApp pour le point d'entrée.
 class OnboardingFlow extends ConsumerStatefulWidget {
   const OnboardingFlow({super.key});
 
@@ -59,7 +59,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         );
 
     // Fait recalculer needsOnboardingProvider (qui dépend de ce profil) :
-    // WirdApp bascule alors vers l'app normale.
+    // SudurApp bascule alors vers l'app normale.
     ref.invalidate(currentProfileProvider);
   }
 

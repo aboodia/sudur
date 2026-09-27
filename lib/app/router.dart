@@ -22,7 +22,7 @@ final appRouter = GoRouter(
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
-          _WirdScaffold(navigationShell: navigationShell, location: state.uri.toString()),
+          _SudurScaffold(navigationShell: navigationShell, location: state.uri.toString()),
       branches: [
         StatefulShellBranch(routes: [
           GoRoute(path: '/accueil', builder: (context, state) => const HomeScreen()),
@@ -84,8 +84,8 @@ final appRouter = GoRouter(
   ],
 );
 
-class _WirdScaffold extends StatelessWidget {
-  const _WirdScaffold({required this.navigationShell, required this.location});
+class _SudurScaffold extends StatelessWidget {
+  const _SudurScaffold({required this.navigationShell, required this.location});
 
   final StatefulNavigationShell navigationShell;
   final String location;
