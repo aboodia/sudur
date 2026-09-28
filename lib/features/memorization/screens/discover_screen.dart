@@ -29,10 +29,17 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   @override
   void initState() {
     super.initState();
-    _play();
+    // Deferred: this screen's very first mount can happen synchronously
+    // inside guidedSessionProvider's own state-notification cascade (e.g.
+    // resuming a session on app start) — writing to audioPlaybackProvider
+    // right there is rejected by Riverpod ("modify a provider while the
+    // widget tree was building"). A microtask runs just after that
+    // cascade unwinds, once it's safe.
+    Future.microtask(_play);
   }
 
   void _play() {
+    if (!mounted) return;
     final audio = ref.read(audioPlaybackProvider.notifier);
     audio.setRepeatRange(widget.passage.ayahStart, widget.passage.ayahEnd);
     audio.playFrom(widget.passage.surahNumber, widget.passage.ayahStart);

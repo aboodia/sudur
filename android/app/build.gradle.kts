@@ -6,7 +6,11 @@ plugins {
 
 android {
     namespace = "com.sudur.sudur"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android (Phase 5, enregistrement vocal) requires
+    // compileSdk 37 — the AGP max recommended for this project's Flutter
+    // version's own default (36), but still backward-compatible per the
+    // warning's own note.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

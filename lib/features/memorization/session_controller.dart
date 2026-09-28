@@ -287,6 +287,8 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
     await ref.read(memorizationRepositoryProvider).finishPassage(passage.id);
     ref.invalidate(surahProgressProvider);
     ref.invalidate(activeSessionProvider);
+    ref.invalidate(todaysPassagePreviewProvider);
+    ref.invalidate(dueReviewsProvider);
     state = state.copyWith(isFinished: true);
   }
 

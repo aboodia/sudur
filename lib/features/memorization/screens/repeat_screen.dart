@@ -32,7 +32,12 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
   @override
   void initState() {
     super.initState();
-    _play();
+    // Deferred for the same reason as DiscoverScreen: the very first mount
+    // of a step can happen synchronously inside guidedSessionProvider's own
+    // state-notification cascade (e.g. resuming straight into Répéter on
+    // app start), where writing to audioPlaybackProvider right away is
+    // rejected by Riverpod.
+    Future.microtask(_play);
   }
 
   @override
@@ -42,6 +47,7 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
   }
 
   void _play() {
+    if (!mounted) return;
     final audio = ref.read(audioPlaybackProvider.notifier);
     audio.setRepeatCount(_defaultRepeatTimes - 1);
     audio.playFrom(widget.passage.surahNumber, widget.ayahNumber);
