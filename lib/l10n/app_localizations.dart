@@ -111,6 +111,384 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Étape {step} sur {total} · {name}'**
   String stepOfTotal(int step, int total, String name);
+
+  /// No description provided for @discoverTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écoute le passage en entier'**
+  String get discoverTitle;
+
+  /// No description provided for @discoverSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suis le texte des yeux, sans chercher à retenir. Tu prends simplement contact avec les versets.'**
+  String get discoverSubtitle;
+
+  /// No description provided for @listeningToAyah.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset {ayah} en lecture'**
+  String listeningToAyah(int ayah);
+
+  /// No description provided for @finishedListening.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai écouté le passage'**
+  String get finishedListening;
+
+  /// No description provided for @listenAgain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter une seconde fois'**
+  String get listenAgain;
+
+  /// No description provided for @verseOfTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset {n} sur {total}'**
+  String verseOfTotal(int n, int total);
+
+  /// No description provided for @repeatAloudBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Répète à voix haute'**
+  String get repeatAloudBadge;
+
+  /// No description provided for @listenXOfY.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écoute {x} sur {y} · puis répète'**
+  String listenXOfY(int x, int y);
+
+  /// No description provided for @noHesitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je le répète sans hésiter'**
+  String get noHesitation;
+
+  /// No description provided for @maskInstructions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récite en complétant les mots masqués. Touche un mot pour le révéler.'**
+  String get maskInstructions;
+
+  /// No description provided for @levelLight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Léger'**
+  String get levelLight;
+
+  /// No description provided for @levelMedium.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get levelMedium;
+
+  /// No description provided for @levelFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Complet'**
+  String get levelFull;
+
+  /// No description provided for @noWordRevealedYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun mot révélé pour l\'instant. Prends ton temps.'**
+  String get noWordRevealedYet;
+
+  /// No description provided for @someWordsRevealed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} mot(s) révélé(s) — ils seront à surveiller à la révision.'**
+  String someWordsRevealed(int n);
+
+  /// No description provided for @restartStep.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recommencer'**
+  String get restartStep;
+
+  /// No description provided for @iKnowIt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je le connais'**
+  String get iKnowIt;
+
+  /// No description provided for @reciteVerseNoHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récite le verset {n} sans aide'**
+  String reciteVerseNoHelp(int n);
+
+  /// No description provided for @reciteInstructions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul le premier mot reste visible. Récite, puis vérifie.'**
+  String get reciteInstructions;
+
+  /// No description provided for @showVerse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher le verset'**
+  String get showVerse;
+
+  /// No description provided for @hideVerse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer le verset'**
+  String get hideVerse;
+
+  /// No description provided for @howWasRecitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment s\'est passée ta récitation ?'**
+  String get howWasRecitation;
+
+  /// No description provided for @outcomeClean.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans erreur'**
+  String get outcomeClean;
+
+  /// No description provided for @outcomeCleanSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset validé'**
+  String get outcomeCleanSub;
+
+  /// No description provided for @outcomeHesitant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelques hésitations'**
+  String get outcomeHesitant;
+
+  /// No description provided for @outcomeHesitantSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validé, revu plus tôt'**
+  String get outcomeHesitantSub;
+
+  /// No description provided for @outcomeRedo.
+  ///
+  /// In fr, this message translates to:
+  /// **'À reprendre'**
+  String get outcomeRedo;
+
+  /// No description provided for @outcomeRedoSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'On le repasse au masquage'**
+  String get outcomeRedoSub;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get continueLabel;
+
+  /// No description provided for @chainTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récite le passage d\'un seul tenant'**
+  String get chainTitle;
+
+  /// No description provided for @chainSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relie les versets entre eux : c\'est ce qui fixe le passage dans la mémoire.'**
+  String get chainSubtitle;
+
+  /// No description provided for @chainVerseLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset {n}'**
+  String chainVerseLabel(int n);
+
+  /// No description provided for @chainStatusValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans erreur'**
+  String get chainStatusValidated;
+
+  /// No description provided for @chainStatusHesitant.
+  ///
+  /// In fr, this message translates to:
+  /// **'1 hésitation'**
+  String get chainStatusHesitant;
+
+  /// No description provided for @chainStatusCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get chainStatusCurrent;
+
+  /// No description provided for @finishPassageButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer le passage'**
+  String get finishPassageButton;
+
+  /// No description provided for @passageMemorizedBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'PASSAGE MÉMORISÉ'**
+  String get passageMemorizedBadge;
+
+  /// No description provided for @passageMemorizedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{surah}, versets {start} à {end}'**
+  String passageMemorizedTitle(String surah, int start, int end);
+
+  /// No description provided for @passageMemorizedTitleSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{surah}, verset {start}'**
+  String passageMemorizedTitleSingle(String surah, int start);
+
+  /// No description provided for @barakAllahuFik.
+  ///
+  /// In fr, this message translates to:
+  /// **'بارك الله فيك'**
+  String get barakAllahuFik;
+
+  /// No description provided for @passageMemorizedSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces versets sont maintenant dans ton cœur. La révision va les y ancrer durablement.'**
+  String get passageMemorizedSubtitle;
+
+  /// No description provided for @statVerses.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} verset(s)'**
+  String statVerses(int n);
+
+  /// No description provided for @statDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'{min} min de pratique'**
+  String statDuration(int min);
+
+  /// No description provided for @statToWatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} verset(s) à surveiller'**
+  String statToWatch(int n);
+
+  /// No description provided for @reviewCycleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton cycle de révision'**
+  String get reviewCycleTitle;
+
+  /// No description provided for @reviewCycleTomorrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demain'**
+  String get reviewCycleTomorrow;
+
+  /// No description provided for @surahProgressLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourate {name}'**
+  String surahProgressLabel(String name);
+
+  /// No description provided for @surahProgressCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} / {total} versets'**
+  String surahProgressCount(int n, int total);
+
+  /// No description provided for @surahProgressRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Encore {n} verset(s) pour compléter la sourate : elle comptera pour ton prochain badge.'**
+  String surahProgressRemaining(int n);
+
+  /// No description provided for @surahAlreadyComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourate complète, mabrouk !'**
+  String get surahAlreadyComplete;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à l\'accueil'**
+  String get backToHome;
+
+  /// No description provided for @replayPassage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réécouter le passage'**
+  String get replayPassage;
+
+  /// No description provided for @greeting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assalamu alaykum'**
+  String get greeting;
+
+  /// No description provided for @todaysSessionLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'SESSION DU JOUR · MÉMORISATION'**
+  String get todaysSessionLabel;
+
+  /// No description provided for @estimatedDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'≈ {min} min'**
+  String estimatedDuration(int min);
+
+  /// No description provided for @surahVersesLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourate {surah} · versets {start} à {end}'**
+  String surahVersesLabel(int surah, int start, int end);
+
+  /// No description provided for @surahVerseLabelSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourate {surah} · verset {start}'**
+  String surahVerseLabelSingle(int surah, int start);
+
+  /// No description provided for @startSession.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer la session'**
+  String get startSession;
+
+  /// No description provided for @alsoToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'AUSSI AUJOURD\'HUI'**
+  String get alsoToday;
+
+  /// No description provided for @reviewDueToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} verset(s) à réviser aujourd\'hui'**
+  String reviewDueToday(int n);
+
+  /// No description provided for @allMemorizedCongrats.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout le Coran est mémorisé, mabrouk !'**
+  String get allMemorizedCongrats;
+
+  /// No description provided for @profileRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} sourate(s) restante(s) pour {nextName}'**
+  String profileRemaining(int n, String nextName);
+
+  /// No description provided for @profileMaxed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le sommet est atteint, mabrouk !'**
+  String get profileMaxed;
 }
 
 class _AppLocalizationsDelegate
