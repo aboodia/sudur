@@ -7,6 +7,7 @@ import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
 import '../../../l10n/app_localizations.dart';
 import '../session_controller.dart';
+import '../widgets/record_control.dart';
 import '../widgets/session_step_scaffold.dart';
 
 /// Étape 4 : récitation sans aide (seul le premier mot reste visible),
@@ -93,10 +94,19 @@ class _ReciteScreenState extends ConsumerState<ReciteScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: () =>
-                      setState(() => _verseVisible = !_verseVisible),
-                  child: Text(_verseVisible ? l10n.hideVerse : l10n.showVerse),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () =>
+                          setState(() => _verseVisible = !_verseVisible),
+                      child: Text(
+                        _verseVisible ? l10n.hideVerse : l10n.showVerse,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const RecordControl(),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Text(l10n.howWasRecitation, style: theme.textTheme.titleSmall),

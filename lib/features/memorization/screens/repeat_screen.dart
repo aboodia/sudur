@@ -7,6 +7,7 @@ import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
 import '../../../l10n/app_localizations.dart';
 import '../session_controller.dart';
+import '../widgets/record_control.dart';
 import '../widgets/session_step_scaffold.dart';
 
 const _defaultRepeatTimes = 3;
@@ -176,11 +177,7 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
                     playback.isPlaying ? audio.pause() : audio.resume(),
               ),
               const SizedBox(width: 24),
-              const IconButton(
-                icon: Icon(Icons.mic_none),
-                onPressed: null,
-                tooltip: 'Enregistrement (bientôt)',
-              ),
+              const RecordControl(),
             ],
           ),
           const SizedBox(height: 12),

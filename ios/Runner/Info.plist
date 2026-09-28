@@ -26,6 +26,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sudur peut enregistrer ta récitation pour te la faire réécouter pendant tes sessions de mémorisation. Cet enregistrement reste sur ton appareil et n'est jamais envoyé ailleurs.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

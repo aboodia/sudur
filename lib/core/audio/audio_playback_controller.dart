@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../quran_text/quran_text_repository.dart';
+import 'ayah_audio_cache.dart';
 import 'playback_state.dart';
 import 'reciter.dart';
 
@@ -94,7 +95,14 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     final global = repo.globalAyahNumber(state.surahNumber!, state.ayahNumber!);
     final url = ayahAudioUrl(reciterById(state.reciterId), global);
     try {
-      await _player.setUrl(url);
+      final cachedPath = await ref
+          .read(ayahAudioCacheProvider)
+          .localPathFor(url);
+      if (cachedPath != null) {
+        await _player.setFilePath(cachedPath);
+      } else {
+        await _player.setUrl(url);
+      }
       _hasLoadedSource = true;
       await _player.setSpeed(state.speed);
       await _player.play();
