@@ -35,7 +35,17 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     // right there is rejected by Riverpod ("modify a provider while the
     // widget tree was building"). A microtask runs just after that
     // cascade unwinds, once it's safe.
-    Future.microtask(_play);
+    Future.microtask(_prepare);
+  }
+
+  /// Sets up the mini-player (range, first ayah) without starting
+  /// playback — Découvrir waits for the user to press play themselves,
+  /// same as every other step.
+  void _prepare() {
+    if (!mounted) return;
+    final audio = ref.read(audioPlaybackProvider.notifier);
+    audio.setRepeatRange(widget.passage.ayahStart, widget.passage.ayahEnd);
+    audio.prepare(widget.passage.surahNumber, widget.passage.ayahStart);
   }
 
   void _play() {
