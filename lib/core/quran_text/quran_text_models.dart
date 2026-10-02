@@ -9,11 +9,14 @@ class AyahText {
   });
 
   factory AyahText.fromJson(Map<String, dynamic> json) => AyahText(
-        numberInSurah: json['n'] as int,
-        arabic: json['ar'] as String,
-        french: json['fr'] as String,
-        transliteration: json['tl'] as String,
-      );
+    numberInSurah: json['n'] as int,
+    // The source marks Al-Fatiha's ayah 1 with a leading U+FEFF (an
+    // invisible byte-order mark, not part of the text): it made the
+    // "first word" of that verse an empty string.
+    arabic: (json['ar'] as String).replaceAll('﻿', ''),
+    french: json['fr'] as String,
+    transliteration: json['tl'] as String,
+  );
 
   final int numberInSurah;
   final String arabic;
@@ -21,23 +24,23 @@ class AyahText {
   final String transliteration;
 
   AyahText copyWith({String? arabic}) => AyahText(
-        numberInSurah: numberInSurah,
-        arabic: arabic ?? this.arabic,
-        french: french,
-        transliteration: transliteration,
-      );
+    numberInSurah: numberInSurah,
+    arabic: arabic ?? this.arabic,
+    french: french,
+    transliteration: transliteration,
+  );
 }
 
 class SurahText {
   const SurahText({required this.number, required this.ayahs, this.basmalah});
 
   factory SurahText.fromJson(Map<String, dynamic> json) => SurahText(
-        number: json['number'] as int,
-        ayahs: (json['ayahs'] as List)
-            .cast<Map<String, dynamic>>()
-            .map(AyahText.fromJson)
-            .toList(growable: false),
-      );
+    number: json['number'] as int,
+    ayahs: (json['ayahs'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(AyahText.fromJson)
+        .toList(growable: false),
+  );
 
   final int number;
   final List<AyahText> ayahs;
@@ -60,7 +63,9 @@ class SurahText {
       number: number,
       basmalah: basmalahText,
       ayahs: [
-        firstAyah.copyWith(arabic: firstAyah.arabic.substring(basmalahText.length).trim()),
+        firstAyah.copyWith(
+          arabic: firstAyah.arabic.substring(basmalahText.length).trim(),
+        ),
         ...ayahs.skip(1),
       ],
     );

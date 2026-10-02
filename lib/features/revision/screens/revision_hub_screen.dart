@@ -168,6 +168,7 @@ class _TodayCard extends StatelessWidget {
             l10n.statVerses(dueToday.length),
             style: theme.textTheme.headlineMedium?.copyWith(
               color: scheme.onPrimary,
+              fontFeatures: const [FontFeature.liningFigures()],
             ),
           ),
           const SizedBox(height: 8),

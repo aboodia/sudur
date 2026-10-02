@@ -5,6 +5,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/memorization/masking_strategy.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
+import '../../../core/quran_text/quran_words.dart';
 import '../../../l10n/app_localizations.dart';
 import '../session_controller.dart';
 import '../widgets/ayah_text_view.dart';
@@ -46,7 +47,7 @@ class MaskScreen extends ConsumerWidget {
       body: textAsync.when(
         data: (repo) {
           final ayah = repo.surah(passage.surahNumber).ayahs[ayahNumber - 1];
-          final words = ayah.arabic.split(RegExp(r'\s+'));
+          final words = quranWords(ayah.arabic);
           final seed = passage.surahNumber * 1000 + ayahNumber;
           final hidden = maskedIndices(words, session.maskLevel, seed).toSet();
 

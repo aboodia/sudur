@@ -54,8 +54,13 @@ String formatStudyTime(Duration d) {
   return '${minutes ~/ 60} h $m';
 }
 
-/// One decimal with a French comma: 0.1 → "0,1", 12 → "12,0".
-String formatJuz(double juz) => juz.toStringAsFixed(1).replaceAll('.', ',');
+/// A French decimal comma: 0 → "0", 0.047 → "0,05" (two decimals under one
+/// Juz, so a first sourate doesn't read as nothing), 12 → "12,0".
+String formatJuz(double juz) {
+  if (juz <= 0) return '0';
+  final digits = juz < 1 ? 2 : 1;
+  return juz.toStringAsFixed(digits).replaceAll('.', ',');
+}
 
 /// How much of the Quran is memorized, in Juz: each verse counts for
 /// 1 / (the number of verses in its Juz), so the whole Quran adds up to

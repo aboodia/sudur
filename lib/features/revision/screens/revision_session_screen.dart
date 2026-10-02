@@ -7,6 +7,7 @@ import '../../../core/format/french_date.dart';
 import '../../../core/memorization/review_scheduler.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
+import '../../../core/quran_text/quran_words.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../memorization/widgets/outcome_tile.dart';
 import '../../memorization/widgets/record_control.dart';
@@ -167,7 +168,7 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                   final ayah = repo
                       .surah(entry.surahNumber)
                       .ayahs[entry.ayahNumber - 1];
-                  final words = ayah.arabic.split(RegExp(r'\s+'));
+                  final words = quranWords(ayah.arabic);
                   return Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(

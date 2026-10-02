@@ -235,6 +235,11 @@ class _SessionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    // Text colors come from the theme, not a hard-coded white: in dark mode
+    // the primary is a light blue and white on it is unreadable.
+    final isDark = theme.brightness == Brightness.dark;
+    final onCard = theme.colorScheme.onPrimary;
+    final onCardMuted = onCard.withValues(alpha: 0.75);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -249,13 +254,15 @@ class _SessionCard extends ConsumerWidget {
               Text(
                 'SESSION DU JOUR · MÉMORISATION',
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: const Color(0xFFB57A64),
+                  color: isDark
+                      ? theme.colorScheme.tertiaryContainer
+                      : const Color(0xFFB57A64),
                 ),
               ),
               const Spacer(),
               Text(
                 '≈ $estimatedMinutes min',
-                style: const TextStyle(color: Colors.white70),
+                style: TextStyle(color: onCardMuted),
               ),
             ],
           ),
@@ -267,7 +274,7 @@ class _SessionCard extends ConsumerWidget {
                 child: Text(
                   surahName,
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+                    color: onCard,
                     fontFamily: 'CormorantGaramond',
                   ),
                 ),
@@ -275,17 +282,17 @@ class _SessionCard extends ConsumerWidget {
               Text(
                 surahArabic,
                 textDirection: TextDirection.rtl,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'AmiriQuran',
                   fontSize: 28,
-                  color: Colors.white,
+                  color: onCard,
                 ),
               ),
             ],
           ),
           Text(
             'Sourate $surahNumber · versets $ayahStart à $ayahEnd',
-            style: const TextStyle(color: Colors.white70),
+            style: TextStyle(color: onCardMuted),
           ),
           const SizedBox(height: 16),
           Row(
@@ -296,7 +303,7 @@ class _SessionCard extends ConsumerWidget {
                   child: Container(
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white24,
+                      color: onCard.withValues(alpha: 0.25),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -305,17 +312,19 @@ class _SessionCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Découvrir · Répéter · Masquer · Réciter · Enchaîner',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+            style: TextStyle(color: onCardMuted, fontSize: 12),
           ),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFF4EFE7),
-                foregroundColor: const Color(0xFF24427C),
+                backgroundColor: isDark ? onCard : const Color(0xFFF4EFE7),
+                foregroundColor: isDark
+                    ? theme.colorScheme.primary
+                    : const Color(0xFF24427C),
               ),
               onPressed: () => context.push('/memoriser'),
               child: const Row(

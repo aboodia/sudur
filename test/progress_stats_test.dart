@@ -124,7 +124,10 @@ void main() {
   });
 
   test('formatJuz uses a French decimal comma', () {
-    expect(formatJuz(0.1), '0,1');
+    expect(formatJuz(0), '0');
+    expect(formatJuz(0.047), '0,05');
+    expect(formatJuz(0.1), '0,10');
+    expect(formatJuz(1.26), '1,3');
     expect(formatJuz(12), '12,0');
     expect(formatJuz(29.96), '30,0');
   });

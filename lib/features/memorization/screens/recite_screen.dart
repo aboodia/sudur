@@ -5,6 +5,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/memorization/review_scheduler.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
+import '../../../core/quran_text/quran_words.dart';
 import '../../../l10n/app_localizations.dart';
 import '../session_controller.dart';
 import '../widgets/outcome_tile.dart';
@@ -56,7 +57,7 @@ class _ReciteScreenState extends ConsumerState<ReciteScreen> {
           final ayah = repo
               .surah(widget.passage.surahNumber)
               .ayahs[widget.ayahNumber - 1];
-          final words = ayah.arabic.split(RegExp(r'\s+'));
+          final words = quranWords(ayah.arabic);
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

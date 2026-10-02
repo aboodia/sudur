@@ -116,6 +116,9 @@ class _StatTile extends StatelessWidget {
               value,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
+                // The title font's default old-style figures make "0 min"
+                // read as "o min" and "1" as "I".
+                fontFeatures: const [FontFeature.liningFigures()],
               ),
             ),
             const SizedBox(height: 2),

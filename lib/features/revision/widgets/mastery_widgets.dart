@@ -43,6 +43,9 @@ class MasteryBar extends StatelessWidget {
           child: counts.total == 0
               ? ColoredBox(color: scheme.surfaceContainerHighest)
               : Row(
+                  // Stretch: otherwise the segments get a loose height and
+                  // collapse to nothing.
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     for (final level in MasteryLevel.values)
                       if (_countOf(counts, level) > 0)

@@ -30,7 +30,7 @@ void main() {
       const ProgressStats(
         memorizedAyahs: 29,
         completedSurahs: 6,
-        juz: 0.1,
+        juz: 1.26,
         retention: 0.75,
         streakDays: 3,
         studyTime: Duration(minutes: 125),
@@ -40,7 +40,7 @@ void main() {
     expect(find.text('Statistiques de progression'), findsOneWidget);
     expect(find.text('29'), findsOneWidget);
     expect(find.text('6'), findsOneWidget);
-    expect(find.text('0,1'), findsOneWidget);
+    expect(find.text('1,3'), findsOneWidget);
     expect(find.text('75 %'), findsOneWidget);
     expect(find.text('3 j'), findsOneWidget);
     expect(find.text('2 h 05'), findsOneWidget);
@@ -64,6 +64,7 @@ void main() {
     expect(find.text('—'), findsOneWidget);
     expect(find.text('pas encore de révision'), findsOneWidget);
     expect(find.text('0 min'), findsOneWidget);
-    expect(find.text('0,0'), findsOneWidget);
+    // Zero stays a plain 0 (the streak and the other tiles read "0 j" / "0 min").
+    expect(find.text('0'), findsWidgets);
   });
 }
