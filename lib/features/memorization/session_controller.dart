@@ -6,6 +6,7 @@ import '../../core/database/profile_repository.dart';
 import '../../core/memorization/masking_strategy.dart';
 import '../../core/memorization/passage_suggestion.dart';
 import '../../core/memorization/review_scheduler.dart';
+import '../../core/memorization/study_session.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 
 /// The 5 guided steps, in order — matches [Passages]' `currentStepIndex`.
@@ -88,11 +89,16 @@ class GuidedSessionState {
 /// once, the other 4 steps loop ayah by ayah. Découplé de l'audio comme les
 /// contrôleurs précédents : l'écran pilote lui-même `audioPlaybackProvider`.
 class GuidedSessionController extends Notifier<GuidedSessionState> {
+  /// When this sitting began — only this sitting is timed, so a passage
+  /// resumed the next day isn't counted as a day of study.
+  DateTime _openedAt = DateTime.now();
+
   @override
   GuidedSessionState build() => const GuidedSessionState();
 
   /// Resumes an interrupted passage, or starts today's suggested one.
   Future<void> startOrResume() async {
+    _openedAt = DateTime.now();
     final profile = await ref.read(currentProfileProvider.future);
     final repo = ref.read(memorizationRepositoryProvider);
 
@@ -284,7 +290,17 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
   /// steps — this controller never touches audio directly.
   Future<void> finishPassage() async {
     final passage = state.passage!;
-    await ref.read(memorizationRepositoryProvider).finishPassage(passage.id);
+    final repo = ref.read(memorizationRepositoryProvider);
+    await repo.finishPassage(passage.id);
+    final profile = await ref.read(currentProfileProvider.future);
+    await repo.logStudySession(
+      profileId: profile.id,
+      kind: 'memorization',
+      startedAt: _openedAt,
+      duration: cappedStudyDuration(DateTime.now().difference(_openedAt)),
+      ayahCount: passage.ayahEnd - passage.ayahStart + 1,
+    );
+    ref.invalidate(ayahProgressProvider);
     ref.invalidate(surahProgressProvider);
     ref.invalidate(activeSessionProvider);
     ref.invalidate(todaysPassagePreviewProvider);

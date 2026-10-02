@@ -124,6 +124,12 @@ void main() {
     await notifier.finishPassage();
     expect(container.read(guidedSessionProvider).isFinished, isTrue);
     expect(await repo.activeSession(profile.id), isNull);
+
+    // The sitting is logged for the dashboard's time invested.
+    final db = container.read(appDatabaseProvider);
+    final session = (await db.select(db.studySessionEntries).get()).single;
+    expect(session.kind, 'memorization');
+    expect(session.ayahCount, ayahCount);
   });
 
   test('a redo verdict on Réciter sends the ayah back to Masquer, then returns to Réciter', () async {

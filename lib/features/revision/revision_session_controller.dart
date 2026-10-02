@@ -7,6 +7,7 @@ import '../../core/database/memorization_repository.dart';
 import '../../core/database/profile_repository.dart';
 import '../../core/memorization/review_calendar.dart';
 import '../../core/memorization/review_scheduler.dart';
+import '../../core/memorization/study_session.dart';
 
 /// Most verses one revision session offers — "sessions courtes (5-15 min)"
 /// per the cahier des charges. Whatever is left stays due and is offered by
@@ -126,7 +127,7 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
       profileId: profile.id,
       kind: 'revision',
       startedAt: _startedAt,
-      duration: _cappedDuration(now.difference(_startedAt)),
+      duration: cappedStudyDuration(now.difference(_startedAt)),
       ayahCount: results.length,
     );
 
@@ -149,10 +150,6 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
       isFinished: true,
     );
   }
-
-  /// A session left open in the background must not count as hours of study.
-  static Duration _cappedDuration(Duration d) =>
-      d > const Duration(minutes: 60) ? const Duration(minutes: 60) : d;
 
   static bool _hasFragileWords(AyahProgressEntry entry) {
     try {
