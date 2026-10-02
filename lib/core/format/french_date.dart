@@ -44,6 +44,10 @@ String frenchDateLabel(DateTime date) =>
     '${capitalizeFirst(frenchWeekday(date.weekday))} ${date.day} '
     '${frenchMonth(date.month)}';
 
+/// "29 septembre 2026".
+String frenchFullDate(DateTime date) =>
+    '${date.day} ${frenchMonth(date.month)} ${date.year}';
+
 /// "aujourd'hui", "demain" or "lundi 5 octobre" — [day] relative to [today].
 String frenchRelativeDay(DateTime day, DateTime today) {
   final diff = daysBetween(today, day);

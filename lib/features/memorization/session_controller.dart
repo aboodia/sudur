@@ -260,6 +260,7 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
           fragileWordIndices: state.fragileIndices.toList(),
         );
     ref.invalidate(progressStatsProvider);
+    ref.invalidate(surahProgressProvider);
 
     final newStatuses = {
       ...state.chainStatuses,

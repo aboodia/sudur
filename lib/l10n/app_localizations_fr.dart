@@ -409,4 +409,82 @@ class AppLocalizationsFr extends AppLocalizations {
   String statsPercent(int n) {
     return '$n %';
   }
+
+  @override
+  String get pathTitle => 'Le Chemin';
+
+  @override
+  String pathSummaryTitle(int done, int total) {
+    return '$done sourate(s) sur $total';
+  }
+
+  @override
+  String pathNextStep(String surah) {
+    return 'Prochaine étape : $surah';
+  }
+
+  @override
+  String get pathContinue => 'Continuer';
+
+  @override
+  String get pathAllDone => 'Tout le chemin est parcouru, mabrouk !';
+
+  @override
+  String get milestoneCompleted => 'Achevée';
+
+  @override
+  String get milestoneCurrent => 'En cours';
+
+  @override
+  String get milestoneLocked => 'À venir';
+
+  @override
+  String milestoneVersesAndType(int n, String type) {
+    return '$n verset(s) · $type';
+  }
+
+  @override
+  String get revelationMeccan => 'Mecquoise';
+
+  @override
+  String get revelationMedinan => 'Médinoise';
+
+  @override
+  String milestoneCompletedOn(String date) {
+    return 'Achevée le $date';
+  }
+
+  @override
+  String get milestoneAlreadyKnown =>
+      'Déjà mémorisée avant ton arrivée dans l\'application.';
+
+  @override
+  String get milestoneLocksHint =>
+      'Elle s\'ouvrira sur ton chemin après les sourates qui la précèdent.';
+
+  @override
+  String get milestoneRead => 'Lire la sourate';
+
+  @override
+  String get milestoneContinue => 'Continuer la mémorisation';
+
+  @override
+  String milestoneSemantics(int number, String name, String state) {
+    return 'Sourate $number, $name, $state';
+  }
+
+  @override
+  String get storyUnlockedTitle => 'Histoire débloquée';
+
+  @override
+  String get storyComingSoon =>
+      'Le récit de cette sourate sera ajouté une fois son contenu validé.';
+
+  @override
+  String storySource(String source) {
+    return 'Source : $source';
+  }
+
+  @override
+  String get storyOpen => 'Voir l\'histoire';
 }

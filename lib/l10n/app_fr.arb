@@ -181,4 +181,35 @@
   "@statsDays": {"placeholders": {"n": {"type": "int"}}},
   "statsPercent": "{n} %",
   "@statsPercent": {"placeholders": {"n": {"type": "int"}}}
+  ,
+
+  "pathTitle": "Le Chemin",
+  "pathSummaryTitle": "{done} sourate(s) sur {total}",
+  "@pathSummaryTitle": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "pathNextStep": "Prochaine étape : {surah}",
+  "@pathNextStep": {"placeholders": {"surah": {"type": "String"}}},
+  "pathContinue": "Continuer",
+  "pathAllDone": "Tout le chemin est parcouru, mabrouk !",
+  "milestoneCompleted": "Achevée",
+  "milestoneCurrent": "En cours",
+  "milestoneLocked": "À venir",
+  "milestoneVersesAndType": "{n} verset(s) · {type}",
+  "@milestoneVersesAndType": {"placeholders": {"n": {"type": "int"}, "type": {"type": "String"}}},
+  "revelationMeccan": "Mecquoise",
+  "revelationMedinan": "Médinoise",
+  "milestoneCompletedOn": "Achevée le {date}",
+  "@milestoneCompletedOn": {"placeholders": {"date": {"type": "String"}}},
+  "milestoneAlreadyKnown": "Déjà mémorisée avant ton arrivée dans l'application.",
+  "milestoneLocksHint": "Elle s'ouvrira sur ton chemin après les sourates qui la précèdent.",
+  "milestoneRead": "Lire la sourate",
+  "milestoneContinue": "Continuer la mémorisation",
+  "milestoneSemantics": "Sourate {number}, {name}, {state}",
+  "@milestoneSemantics": {
+    "placeholders": {"number": {"type": "int"}, "name": {"type": "String"}, "state": {"type": "String"}}
+  },
+  "storyUnlockedTitle": "Histoire débloquée",
+  "storyComingSoon": "Le récit de cette sourate sera ajouté une fois son contenu validé.",
+  "storySource": "Source : {source}",
+  "@storySource": {"placeholders": {"source": {"type": "String"}}},
+  "storyOpen": "Voir l'histoire"
 }

@@ -6,6 +6,7 @@ import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/database/memorization_repository.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../path/widgets/surah_story_sheet.dart';
 
 /// Écran de fin sobre (fond Nuit bleue, pas de confettis) : bilan du
 /// passage, aperçu du cycle de révision à venir (J+1/J+3/J+7/J+30) et
@@ -237,6 +238,25 @@ class CompletedScreen extends ConsumerWidget {
                               fontSize: 12,
                             ),
                           ),
+                          if (complete)
+                            Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: TextButton.icon(
+                                onPressed: () => showSurahStorySheet(
+                                  context,
+                                  surahNumber: surahNumber,
+                                  surahName: surahName,
+                                ),
+                                icon: const Icon(
+                                  Icons.auto_stories_outlined,
+                                  size: 18,
+                                ),
+                                label: Text(l10n.storyOpen),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: const Color(0xFFB57A64),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     );

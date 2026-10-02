@@ -765,6 +765,132 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{n} %'**
   String statsPercent(int n);
+
+  /// No description provided for @pathTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le Chemin'**
+  String get pathTitle;
+
+  /// No description provided for @pathSummaryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} sourate(s) sur {total}'**
+  String pathSummaryTitle(int done, int total);
+
+  /// No description provided for @pathNextStep.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaine étape : {surah}'**
+  String pathNextStep(String surah);
+
+  /// No description provided for @pathContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get pathContinue;
+
+  /// No description provided for @pathAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout le chemin est parcouru, mabrouk !'**
+  String get pathAllDone;
+
+  /// No description provided for @milestoneCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achevée'**
+  String get milestoneCompleted;
+
+  /// No description provided for @milestoneCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get milestoneCurrent;
+
+  /// No description provided for @milestoneLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get milestoneLocked;
+
+  /// No description provided for @milestoneVersesAndType.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} verset(s) · {type}'**
+  String milestoneVersesAndType(int n, String type);
+
+  /// No description provided for @revelationMeccan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mecquoise'**
+  String get revelationMeccan;
+
+  /// No description provided for @revelationMedinan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Médinoise'**
+  String get revelationMedinan;
+
+  /// No description provided for @milestoneCompletedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achevée le {date}'**
+  String milestoneCompletedOn(String date);
+
+  /// No description provided for @milestoneAlreadyKnown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà mémorisée avant ton arrivée dans l\'application.'**
+  String get milestoneAlreadyKnown;
+
+  /// No description provided for @milestoneLocksHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elle s\'ouvrira sur ton chemin après les sourates qui la précèdent.'**
+  String get milestoneLocksHint;
+
+  /// No description provided for @milestoneRead.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire la sourate'**
+  String get milestoneRead;
+
+  /// No description provided for @milestoneContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer la mémorisation'**
+  String get milestoneContinue;
+
+  /// No description provided for @milestoneSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourate {number}, {name}, {state}'**
+  String milestoneSemantics(int number, String name, String state);
+
+  /// No description provided for @storyUnlockedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Histoire débloquée'**
+  String get storyUnlockedTitle;
+
+  /// No description provided for @storyComingSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le récit de cette sourate sera ajouté une fois son contenu validé.'**
+  String get storyComingSoon;
+
+  /// No description provided for @storySource.
+  ///
+  /// In fr, this message translates to:
+  /// **'Source : {source}'**
+  String storySource(String source);
+
+  /// No description provided for @storyOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir l\'histoire'**
+  String get storyOpen;
 }
 
 class _AppLocalizationsDelegate
