@@ -565,4 +565,65 @@ class AppLocalizationsFr extends AppLocalizations {
   String historyDetail(String when, int min) {
     return '$when · $min min';
   }
+
+  @override
+  String get goalsTitle => 'Objectifs';
+
+  @override
+  String get goalsEdit => 'Modifier';
+
+  @override
+  String get goalWeekTitle => 'Cette semaine';
+
+  @override
+  String get goalMonthTitle => 'Ce mois-ci';
+
+  @override
+  String goalCount(int done, int goal) {
+    return '$done / $goal versets';
+  }
+
+  @override
+  String goalRemaining(int n, int perDay) {
+    return 'Encore $n verset(s) : environ $perDay par jour.';
+  }
+
+  @override
+  String get goalReached => 'Objectif atteint, mabrouk !';
+
+  @override
+  String get goalAhead => 'Tu es en avance sur ton rythme.';
+
+  @override
+  String get goalSuggested => 'Proposé d\'après ton temps quotidien.';
+
+  @override
+  String goalSemantics(String title, int done, int goal) {
+    return '$title : $done versets sur $goal';
+  }
+
+  @override
+  String get goalEditTitle => 'Tes objectifs';
+
+  @override
+  String get goalEditHint =>
+      'Un objectif doux et tenable vaut mieux qu\'un objectif ambitieux abandonné.';
+
+  @override
+  String get goalEditWeekly => 'Par semaine';
+
+  @override
+  String get goalEditMonthly => 'Par mois';
+
+  @override
+  String get goalEditReset => 'Revenir aux valeurs proposées';
+
+  @override
+  String get goalEditSave => 'Enregistrer';
+
+  @override
+  String get goalEditDecrease => 'Diminuer';
+
+  @override
+  String get goalEditIncrease => 'Augmenter';
 }

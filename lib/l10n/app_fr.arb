@@ -243,4 +243,27 @@
   "@historyLine": {"placeholders": {"kind": {"type": "String"}, "n": {"type": "int"}}},
   "historyDetail": "{when} · {min} min",
   "@historyDetail": {"placeholders": {"when": {"type": "String"}, "min": {"type": "int"}}}
+  ,
+
+  "goalsTitle": "Objectifs",
+  "goalsEdit": "Modifier",
+  "goalWeekTitle": "Cette semaine",
+  "goalMonthTitle": "Ce mois-ci",
+  "goalCount": "{done} / {goal} versets",
+  "@goalCount": {"placeholders": {"done": {"type": "int"}, "goal": {"type": "int"}}},
+  "goalRemaining": "Encore {n} verset(s) : environ {perDay} par jour.",
+  "@goalRemaining": {"placeholders": {"n": {"type": "int"}, "perDay": {"type": "int"}}},
+  "goalReached": "Objectif atteint, mabrouk !",
+  "goalAhead": "Tu es en avance sur ton rythme.",
+  "goalSuggested": "Proposé d'après ton temps quotidien.",
+  "goalSemantics": "{title} : {done} versets sur {goal}",
+  "@goalSemantics": {"placeholders": {"title": {"type": "String"}, "done": {"type": "int"}, "goal": {"type": "int"}}},
+  "goalEditTitle": "Tes objectifs",
+  "goalEditHint": "Un objectif doux et tenable vaut mieux qu'un objectif ambitieux abandonné.",
+  "goalEditWeekly": "Par semaine",
+  "goalEditMonthly": "Par mois",
+  "goalEditReset": "Revenir aux valeurs proposées",
+  "goalEditSave": "Enregistrer",
+  "goalEditDecrease": "Diminuer",
+  "goalEditIncrease": "Augmenter"
 }

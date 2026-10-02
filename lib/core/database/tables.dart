@@ -21,6 +21,11 @@ class UserProfiles extends Table {
   IntColumn get dailyTargetMinutes =>
       integer().withDefault(const Constant(10))();
 
+  /// Goals in new verses per calendar week / month. Null = not chosen: the
+  /// app proposes one from the daily time and available days.
+  IntColumn get weeklyVerseGoal => integer().nullable()();
+  IntColumn get monthlyVerseGoal => integer().nullable()();
+
   TextColumn get preferredQariId => text().nullable()();
 
   /// 'hafs' | 'warsh' — Mushaf script/riwaya.

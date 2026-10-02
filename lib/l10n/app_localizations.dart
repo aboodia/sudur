@@ -1023,6 +1023,114 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{when} · {min} min'**
   String historyDetail(String when, int min);
+
+  /// No description provided for @goalsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs'**
+  String get goalsTitle;
+
+  /// No description provided for @goalsEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get goalsEdit;
+
+  /// No description provided for @goalWeekTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette semaine'**
+  String get goalWeekTitle;
+
+  /// No description provided for @goalMonthTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci'**
+  String get goalMonthTitle;
+
+  /// No description provided for @goalCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} / {goal} versets'**
+  String goalCount(int done, int goal);
+
+  /// No description provided for @goalRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Encore {n} verset(s) : environ {perDay} par jour.'**
+  String goalRemaining(int n, int perDay);
+
+  /// No description provided for @goalReached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif atteint, mabrouk !'**
+  String get goalReached;
+
+  /// No description provided for @goalAhead.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es en avance sur ton rythme.'**
+  String get goalAhead;
+
+  /// No description provided for @goalSuggested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposé d\'après ton temps quotidien.'**
+  String get goalSuggested;
+
+  /// No description provided for @goalSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'{title} : {done} versets sur {goal}'**
+  String goalSemantics(String title, int done, int goal);
+
+  /// No description provided for @goalEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes objectifs'**
+  String get goalEditTitle;
+
+  /// No description provided for @goalEditHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un objectif doux et tenable vaut mieux qu\'un objectif ambitieux abandonné.'**
+  String get goalEditHint;
+
+  /// No description provided for @goalEditWeekly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par semaine'**
+  String get goalEditWeekly;
+
+  /// No description provided for @goalEditMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par mois'**
+  String get goalEditMonthly;
+
+  /// No description provided for @goalEditReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir aux valeurs proposées'**
+  String get goalEditReset;
+
+  /// No description provided for @goalEditSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get goalEditSave;
+
+  /// No description provided for @goalEditDecrease.
+  ///
+  /// In fr, this message translates to:
+  /// **'Diminuer'**
+  String get goalEditDecrease;
+
+  /// No description provided for @goalEditIncrease.
+  ///
+  /// In fr, this message translates to:
+  /// **'Augmenter'**
+  String get goalEditIncrease;
 }
 
 class _AppLocalizationsDelegate

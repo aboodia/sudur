@@ -66,6 +66,28 @@ class $UserProfilesTable extends UserProfiles
     requiredDuringInsert: false,
     defaultValue: const Constant(10),
   );
+  static const VerificationMeta _weeklyVerseGoalMeta = const VerificationMeta(
+    'weeklyVerseGoal',
+  );
+  @override
+  late final GeneratedColumn<int> weeklyVerseGoal = GeneratedColumn<int>(
+    'weekly_verse_goal',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _monthlyVerseGoalMeta = const VerificationMeta(
+    'monthlyVerseGoal',
+  );
+  @override
+  late final GeneratedColumn<int> monthlyVerseGoal = GeneratedColumn<int>(
+    'monthly_verse_goal',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _preferredQariIdMeta = const VerificationMeta(
     'preferredQariId',
   );
@@ -133,6 +155,8 @@ class $UserProfilesTable extends UserProfiles
     memorizationLevel,
     availableDaysMask,
     dailyTargetMinutes,
+    weeklyVerseGoal,
+    monthlyVerseGoal,
     preferredQariId,
     scriptMode,
     hasCompletedOnboarding,
@@ -189,6 +213,24 @@ class $UserProfilesTable extends UserProfiles
         dailyTargetMinutes.isAcceptableOrUnknown(
           data['daily_target_minutes']!,
           _dailyTargetMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('weekly_verse_goal')) {
+      context.handle(
+        _weeklyVerseGoalMeta,
+        weeklyVerseGoal.isAcceptableOrUnknown(
+          data['weekly_verse_goal']!,
+          _weeklyVerseGoalMeta,
+        ),
+      );
+    }
+    if (data.containsKey('monthly_verse_goal')) {
+      context.handle(
+        _monthlyVerseGoalMeta,
+        monthlyVerseGoal.isAcceptableOrUnknown(
+          data['monthly_verse_goal']!,
+          _monthlyVerseGoalMeta,
         ),
       );
     }
@@ -261,6 +303,14 @@ class $UserProfilesTable extends UserProfiles
         DriftSqlType.int,
         data['${effectivePrefix}daily_target_minutes'],
       )!,
+      weeklyVerseGoal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weekly_verse_goal'],
+      ),
+      monthlyVerseGoal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}monthly_verse_goal'],
+      ),
       preferredQariId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}preferred_qari_id'],
@@ -300,6 +350,11 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
   /// Bitmask over the 7 days of the week (bit 0 = Monday) for availability.
   final int availableDaysMask;
   final int dailyTargetMinutes;
+
+  /// Goals in new verses per calendar week / month. Null = not chosen: the
+  /// app proposes one from the daily time and available days.
+  final int? weeklyVerseGoal;
+  final int? monthlyVerseGoal;
   final String? preferredQariId;
 
   /// 'hafs' | 'warsh' — Mushaf script/riwaya.
@@ -316,6 +371,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     required this.memorizationLevel,
     required this.availableDaysMask,
     required this.dailyTargetMinutes,
+    this.weeklyVerseGoal,
+    this.monthlyVerseGoal,
     this.preferredQariId,
     required this.scriptMode,
     required this.hasCompletedOnboarding,
@@ -330,6 +387,12 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     map['memorization_level'] = Variable<String>(memorizationLevel);
     map['available_days_mask'] = Variable<int>(availableDaysMask);
     map['daily_target_minutes'] = Variable<int>(dailyTargetMinutes);
+    if (!nullToAbsent || weeklyVerseGoal != null) {
+      map['weekly_verse_goal'] = Variable<int>(weeklyVerseGoal);
+    }
+    if (!nullToAbsent || monthlyVerseGoal != null) {
+      map['monthly_verse_goal'] = Variable<int>(monthlyVerseGoal);
+    }
     if (!nullToAbsent || preferredQariId != null) {
       map['preferred_qari_id'] = Variable<String>(preferredQariId);
     }
@@ -347,6 +410,12 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       memorizationLevel: Value(memorizationLevel),
       availableDaysMask: Value(availableDaysMask),
       dailyTargetMinutes: Value(dailyTargetMinutes),
+      weeklyVerseGoal: weeklyVerseGoal == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weeklyVerseGoal),
+      monthlyVerseGoal: monthlyVerseGoal == null && nullToAbsent
+          ? const Value.absent()
+          : Value(monthlyVerseGoal),
       preferredQariId: preferredQariId == null && nullToAbsent
           ? const Value.absent()
           : Value(preferredQariId),
@@ -368,6 +437,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       memorizationLevel: serializer.fromJson<String>(json['memorizationLevel']),
       availableDaysMask: serializer.fromJson<int>(json['availableDaysMask']),
       dailyTargetMinutes: serializer.fromJson<int>(json['dailyTargetMinutes']),
+      weeklyVerseGoal: serializer.fromJson<int?>(json['weeklyVerseGoal']),
+      monthlyVerseGoal: serializer.fromJson<int?>(json['monthlyVerseGoal']),
       preferredQariId: serializer.fromJson<String?>(json['preferredQariId']),
       scriptMode: serializer.fromJson<String>(json['scriptMode']),
       hasCompletedOnboarding: serializer.fromJson<bool>(
@@ -386,6 +457,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       'memorizationLevel': serializer.toJson<String>(memorizationLevel),
       'availableDaysMask': serializer.toJson<int>(availableDaysMask),
       'dailyTargetMinutes': serializer.toJson<int>(dailyTargetMinutes),
+      'weeklyVerseGoal': serializer.toJson<int?>(weeklyVerseGoal),
+      'monthlyVerseGoal': serializer.toJson<int?>(monthlyVerseGoal),
       'preferredQariId': serializer.toJson<String?>(preferredQariId),
       'scriptMode': serializer.toJson<String>(scriptMode),
       'hasCompletedOnboarding': serializer.toJson<bool>(hasCompletedOnboarding),
@@ -400,6 +473,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     String? memorizationLevel,
     int? availableDaysMask,
     int? dailyTargetMinutes,
+    Value<int?> weeklyVerseGoal = const Value.absent(),
+    Value<int?> monthlyVerseGoal = const Value.absent(),
     Value<String?> preferredQariId = const Value.absent(),
     String? scriptMode,
     bool? hasCompletedOnboarding,
@@ -411,6 +486,12 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     memorizationLevel: memorizationLevel ?? this.memorizationLevel,
     availableDaysMask: availableDaysMask ?? this.availableDaysMask,
     dailyTargetMinutes: dailyTargetMinutes ?? this.dailyTargetMinutes,
+    weeklyVerseGoal: weeklyVerseGoal.present
+        ? weeklyVerseGoal.value
+        : this.weeklyVerseGoal,
+    monthlyVerseGoal: monthlyVerseGoal.present
+        ? monthlyVerseGoal.value
+        : this.monthlyVerseGoal,
     preferredQariId: preferredQariId.present
         ? preferredQariId.value
         : this.preferredQariId,
@@ -435,6 +516,12 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       dailyTargetMinutes: data.dailyTargetMinutes.present
           ? data.dailyTargetMinutes.value
           : this.dailyTargetMinutes,
+      weeklyVerseGoal: data.weeklyVerseGoal.present
+          ? data.weeklyVerseGoal.value
+          : this.weeklyVerseGoal,
+      monthlyVerseGoal: data.monthlyVerseGoal.present
+          ? data.monthlyVerseGoal.value
+          : this.monthlyVerseGoal,
       preferredQariId: data.preferredQariId.present
           ? data.preferredQariId.value
           : this.preferredQariId,
@@ -457,6 +544,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ..write('memorizationLevel: $memorizationLevel, ')
           ..write('availableDaysMask: $availableDaysMask, ')
           ..write('dailyTargetMinutes: $dailyTargetMinutes, ')
+          ..write('weeklyVerseGoal: $weeklyVerseGoal, ')
+          ..write('monthlyVerseGoal: $monthlyVerseGoal, ')
           ..write('preferredQariId: $preferredQariId, ')
           ..write('scriptMode: $scriptMode, ')
           ..write('hasCompletedOnboarding: $hasCompletedOnboarding, ')
@@ -473,6 +562,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
     memorizationLevel,
     availableDaysMask,
     dailyTargetMinutes,
+    weeklyVerseGoal,
+    monthlyVerseGoal,
     preferredQariId,
     scriptMode,
     hasCompletedOnboarding,
@@ -488,6 +579,8 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           other.memorizationLevel == this.memorizationLevel &&
           other.availableDaysMask == this.availableDaysMask &&
           other.dailyTargetMinutes == this.dailyTargetMinutes &&
+          other.weeklyVerseGoal == this.weeklyVerseGoal &&
+          other.monthlyVerseGoal == this.monthlyVerseGoal &&
           other.preferredQariId == this.preferredQariId &&
           other.scriptMode == this.scriptMode &&
           other.hasCompletedOnboarding == this.hasCompletedOnboarding &&
@@ -501,6 +594,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
   final Value<String> memorizationLevel;
   final Value<int> availableDaysMask;
   final Value<int> dailyTargetMinutes;
+  final Value<int?> weeklyVerseGoal;
+  final Value<int?> monthlyVerseGoal;
   final Value<String?> preferredQariId;
   final Value<String> scriptMode;
   final Value<bool> hasCompletedOnboarding;
@@ -513,6 +608,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.memorizationLevel = const Value.absent(),
     this.availableDaysMask = const Value.absent(),
     this.dailyTargetMinutes = const Value.absent(),
+    this.weeklyVerseGoal = const Value.absent(),
+    this.monthlyVerseGoal = const Value.absent(),
     this.preferredQariId = const Value.absent(),
     this.scriptMode = const Value.absent(),
     this.hasCompletedOnboarding = const Value.absent(),
@@ -526,6 +623,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.memorizationLevel = const Value.absent(),
     this.availableDaysMask = const Value.absent(),
     this.dailyTargetMinutes = const Value.absent(),
+    this.weeklyVerseGoal = const Value.absent(),
+    this.monthlyVerseGoal = const Value.absent(),
     this.preferredQariId = const Value.absent(),
     this.scriptMode = const Value.absent(),
     this.hasCompletedOnboarding = const Value.absent(),
@@ -541,6 +640,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Expression<String>? memorizationLevel,
     Expression<int>? availableDaysMask,
     Expression<int>? dailyTargetMinutes,
+    Expression<int>? weeklyVerseGoal,
+    Expression<int>? monthlyVerseGoal,
     Expression<String>? preferredQariId,
     Expression<String>? scriptMode,
     Expression<bool>? hasCompletedOnboarding,
@@ -555,6 +656,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       if (availableDaysMask != null) 'available_days_mask': availableDaysMask,
       if (dailyTargetMinutes != null)
         'daily_target_minutes': dailyTargetMinutes,
+      if (weeklyVerseGoal != null) 'weekly_verse_goal': weeklyVerseGoal,
+      if (monthlyVerseGoal != null) 'monthly_verse_goal': monthlyVerseGoal,
       if (preferredQariId != null) 'preferred_qari_id': preferredQariId,
       if (scriptMode != null) 'script_mode': scriptMode,
       if (hasCompletedOnboarding != null)
@@ -571,6 +674,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Value<String>? memorizationLevel,
     Value<int>? availableDaysMask,
     Value<int>? dailyTargetMinutes,
+    Value<int?>? weeklyVerseGoal,
+    Value<int?>? monthlyVerseGoal,
     Value<String?>? preferredQariId,
     Value<String>? scriptMode,
     Value<bool>? hasCompletedOnboarding,
@@ -584,6 +689,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       memorizationLevel: memorizationLevel ?? this.memorizationLevel,
       availableDaysMask: availableDaysMask ?? this.availableDaysMask,
       dailyTargetMinutes: dailyTargetMinutes ?? this.dailyTargetMinutes,
+      weeklyVerseGoal: weeklyVerseGoal ?? this.weeklyVerseGoal,
+      monthlyVerseGoal: monthlyVerseGoal ?? this.monthlyVerseGoal,
       preferredQariId: preferredQariId ?? this.preferredQariId,
       scriptMode: scriptMode ?? this.scriptMode,
       hasCompletedOnboarding:
@@ -611,6 +718,12 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     }
     if (dailyTargetMinutes.present) {
       map['daily_target_minutes'] = Variable<int>(dailyTargetMinutes.value);
+    }
+    if (weeklyVerseGoal.present) {
+      map['weekly_verse_goal'] = Variable<int>(weeklyVerseGoal.value);
+    }
+    if (monthlyVerseGoal.present) {
+      map['monthly_verse_goal'] = Variable<int>(monthlyVerseGoal.value);
     }
     if (preferredQariId.present) {
       map['preferred_qari_id'] = Variable<String>(preferredQariId.value);
@@ -643,6 +756,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
           ..write('memorizationLevel: $memorizationLevel, ')
           ..write('availableDaysMask: $availableDaysMask, ')
           ..write('dailyTargetMinutes: $dailyTargetMinutes, ')
+          ..write('weeklyVerseGoal: $weeklyVerseGoal, ')
+          ..write('monthlyVerseGoal: $monthlyVerseGoal, ')
           ..write('preferredQariId: $preferredQariId, ')
           ..write('scriptMode: $scriptMode, ')
           ..write('hasCompletedOnboarding: $hasCompletedOnboarding, ')
@@ -4113,6 +4228,8 @@ typedef $$UserProfilesTableCreateCompanionBuilder =
       Value<String> memorizationLevel,
       Value<int> availableDaysMask,
       Value<int> dailyTargetMinutes,
+      Value<int?> weeklyVerseGoal,
+      Value<int?> monthlyVerseGoal,
       Value<String?> preferredQariId,
       Value<String> scriptMode,
       Value<bool> hasCompletedOnboarding,
@@ -4127,6 +4244,8 @@ typedef $$UserProfilesTableUpdateCompanionBuilder =
       Value<String> memorizationLevel,
       Value<int> availableDaysMask,
       Value<int> dailyTargetMinutes,
+      Value<int?> weeklyVerseGoal,
+      Value<int?> monthlyVerseGoal,
       Value<String?> preferredQariId,
       Value<String> scriptMode,
       Value<bool> hasCompletedOnboarding,
@@ -4295,6 +4414,16 @@ class $$UserProfilesTableFilterComposer
 
   ColumnFilters<int> get dailyTargetMinutes => $composableBuilder(
     column: $table.dailyTargetMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get weeklyVerseGoal => $composableBuilder(
+    column: $table.weeklyVerseGoal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get monthlyVerseGoal => $composableBuilder(
+    column: $table.monthlyVerseGoal,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4508,6 +4637,16 @@ class $$UserProfilesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get weeklyVerseGoal => $composableBuilder(
+    column: $table.weeklyVerseGoal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get monthlyVerseGoal => $composableBuilder(
+    column: $table.monthlyVerseGoal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get preferredQariId => $composableBuilder(
     column: $table.preferredQariId,
     builder: (column) => ColumnOrderings(column),
@@ -4563,6 +4702,16 @@ class $$UserProfilesTableAnnotationComposer
 
   GeneratedColumn<int> get dailyTargetMinutes => $composableBuilder(
     column: $table.dailyTargetMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get weeklyVerseGoal => $composableBuilder(
+    column: $table.weeklyVerseGoal,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get monthlyVerseGoal => $composableBuilder(
+    column: $table.monthlyVerseGoal,
     builder: (column) => column,
   );
 
@@ -4781,6 +4930,8 @@ class $$UserProfilesTableTableManager
                 Value<String> memorizationLevel = const Value.absent(),
                 Value<int> availableDaysMask = const Value.absent(),
                 Value<int> dailyTargetMinutes = const Value.absent(),
+                Value<int?> weeklyVerseGoal = const Value.absent(),
+                Value<int?> monthlyVerseGoal = const Value.absent(),
                 Value<String?> preferredQariId = const Value.absent(),
                 Value<String> scriptMode = const Value.absent(),
                 Value<bool> hasCompletedOnboarding = const Value.absent(),
@@ -4793,6 +4944,8 @@ class $$UserProfilesTableTableManager
                 memorizationLevel: memorizationLevel,
                 availableDaysMask: availableDaysMask,
                 dailyTargetMinutes: dailyTargetMinutes,
+                weeklyVerseGoal: weeklyVerseGoal,
+                monthlyVerseGoal: monthlyVerseGoal,
                 preferredQariId: preferredQariId,
                 scriptMode: scriptMode,
                 hasCompletedOnboarding: hasCompletedOnboarding,
@@ -4807,6 +4960,8 @@ class $$UserProfilesTableTableManager
                 Value<String> memorizationLevel = const Value.absent(),
                 Value<int> availableDaysMask = const Value.absent(),
                 Value<int> dailyTargetMinutes = const Value.absent(),
+                Value<int?> weeklyVerseGoal = const Value.absent(),
+                Value<int?> monthlyVerseGoal = const Value.absent(),
                 Value<String?> preferredQariId = const Value.absent(),
                 Value<String> scriptMode = const Value.absent(),
                 Value<bool> hasCompletedOnboarding = const Value.absent(),
@@ -4819,6 +4974,8 @@ class $$UserProfilesTableTableManager
                 memorizationLevel: memorizationLevel,
                 availableDaysMask: availableDaysMask,
                 dailyTargetMinutes: dailyTargetMinutes,
+                weeklyVerseGoal: weeklyVerseGoal,
+                monthlyVerseGoal: monthlyVerseGoal,
                 preferredQariId: preferredQariId,
                 scriptMode: scriptMode,
                 hasCompletedOnboarding: hasCompletedOnboarding,

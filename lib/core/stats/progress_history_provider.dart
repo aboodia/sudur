@@ -6,6 +6,7 @@ import '../database/profile_repository.dart';
 import '../mushaf/mushaf_repository.dart';
 import 'memorized_set.dart';
 import 'progress_history.dart';
+import 'goals_provider.dart';
 import 'progress_stats_provider.dart';
 
 /// When verses were memorized, for the progress curve: one event per verse
@@ -68,4 +69,5 @@ void refreshProgressData(Ref ref) {
   ref.invalidate(memorizationEventsProvider);
   ref.invalidate(mushafCoverageProvider);
   ref.invalidate(studyHistoryProvider);
+  ref.invalidate(goalsProvider);
 }

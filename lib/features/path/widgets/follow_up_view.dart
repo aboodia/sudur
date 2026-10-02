@@ -8,6 +8,7 @@ import '../../../core/memorization/review_calendar.dart';
 import '../../../core/stats/progress_history.dart';
 import '../../../core/stats/progress_history_provider.dart';
 import '../../../l10n/app_localizations.dart';
+import 'goals_section.dart';
 import 'mushaf_map.dart';
 import 'progress_curve.dart';
 
@@ -31,6 +32,8 @@ class _FollowUpViewState extends ConsumerState<FollowUpView> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        const GoalsSection(),
+        const SizedBox(height: 32),
         Text(l10n.curveTitle, style: theme.textTheme.titleLarge),
         const SizedBox(height: 12),
         SegmentedButton<HistoryPeriod>(

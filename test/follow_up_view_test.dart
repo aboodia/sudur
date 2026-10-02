@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sudur/core/database/app_database.dart';
 import 'package:sudur/core/database/memorization_repository.dart';
 import 'package:sudur/core/database/profile_repository.dart';
+import 'package:sudur/core/memorization/review_scheduler.dart';
 import 'package:sudur/core/path/surah_stories.dart';
 import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
 import 'package:sudur/core/stats/progress_history_provider.dart';
@@ -154,5 +155,68 @@ void main() {
     await _openFollowUp(tester, db, coverage: coverage);
 
     expect(find.text('2 page(s) complète(s) · 1 entamée(s) sur 604'), findsOne);
+  });
+
+  testWidgets('goals show progress and what is left, without reproach', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    await UserProfileRepository(db)
+        .setGoals(id: profile.id, weekly: 5, monthly: 20);
+
+    await _openFollowUp(tester, db);
+
+    expect(find.text('Objectifs'), findsOneWidget);
+    expect(find.text('Cette semaine'), findsOneWidget);
+    expect(find.text('0 / 5 versets'), findsOneWidget);
+    expect(find.text('0 / 20 versets'), findsOneWidget);
+    expect(find.textContaining('Encore 5 verset(s)'), findsOneWidget);
+    // Chosen by the user: no "proposed" footnote.
+    expect(find.text("Proposé d'après ton temps quotidien."), findsNothing);
+  });
+
+  testWidgets('a reached goal is celebrated', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    await UserProfileRepository(db)
+        .setGoals(id: profile.id, weekly: 2, monthly: 2);
+    final repo = MemorizationRepository(db);
+    for (var ayah = 1; ayah <= 2; ayah++) {
+      await repo.recordAyahMemorized(
+        profileId: profile.id,
+        surahNumber: 67,
+        ayahNumber: ayah,
+        surahTotalAyahs: 30,
+        outcome: ReciteOutcome.clean,
+        fragileWordIndices: [],
+      );
+    }
+
+    await _openFollowUp(tester, db);
+
+    expect(find.text('Objectif atteint, mabrouk !'), findsNWidgets(2));
+  });
+
+  testWidgets('the goals can be edited and are kept', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    await UserProfileRepository(db)
+        .setGoals(id: profile.id, weekly: 5, monthly: 20);
+
+    await _openFollowUp(tester, db);
+    await tester.tap(find.text('Modifier'));
+    await _settle(tester);
+    expect(find.text('Tes objectifs'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Augmenter').first);
+    await tester.pump();
+    await tester.tap(find.text('Enregistrer'));
+    await _settle(tester);
+
+    expect(find.text('0 / 6 versets'), findsOneWidget);
+    final saved = await UserProfileRepository(db).getOrCreateLocalProfile();
+    expect(saved.weeklyVerseGoal, 6);
+    expect(saved.monthlyVerseGoal, 20);
   });
 }

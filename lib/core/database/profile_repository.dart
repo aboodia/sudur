@@ -13,22 +13,24 @@ class UserProfileRepository {
   final AppDatabase _db;
 
   Future<UserProfile> getOrCreateLocalProfile() async {
-    final existing = await (_db.select(_db.userProfiles)
-          ..where((p) => p.id.equals(localProfileId)))
-        .getSingleOrNull();
+    final existing = await (_db.select(
+      _db.userProfiles,
+    )..where((p) => p.id.equals(localProfileId))).getSingleOrNull();
     if (existing != null) return existing;
 
     final now = DateTime.now();
-    await _db.into(_db.userProfiles).insert(
+    await _db
+        .into(_db.userProfiles)
+        .insert(
           UserProfilesCompanion.insert(
             id: localProfileId,
             createdAt: now,
             updatedAt: now,
           ),
         );
-    return (_db.select(_db.userProfiles)
-          ..where((p) => p.id.equals(localProfileId)))
-        .getSingle();
+    return (_db.select(
+      _db.userProfiles,
+    )..where((p) => p.id.equals(localProfileId))).getSingle();
   }
 
   /// Partial update — used by the Onboarding flow (Brique 2) to persist the
@@ -42,11 +44,34 @@ class UserProfileRepository {
   }) async {
     await (_db.update(_db.userProfiles)..where((p) => p.id.equals(id))).write(
       UserProfilesCompanion(
-        memorizationLevel: memorizationLevel != null ? Value(memorizationLevel) : const Value.absent(),
-        availableDaysMask: availableDaysMask != null ? Value(availableDaysMask) : const Value.absent(),
-        dailyTargetMinutes: dailyTargetMinutes != null ? Value(dailyTargetMinutes) : const Value.absent(),
-        hasCompletedOnboarding:
-            hasCompletedOnboarding != null ? Value(hasCompletedOnboarding) : const Value.absent(),
+        memorizationLevel: memorizationLevel != null
+            ? Value(memorizationLevel)
+            : const Value.absent(),
+        availableDaysMask: availableDaysMask != null
+            ? Value(availableDaysMask)
+            : const Value.absent(),
+        dailyTargetMinutes: dailyTargetMinutes != null
+            ? Value(dailyTargetMinutes)
+            : const Value.absent(),
+        hasCompletedOnboarding: hasCompletedOnboarding != null
+            ? Value(hasCompletedOnboarding)
+            : const Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  /// Sets the weekly and monthly verse goals; null for either goes back to
+  /// the proposed default.
+  Future<void> setGoals({
+    required String id,
+    required int? weekly,
+    required int? monthly,
+  }) async {
+    await (_db.update(_db.userProfiles)..where((p) => p.id.equals(id))).write(
+      UserProfilesCompanion(
+        weeklyVerseGoal: Value(weekly),
+        monthlyVerseGoal: Value(monthly),
         updatedAt: Value(DateTime.now()),
       ),
     );
