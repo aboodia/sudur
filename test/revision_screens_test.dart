@@ -76,6 +76,11 @@ Future<void> _pumpApp(WidgetTester tester, AppDatabase db) async {
 
 AppDatabase _freshDb() => AppDatabase.forTesting(NativeDatabase.memory());
 
+DateTime _tomorrowAtNoon() {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day + 1, 12);
+}
+
 DateTime _hoursFromNow(int h) => DateTime.now().add(Duration(hours: h));
 
 void main() {
@@ -121,7 +126,9 @@ void main() {
       db,
       surah: 105,
       ayah: 1,
-      due: DateTime.now().add(const Duration(days: 1, hours: 2)),
+      // Noon tomorrow: "now + 26 h" lands on the day after tomorrow late
+      // in the evening, which made this test depend on the time it runs.
+      due: _tomorrowAtNoon(),
     );
     await _pumpApp(tester, db);
 
