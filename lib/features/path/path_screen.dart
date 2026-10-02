@@ -292,10 +292,14 @@ class _MilestoneTile extends StatelessWidget {
                                   style: const TextStyle(
                                     fontFamily: 'AmiriQuran',
                                     fontSize: 22,
+                                    // The script's marks reach below the line: without
+                                    // the height they overlap the subtitle.
+                                    height: 1.7,
                                   ),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 8),
                             Text(
                               '$stateLabel · ${l10n.milestoneVersesAndType(surah.numberOfAyahs, revelationLabel(l10n, surah))}',
                               style: theme.textTheme.bodySmall,

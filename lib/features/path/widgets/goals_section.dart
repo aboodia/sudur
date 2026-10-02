@@ -260,7 +260,8 @@ class _Stepper extends StatelessWidget {
           child: Text(
             '$value',
             textAlign: TextAlign.center,
-            style: theme.textTheme.titleLarge,
+            // The serif's old-style figures make "21" read as "2I".
+            style: theme.textTheme.titleMedium?.copyWith(fontSize: 22),
           ),
         ),
         IconButton.outlined(
