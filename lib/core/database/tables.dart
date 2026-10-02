@@ -159,3 +159,48 @@ class Bookmarks extends Table {
   @override
   Set<Column> get primaryKey => {id};
 }
+
+/// One row each time a verse is validated — memorized for the first time
+/// ('memorize') or reviewed later ('review') — with how it went. The raw
+/// material for the dashboard's retention rate, streak and progress curve;
+/// never read by the scheduling logic itself ([AyahProgressEntries] is the
+/// source of truth for what's due).
+class ReviewLogEntries extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get surahNumber => integer()();
+  IntColumn get ayahNumber => integer()();
+
+  /// 'memorize' | 'review'.
+  TextColumn get kind => text()();
+
+  /// 'clean' | 'hesitant' | 'redo' — same values as
+  /// [AyahProgressEntries.lastOutcome].
+  TextColumn get outcome => text()();
+
+  DateTimeColumn get occurredAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// One row per finished study session (a guided memorization passage or a
+/// revision session) — how long it took, for the dashboard's "temps
+/// investi".
+class StudySessionEntries extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  /// 'memorization' | 'revision'.
+  TextColumn get kind => text()();
+
+  DateTimeColumn get startedAt => dateTime()();
+  IntColumn get durationSeconds => integer()();
+  IntColumn get ayahCount => integer()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}

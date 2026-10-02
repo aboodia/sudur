@@ -14,6 +14,8 @@ part 'app_database.g.dart';
     AyahProgressEntries,
     SurahProgressEntries,
     Bookmarks,
+    ReviewLogEntries,
+    StudySessionEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -22,7 +24,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -43,6 +45,11 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(sessionProgressEntries);
         await m.createTable(ayahProgressEntries);
         await m.createTable(surahProgressEntries);
+      }
+      if (from < 4) {
+        // Journal d'activité (révisions, sessions) pour le Tableau de bord.
+        await m.createTable(reviewLogEntries);
+        await m.createTable(studySessionEntries);
       }
     },
   );

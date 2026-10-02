@@ -489,6 +489,180 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le sommet est atteint, mabrouk !'**
   String get profileMaxed;
+
+  /// No description provided for @revisionHubTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révision'**
+  String get revisionHubTitle;
+
+  /// No description provided for @revisionTodayLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'RÉVISION DU JOUR'**
+  String get revisionTodayLabel;
+
+  /// No description provided for @revisionStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer la révision'**
+  String get revisionStart;
+
+  /// No description provided for @revisionUpToDateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es à jour'**
+  String get revisionUpToDateTitle;
+
+  /// No description provided for @revisionUpToDateSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à réviser aujourd\'hui.'**
+  String get revisionUpToDateSubtitle;
+
+  /// No description provided for @revisionNextDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaine révision : {date}'**
+  String revisionNextDue(String date);
+
+  /// No description provided for @revisionNothingYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes révisions apparaîtront ici dès que tu auras mémorisé ton premier passage.'**
+  String get revisionNothingYet;
+
+  /// No description provided for @revisionCalendarTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calendrier'**
+  String get revisionCalendarTitle;
+
+  /// No description provided for @revisionViewDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour'**
+  String get revisionViewDay;
+
+  /// No description provided for @revisionViewWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'Semaine'**
+  String get revisionViewWeek;
+
+  /// No description provided for @revisionViewMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois'**
+  String get revisionViewMonth;
+
+  /// No description provided for @revisionNothingThatDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de prévu ce jour-là.'**
+  String get revisionNothingThatDay;
+
+  /// No description provided for @revisionPassageRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'{surah} · versets {start} à {end}'**
+  String revisionPassageRange(String surah, int start, int end);
+
+  /// No description provided for @revisionPassageSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{surah} · verset {start}'**
+  String revisionPassageSingle(String surah, int start);
+
+  /// No description provided for @revisionPreviousMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois précédent'**
+  String get revisionPreviousMonth;
+
+  /// No description provided for @revisionNextMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois suivant'**
+  String get revisionNextMonth;
+
+  /// No description provided for @revisionMasteryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta maîtrise'**
+  String get revisionMasteryTitle;
+
+  /// No description provided for @revisionMasteryHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculée d\'après tes auto-évaluations : plus un verset est récité sans erreur, plus il devient solide.'**
+  String get revisionMasteryHint;
+
+  /// No description provided for @masteryWeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faible'**
+  String get masteryWeak;
+
+  /// No description provided for @masteryMedium.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get masteryMedium;
+
+  /// No description provided for @masterySolid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solide'**
+  String get masterySolid;
+
+  /// No description provided for @revisionQuitTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter (ce que tu as déjà révisé est enregistré)'**
+  String get revisionQuitTooltip;
+
+  /// No description provided for @revisionDoneTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révision terminée'**
+  String get revisionDoneTitle;
+
+  /// No description provided for @revisionDoneAllClean.
+  ///
+  /// In fr, this message translates to:
+  /// **'Belle récitation, mabrouk ! Tout est bien en place.'**
+  String get revisionDoneAllClean;
+
+  /// No description provided for @revisionDoneEncourage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque révision ancre un peu plus : les versets hésitants reviendront bientôt pour mieux se fixer.'**
+  String get revisionDoneEncourage;
+
+  /// No description provided for @revisionResultLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} · {n}'**
+  String revisionResultLine(String label, int n);
+
+  /// No description provided for @revisionRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il t\'en reste {n} verset(s) à réviser aujourd\'hui.'**
+  String revisionRemaining(int n);
+
+  /// No description provided for @revisionReviseMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réviser encore'**
+  String get revisionReviseMore;
+
+  /// No description provided for @revisionBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour'**
+  String get revisionBack;
 }
 
 class _AppLocalizationsDelegate

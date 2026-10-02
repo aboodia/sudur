@@ -119,4 +119,45 @@
     "placeholders": {"n": {"type": "int"}, "nextName": {"type": "String"}}
   },
   "profileMaxed": "Le sommet est atteint, mabrouk !"
+  ,
+
+  "revisionHubTitle": "Révision",
+  "revisionTodayLabel": "RÉVISION DU JOUR",
+  "revisionStart": "Commencer la révision",
+  "revisionUpToDateTitle": "Tu es à jour",
+  "revisionUpToDateSubtitle": "Rien à réviser aujourd'hui.",
+  "revisionNextDue": "Prochaine révision : {date}",
+  "@revisionNextDue": {"placeholders": {"date": {"type": "String"}}},
+  "revisionNothingYet": "Tes révisions apparaîtront ici dès que tu auras mémorisé ton premier passage.",
+  "revisionCalendarTitle": "Calendrier",
+  "revisionViewDay": "Jour",
+  "revisionViewWeek": "Semaine",
+  "revisionViewMonth": "Mois",
+  "revisionNothingThatDay": "Rien de prévu ce jour-là.",
+  "revisionPassageRange": "{surah} · versets {start} à {end}",
+  "@revisionPassageRange": {
+    "placeholders": {"surah": {"type": "String"}, "start": {"type": "int"}, "end": {"type": "int"}}
+  },
+  "revisionPassageSingle": "{surah} · verset {start}",
+  "@revisionPassageSingle": {
+    "placeholders": {"surah": {"type": "String"}, "start": {"type": "int"}}
+  },
+  "revisionPreviousMonth": "Mois précédent",
+  "revisionNextMonth": "Mois suivant",
+  "revisionMasteryTitle": "Ta maîtrise",
+  "revisionMasteryHint": "Calculée d'après tes auto-évaluations : plus un verset est récité sans erreur, plus il devient solide.",
+  "masteryWeak": "Faible",
+  "masteryMedium": "Moyen",
+  "masterySolid": "Solide",
+
+  "revisionQuitTooltip": "Quitter (ce que tu as déjà révisé est enregistré)",
+  "revisionDoneTitle": "Révision terminée",
+  "revisionDoneAllClean": "Belle récitation, mabrouk ! Tout est bien en place.",
+  "revisionDoneEncourage": "Chaque révision ancre un peu plus : les versets hésitants reviendront bientôt pour mieux se fixer.",
+  "revisionResultLine": "{label} · {n}",
+  "@revisionResultLine": {"placeholders": {"label": {"type": "String"}, "n": {"type": "int"}}},
+  "revisionRemaining": "Il t'en reste {n} verset(s) à réviser aujourd'hui.",
+  "@revisionRemaining": {"placeholders": {"n": {"type": "int"}}},
+  "revisionReviseMore": "Réviser encore",
+  "revisionBack": "Retour"
 }

@@ -3121,6 +3121,904 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   }
 }
 
+class $ReviewLogEntriesTable extends ReviewLogEntries
+    with TableInfo<$ReviewLogEntriesTable, ReviewLogEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReviewLogEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
+  @override
+  late final GeneratedColumn<String> profileId = GeneratedColumn<String>(
+    'profile_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_profiles (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
+    'surahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
+    'surah_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ayahNumberMeta = const VerificationMeta(
+    'ayahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> ayahNumber = GeneratedColumn<int>(
+    'ayah_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _outcomeMeta = const VerificationMeta(
+    'outcome',
+  );
+  @override
+  late final GeneratedColumn<String> outcome = GeneratedColumn<String>(
+    'outcome',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _occurredAtMeta = const VerificationMeta(
+    'occurredAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> occurredAt = GeneratedColumn<DateTime>(
+    'occurred_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    profileId,
+    surahNumber,
+    ayahNumber,
+    kind,
+    outcome,
+    occurredAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'review_log_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReviewLogEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('profile_id')) {
+      context.handle(
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_profileIdMeta);
+    }
+    if (data.containsKey('surah_number')) {
+      context.handle(
+        _surahNumberMeta,
+        surahNumber.isAcceptableOrUnknown(
+          data['surah_number']!,
+          _surahNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_surahNumberMeta);
+    }
+    if (data.containsKey('ayah_number')) {
+      context.handle(
+        _ayahNumberMeta,
+        ayahNumber.isAcceptableOrUnknown(data['ayah_number']!, _ayahNumberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ayahNumberMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('outcome')) {
+      context.handle(
+        _outcomeMeta,
+        outcome.isAcceptableOrUnknown(data['outcome']!, _outcomeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_outcomeMeta);
+    }
+    if (data.containsKey('occurred_at')) {
+      context.handle(
+        _occurredAtMeta,
+        occurredAt.isAcceptableOrUnknown(data['occurred_at']!, _occurredAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_occurredAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReviewLogEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReviewLogEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      profileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}profile_id'],
+      )!,
+      surahNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_number'],
+      )!,
+      ayahNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah_number'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      outcome: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}outcome'],
+      )!,
+      occurredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}occurred_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ReviewLogEntriesTable createAlias(String alias) {
+    return $ReviewLogEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class ReviewLogEntry extends DataClass implements Insertable<ReviewLogEntry> {
+  final String id;
+  final String profileId;
+  final int surahNumber;
+  final int ayahNumber;
+
+  /// 'memorize' | 'review'.
+  final String kind;
+
+  /// 'clean' | 'hesitant' | 'redo' — same values as
+  /// [AyahProgressEntries.lastOutcome].
+  final String outcome;
+  final DateTime occurredAt;
+  const ReviewLogEntry({
+    required this.id,
+    required this.profileId,
+    required this.surahNumber,
+    required this.ayahNumber,
+    required this.kind,
+    required this.outcome,
+    required this.occurredAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['profile_id'] = Variable<String>(profileId);
+    map['surah_number'] = Variable<int>(surahNumber);
+    map['ayah_number'] = Variable<int>(ayahNumber);
+    map['kind'] = Variable<String>(kind);
+    map['outcome'] = Variable<String>(outcome);
+    map['occurred_at'] = Variable<DateTime>(occurredAt);
+    return map;
+  }
+
+  ReviewLogEntriesCompanion toCompanion(bool nullToAbsent) {
+    return ReviewLogEntriesCompanion(
+      id: Value(id),
+      profileId: Value(profileId),
+      surahNumber: Value(surahNumber),
+      ayahNumber: Value(ayahNumber),
+      kind: Value(kind),
+      outcome: Value(outcome),
+      occurredAt: Value(occurredAt),
+    );
+  }
+
+  factory ReviewLogEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReviewLogEntry(
+      id: serializer.fromJson<String>(json['id']),
+      profileId: serializer.fromJson<String>(json['profileId']),
+      surahNumber: serializer.fromJson<int>(json['surahNumber']),
+      ayahNumber: serializer.fromJson<int>(json['ayahNumber']),
+      kind: serializer.fromJson<String>(json['kind']),
+      outcome: serializer.fromJson<String>(json['outcome']),
+      occurredAt: serializer.fromJson<DateTime>(json['occurredAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'profileId': serializer.toJson<String>(profileId),
+      'surahNumber': serializer.toJson<int>(surahNumber),
+      'ayahNumber': serializer.toJson<int>(ayahNumber),
+      'kind': serializer.toJson<String>(kind),
+      'outcome': serializer.toJson<String>(outcome),
+      'occurredAt': serializer.toJson<DateTime>(occurredAt),
+    };
+  }
+
+  ReviewLogEntry copyWith({
+    String? id,
+    String? profileId,
+    int? surahNumber,
+    int? ayahNumber,
+    String? kind,
+    String? outcome,
+    DateTime? occurredAt,
+  }) => ReviewLogEntry(
+    id: id ?? this.id,
+    profileId: profileId ?? this.profileId,
+    surahNumber: surahNumber ?? this.surahNumber,
+    ayahNumber: ayahNumber ?? this.ayahNumber,
+    kind: kind ?? this.kind,
+    outcome: outcome ?? this.outcome,
+    occurredAt: occurredAt ?? this.occurredAt,
+  );
+  ReviewLogEntry copyWithCompanion(ReviewLogEntriesCompanion data) {
+    return ReviewLogEntry(
+      id: data.id.present ? data.id.value : this.id,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      surahNumber: data.surahNumber.present
+          ? data.surahNumber.value
+          : this.surahNumber,
+      ayahNumber: data.ayahNumber.present
+          ? data.ayahNumber.value
+          : this.ayahNumber,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      outcome: data.outcome.present ? data.outcome.value : this.outcome,
+      occurredAt: data.occurredAt.present
+          ? data.occurredAt.value
+          : this.occurredAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReviewLogEntry(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('kind: $kind, ')
+          ..write('outcome: $outcome, ')
+          ..write('occurredAt: $occurredAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    profileId,
+    surahNumber,
+    ayahNumber,
+    kind,
+    outcome,
+    occurredAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReviewLogEntry &&
+          other.id == this.id &&
+          other.profileId == this.profileId &&
+          other.surahNumber == this.surahNumber &&
+          other.ayahNumber == this.ayahNumber &&
+          other.kind == this.kind &&
+          other.outcome == this.outcome &&
+          other.occurredAt == this.occurredAt);
+}
+
+class ReviewLogEntriesCompanion extends UpdateCompanion<ReviewLogEntry> {
+  final Value<String> id;
+  final Value<String> profileId;
+  final Value<int> surahNumber;
+  final Value<int> ayahNumber;
+  final Value<String> kind;
+  final Value<String> outcome;
+  final Value<DateTime> occurredAt;
+  final Value<int> rowid;
+  const ReviewLogEntriesCompanion({
+    this.id = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.surahNumber = const Value.absent(),
+    this.ayahNumber = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.outcome = const Value.absent(),
+    this.occurredAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReviewLogEntriesCompanion.insert({
+    required String id,
+    required String profileId,
+    required int surahNumber,
+    required int ayahNumber,
+    required String kind,
+    required String outcome,
+    required DateTime occurredAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       profileId = Value(profileId),
+       surahNumber = Value(surahNumber),
+       ayahNumber = Value(ayahNumber),
+       kind = Value(kind),
+       outcome = Value(outcome),
+       occurredAt = Value(occurredAt);
+  static Insertable<ReviewLogEntry> custom({
+    Expression<String>? id,
+    Expression<String>? profileId,
+    Expression<int>? surahNumber,
+    Expression<int>? ayahNumber,
+    Expression<String>? kind,
+    Expression<String>? outcome,
+    Expression<DateTime>? occurredAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (profileId != null) 'profile_id': profileId,
+      if (surahNumber != null) 'surah_number': surahNumber,
+      if (ayahNumber != null) 'ayah_number': ayahNumber,
+      if (kind != null) 'kind': kind,
+      if (outcome != null) 'outcome': outcome,
+      if (occurredAt != null) 'occurred_at': occurredAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReviewLogEntriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? profileId,
+    Value<int>? surahNumber,
+    Value<int>? ayahNumber,
+    Value<String>? kind,
+    Value<String>? outcome,
+    Value<DateTime>? occurredAt,
+    Value<int>? rowid,
+  }) {
+    return ReviewLogEntriesCompanion(
+      id: id ?? this.id,
+      profileId: profileId ?? this.profileId,
+      surahNumber: surahNumber ?? this.surahNumber,
+      ayahNumber: ayahNumber ?? this.ayahNumber,
+      kind: kind ?? this.kind,
+      outcome: outcome ?? this.outcome,
+      occurredAt: occurredAt ?? this.occurredAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (profileId.present) {
+      map['profile_id'] = Variable<String>(profileId.value);
+    }
+    if (surahNumber.present) {
+      map['surah_number'] = Variable<int>(surahNumber.value);
+    }
+    if (ayahNumber.present) {
+      map['ayah_number'] = Variable<int>(ayahNumber.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (outcome.present) {
+      map['outcome'] = Variable<String>(outcome.value);
+    }
+    if (occurredAt.present) {
+      map['occurred_at'] = Variable<DateTime>(occurredAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReviewLogEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('kind: $kind, ')
+          ..write('outcome: $outcome, ')
+          ..write('occurredAt: $occurredAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StudySessionEntriesTable extends StudySessionEntries
+    with TableInfo<$StudySessionEntriesTable, StudySessionEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StudySessionEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
+  @override
+  late final GeneratedColumn<String> profileId = GeneratedColumn<String>(
+    'profile_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_profiles (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ayahCountMeta = const VerificationMeta(
+    'ayahCount',
+  );
+  @override
+  late final GeneratedColumn<int> ayahCount = GeneratedColumn<int>(
+    'ayah_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    profileId,
+    kind,
+    startedAt,
+    durationSeconds,
+    ayahCount,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'study_session_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<StudySessionEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('profile_id')) {
+      context.handle(
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_profileIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('ayah_count')) {
+      context.handle(
+        _ayahCountMeta,
+        ayahCount.isAcceptableOrUnknown(data['ayah_count']!, _ayahCountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ayahCountMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  StudySessionEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StudySessionEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      profileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}profile_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      ayahCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah_count'],
+      )!,
+    );
+  }
+
+  @override
+  $StudySessionEntriesTable createAlias(String alias) {
+    return $StudySessionEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class StudySessionEntry extends DataClass
+    implements Insertable<StudySessionEntry> {
+  final String id;
+  final String profileId;
+
+  /// 'memorization' | 'revision'.
+  final String kind;
+  final DateTime startedAt;
+  final int durationSeconds;
+  final int ayahCount;
+  const StudySessionEntry({
+    required this.id,
+    required this.profileId,
+    required this.kind,
+    required this.startedAt,
+    required this.durationSeconds,
+    required this.ayahCount,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['profile_id'] = Variable<String>(profileId);
+    map['kind'] = Variable<String>(kind);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    map['ayah_count'] = Variable<int>(ayahCount);
+    return map;
+  }
+
+  StudySessionEntriesCompanion toCompanion(bool nullToAbsent) {
+    return StudySessionEntriesCompanion(
+      id: Value(id),
+      profileId: Value(profileId),
+      kind: Value(kind),
+      startedAt: Value(startedAt),
+      durationSeconds: Value(durationSeconds),
+      ayahCount: Value(ayahCount),
+    );
+  }
+
+  factory StudySessionEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StudySessionEntry(
+      id: serializer.fromJson<String>(json['id']),
+      profileId: serializer.fromJson<String>(json['profileId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      ayahCount: serializer.fromJson<int>(json['ayahCount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'profileId': serializer.toJson<String>(profileId),
+      'kind': serializer.toJson<String>(kind),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'ayahCount': serializer.toJson<int>(ayahCount),
+    };
+  }
+
+  StudySessionEntry copyWith({
+    String? id,
+    String? profileId,
+    String? kind,
+    DateTime? startedAt,
+    int? durationSeconds,
+    int? ayahCount,
+  }) => StudySessionEntry(
+    id: id ?? this.id,
+    profileId: profileId ?? this.profileId,
+    kind: kind ?? this.kind,
+    startedAt: startedAt ?? this.startedAt,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    ayahCount: ayahCount ?? this.ayahCount,
+  );
+  StudySessionEntry copyWithCompanion(StudySessionEntriesCompanion data) {
+    return StudySessionEntry(
+      id: data.id.present ? data.id.value : this.id,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      ayahCount: data.ayahCount.present ? data.ayahCount.value : this.ayahCount,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StudySessionEntry(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('kind: $kind, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('ayahCount: $ayahCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, profileId, kind, startedAt, durationSeconds, ayahCount);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StudySessionEntry &&
+          other.id == this.id &&
+          other.profileId == this.profileId &&
+          other.kind == this.kind &&
+          other.startedAt == this.startedAt &&
+          other.durationSeconds == this.durationSeconds &&
+          other.ayahCount == this.ayahCount);
+}
+
+class StudySessionEntriesCompanion extends UpdateCompanion<StudySessionEntry> {
+  final Value<String> id;
+  final Value<String> profileId;
+  final Value<String> kind;
+  final Value<DateTime> startedAt;
+  final Value<int> durationSeconds;
+  final Value<int> ayahCount;
+  final Value<int> rowid;
+  const StudySessionEntriesCompanion({
+    this.id = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.ayahCount = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StudySessionEntriesCompanion.insert({
+    required String id,
+    required String profileId,
+    required String kind,
+    required DateTime startedAt,
+    required int durationSeconds,
+    required int ayahCount,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       profileId = Value(profileId),
+       kind = Value(kind),
+       startedAt = Value(startedAt),
+       durationSeconds = Value(durationSeconds),
+       ayahCount = Value(ayahCount);
+  static Insertable<StudySessionEntry> custom({
+    Expression<String>? id,
+    Expression<String>? profileId,
+    Expression<String>? kind,
+    Expression<DateTime>? startedAt,
+    Expression<int>? durationSeconds,
+    Expression<int>? ayahCount,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (profileId != null) 'profile_id': profileId,
+      if (kind != null) 'kind': kind,
+      if (startedAt != null) 'started_at': startedAt,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (ayahCount != null) 'ayah_count': ayahCount,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StudySessionEntriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? profileId,
+    Value<String>? kind,
+    Value<DateTime>? startedAt,
+    Value<int>? durationSeconds,
+    Value<int>? ayahCount,
+    Value<int>? rowid,
+  }) {
+    return StudySessionEntriesCompanion(
+      id: id ?? this.id,
+      profileId: profileId ?? this.profileId,
+      kind: kind ?? this.kind,
+      startedAt: startedAt ?? this.startedAt,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      ayahCount: ayahCount ?? this.ayahCount,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (profileId.present) {
+      map['profile_id'] = Variable<String>(profileId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (ayahCount.present) {
+      map['ayah_count'] = Variable<int>(ayahCount.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StudySessionEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('profileId: $profileId, ')
+          ..write('kind: $kind, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('ayahCount: $ayahCount, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3133,6 +4031,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SurahProgressEntriesTable surahProgressEntries =
       $SurahProgressEntriesTable(this);
   late final $BookmarksTable bookmarks = $BookmarksTable(this);
+  late final $ReviewLogEntriesTable reviewLogEntries = $ReviewLogEntriesTable(
+    this,
+  );
+  late final $StudySessionEntriesTable studySessionEntries =
+      $StudySessionEntriesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3144,6 +4047,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     ayahProgressEntries,
     surahProgressEntries,
     bookmarks,
+    reviewLogEntries,
+    studySessionEntries,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -3183,6 +4088,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('bookmarks', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('review_log_entries', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('study_session_entries', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -3298,6 +4217,47 @@ final class $$UserProfilesTableReferences
     ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_bookmarksRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ReviewLogEntriesTable, List<ReviewLogEntry>>
+  _reviewLogEntriesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.reviewLogEntries,
+    aliasName: 'user_profiles__id__review_log_entries__profile_id',
+  );
+
+  $$ReviewLogEntriesTableProcessedTableManager get reviewLogEntriesRefs {
+    final manager = $$ReviewLogEntriesTableTableManager(
+      $_db,
+      $_db.reviewLogEntries,
+    ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _reviewLogEntriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$StudySessionEntriesTable, List<StudySessionEntry>>
+  _studySessionEntriesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.studySessionEntries,
+        aliasName: 'user_profiles__id__study_session_entries__profile_id',
+      );
+
+  $$StudySessionEntriesTableProcessedTableManager get studySessionEntriesRefs {
+    final manager = $$StudySessionEntriesTableTableManager(
+      $_db,
+      $_db.studySessionEntries,
+    ).filter((f) => f.profileId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _studySessionEntriesRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -3454,6 +4414,56 @@ class $$UserProfilesTableFilterComposer
           }) => $$BookmarksTableFilterComposer(
             $db: $db,
             $table: $db.bookmarks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> reviewLogEntriesRefs(
+    Expression<bool> Function($$ReviewLogEntriesTableFilterComposer f) f,
+  ) {
+    final $$ReviewLogEntriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.reviewLogEntries,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ReviewLogEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.reviewLogEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> studySessionEntriesRefs(
+    Expression<bool> Function($$StudySessionEntriesTableFilterComposer f) f,
+  ) {
+    final $$StudySessionEntriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.studySessionEntries,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$StudySessionEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.studySessionEntries,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3678,6 +4688,57 @@ class $$UserProfilesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> reviewLogEntriesRefs<T extends Object>(
+    Expression<T> Function($$ReviewLogEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$ReviewLogEntriesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.reviewLogEntries,
+      getReferencedColumn: (t) => t.profileId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ReviewLogEntriesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.reviewLogEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> studySessionEntriesRefs<T extends Object>(
+    Expression<T> Function($$StudySessionEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$StudySessionEntriesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.studySessionEntries,
+          getReferencedColumn: (t) => t.profileId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$StudySessionEntriesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.studySessionEntries,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$UserProfilesTableTableManager
@@ -3698,6 +4759,8 @@ class $$UserProfilesTableTableManager
             bool ayahProgressEntriesRefs,
             bool surahProgressEntriesRefs,
             bool bookmarksRefs,
+            bool reviewLogEntriesRefs,
+            bool studySessionEntriesRefs,
           })
         > {
   $$UserProfilesTableTableManager(_$AppDatabase db, $UserProfilesTable table)
@@ -3777,6 +4840,8 @@ class $$UserProfilesTableTableManager
                 ayahProgressEntriesRefs = false,
                 surahProgressEntriesRefs = false,
                 bookmarksRefs = false,
+                reviewLogEntriesRefs = false,
+                studySessionEntriesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -3785,6 +4850,8 @@ class $$UserProfilesTableTableManager
                     if (ayahProgressEntriesRefs) db.ayahProgressEntries,
                     if (surahProgressEntriesRefs) db.surahProgressEntries,
                     if (bookmarksRefs) db.bookmarks,
+                    if (reviewLogEntriesRefs) db.reviewLogEntries,
+                    if (studySessionEntriesRefs) db.studySessionEntries,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -3873,6 +4940,48 @@ class $$UserProfilesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (reviewLogEntriesRefs)
+                        await $_getPrefetchedData<
+                          UserProfile,
+                          $UserProfilesTable,
+                          ReviewLogEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserProfilesTableReferences
+                              ._reviewLogEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserProfilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).reviewLogEntriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.profileId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (studySessionEntriesRefs)
+                        await $_getPrefetchedData<
+                          UserProfile,
+                          $UserProfilesTable,
+                          StudySessionEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserProfilesTableReferences
+                              ._studySessionEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserProfilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).studySessionEntriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.profileId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3898,6 +5007,8 @@ typedef $$UserProfilesTableProcessedTableManager =
         bool ayahProgressEntriesRefs,
         bool surahProgressEntriesRefs,
         bool bookmarksRefs,
+        bool reviewLogEntriesRefs,
+        bool studySessionEntriesRefs,
       })
     >;
 typedef $$PassagesTableCreateCompanionBuilder = PassagesCompanion Function({
@@ -5879,6 +6990,727 @@ typedef $$BookmarksTableProcessedTableManager =
       Bookmark,
       PrefetchHooks Function({bool profileId})
     >;
+typedef $$ReviewLogEntriesTableCreateCompanionBuilder =
+    ReviewLogEntriesCompanion Function({
+      required String id,
+      required String profileId,
+      required int surahNumber,
+      required int ayahNumber,
+      required String kind,
+      required String outcome,
+      required DateTime occurredAt,
+      Value<int> rowid,
+    });
+typedef $$ReviewLogEntriesTableUpdateCompanionBuilder =
+    ReviewLogEntriesCompanion Function({
+      Value<String> id,
+      Value<String> profileId,
+      Value<int> surahNumber,
+      Value<int> ayahNumber,
+      Value<String> kind,
+      Value<String> outcome,
+      Value<DateTime> occurredAt,
+      Value<int> rowid,
+    });
+
+final class $$ReviewLogEntriesTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $ReviewLogEntriesTable, ReviewLogEntry> {
+  $$ReviewLogEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserProfilesTable _profileIdTable(_$AppDatabase db) => db.userProfiles
+      .createAlias('review_log_entries__profile_id__user_profiles__id');
+
+  $$UserProfilesTableProcessedTableManager get profileId {
+    final $_column = $_itemColumn<String>('profile_id')!;
+
+    final manager = $$UserProfilesTableTableManager(
+      $_db,
+      $_db.userProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_profileIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ReviewLogEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $ReviewLogEntriesTable> {
+  $$ReviewLogEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get occurredAt => $composableBuilder(
+    column: $table.occurredAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserProfilesTableFilterComposer get profileId {
+    final $$UserProfilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableFilterComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ReviewLogEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ReviewLogEntriesTable> {
+  $$ReviewLogEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get occurredAt => $composableBuilder(
+    column: $table.occurredAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserProfilesTableOrderingComposer get profileId {
+    final $$UserProfilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ReviewLogEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ReviewLogEntriesTable> {
+  $$ReviewLogEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get surahNumber => $composableBuilder(
+    column: $table.surahNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get ayahNumber => $composableBuilder(
+    column: $table.ayahNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get outcome =>
+      $composableBuilder(column: $table.outcome, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get occurredAt => $composableBuilder(
+    column: $table.occurredAt,
+    builder: (column) => column,
+  );
+
+  $$UserProfilesTableAnnotationComposer get profileId {
+    final $$UserProfilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ReviewLogEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReviewLogEntriesTable,
+          ReviewLogEntry,
+          $$ReviewLogEntriesTableFilterComposer,
+          $$ReviewLogEntriesTableOrderingComposer,
+          $$ReviewLogEntriesTableAnnotationComposer,
+          $$ReviewLogEntriesTableCreateCompanionBuilder,
+          $$ReviewLogEntriesTableUpdateCompanionBuilder,
+          (ReviewLogEntry, $$ReviewLogEntriesTableReferences),
+          ReviewLogEntry,
+          PrefetchHooks Function({bool profileId})
+        > {
+  $$ReviewLogEntriesTableTableManager(
+    _$AppDatabase db,
+    $ReviewLogEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ReviewLogEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ReviewLogEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ReviewLogEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> profileId = const Value.absent(),
+                Value<int> surahNumber = const Value.absent(),
+                Value<int> ayahNumber = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> outcome = const Value.absent(),
+                Value<DateTime> occurredAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReviewLogEntriesCompanion(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                ayahNumber: ayahNumber,
+                kind: kind,
+                outcome: outcome,
+                occurredAt: occurredAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String profileId,
+                required int surahNumber,
+                required int ayahNumber,
+                required String kind,
+                required String outcome,
+                required DateTime occurredAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ReviewLogEntriesCompanion.insert(
+                id: id,
+                profileId: profileId,
+                surahNumber: surahNumber,
+                ayahNumber: ayahNumber,
+                kind: kind,
+                outcome: outcome,
+                occurredAt: occurredAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ReviewLogEntriesTable, ReviewLogEntry>(table),
+                  $$ReviewLogEntriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({profileId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (profileId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$ReviewLogEntriesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$ReviewLogEntriesTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ReviewLogEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReviewLogEntriesTable,
+      ReviewLogEntry,
+      $$ReviewLogEntriesTableFilterComposer,
+      $$ReviewLogEntriesTableOrderingComposer,
+      $$ReviewLogEntriesTableAnnotationComposer,
+      $$ReviewLogEntriesTableCreateCompanionBuilder,
+      $$ReviewLogEntriesTableUpdateCompanionBuilder,
+      (ReviewLogEntry, $$ReviewLogEntriesTableReferences),
+      ReviewLogEntry,
+      PrefetchHooks Function({bool profileId})
+    >;
+typedef $$StudySessionEntriesTableCreateCompanionBuilder =
+    StudySessionEntriesCompanion Function({
+      required String id,
+      required String profileId,
+      required String kind,
+      required DateTime startedAt,
+      required int durationSeconds,
+      required int ayahCount,
+      Value<int> rowid,
+    });
+typedef $$StudySessionEntriesTableUpdateCompanionBuilder =
+    StudySessionEntriesCompanion Function({
+      Value<String> id,
+      Value<String> profileId,
+      Value<String> kind,
+      Value<DateTime> startedAt,
+      Value<int> durationSeconds,
+      Value<int> ayahCount,
+      Value<int> rowid,
+    });
+
+final class $$StudySessionEntriesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $StudySessionEntriesTable,
+          StudySessionEntry
+        > {
+  $$StudySessionEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserProfilesTable _profileIdTable(_$AppDatabase db) => db.userProfiles
+      .createAlias('study_session_entries__profile_id__user_profiles__id');
+
+  $$UserProfilesTableProcessedTableManager get profileId {
+    final $_column = $_itemColumn<String>('profile_id')!;
+
+    final manager = $$UserProfilesTableTableManager(
+      $_db,
+      $_db.userProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_profileIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$StudySessionEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $StudySessionEntriesTable> {
+  $$StudySessionEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get ayahCount => $composableBuilder(
+    column: $table.ayahCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserProfilesTableFilterComposer get profileId {
+    final $$UserProfilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableFilterComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StudySessionEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $StudySessionEntriesTable> {
+  $$StudySessionEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get ayahCount => $composableBuilder(
+    column: $table.ayahCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserProfilesTableOrderingComposer get profileId {
+    final $$UserProfilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StudySessionEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StudySessionEntriesTable> {
+  $$StudySessionEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get ayahCount =>
+      $composableBuilder(column: $table.ayahCount, builder: (column) => column);
+
+  $$UserProfilesTableAnnotationComposer get profileId {
+    final $$UserProfilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.profileId,
+      referencedTable: $db.userProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserProfilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StudySessionEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $StudySessionEntriesTable,
+          StudySessionEntry,
+          $$StudySessionEntriesTableFilterComposer,
+          $$StudySessionEntriesTableOrderingComposer,
+          $$StudySessionEntriesTableAnnotationComposer,
+          $$StudySessionEntriesTableCreateCompanionBuilder,
+          $$StudySessionEntriesTableUpdateCompanionBuilder,
+          (StudySessionEntry, $$StudySessionEntriesTableReferences),
+          StudySessionEntry,
+          PrefetchHooks Function({bool profileId})
+        > {
+  $$StudySessionEntriesTableTableManager(
+    _$AppDatabase db,
+    $StudySessionEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StudySessionEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StudySessionEntriesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$StudySessionEntriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> profileId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<int> ayahCount = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => StudySessionEntriesCompanion(
+                id: id,
+                profileId: profileId,
+                kind: kind,
+                startedAt: startedAt,
+                durationSeconds: durationSeconds,
+                ayahCount: ayahCount,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String profileId,
+                required String kind,
+                required DateTime startedAt,
+                required int durationSeconds,
+                required int ayahCount,
+                Value<int> rowid = const Value.absent(),
+              }) => StudySessionEntriesCompanion.insert(
+                id: id,
+                profileId: profileId,
+                kind: kind,
+                startedAt: startedAt,
+                durationSeconds: durationSeconds,
+                ayahCount: ayahCount,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$StudySessionEntriesTable, StudySessionEntry>(
+                    table,
+                  ),
+                  $$StudySessionEntriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({profileId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (profileId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$StudySessionEntriesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$StudySessionEntriesTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$StudySessionEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $StudySessionEntriesTable,
+      StudySessionEntry,
+      $$StudySessionEntriesTableFilterComposer,
+      $$StudySessionEntriesTableOrderingComposer,
+      $$StudySessionEntriesTableAnnotationComposer,
+      $$StudySessionEntriesTableCreateCompanionBuilder,
+      $$StudySessionEntriesTableUpdateCompanionBuilder,
+      (StudySessionEntry, $$StudySessionEntriesTableReferences),
+      StudySessionEntry,
+      PrefetchHooks Function({bool profileId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5898,4 +7730,8 @@ class $AppDatabaseManager {
       $$SurahProgressEntriesTableTableManager(_db, _db.surahProgressEntries);
   $$BookmarksTableTableManager get bookmarks =>
       $$BookmarksTableTableManager(_db, _db.bookmarks);
+  $$ReviewLogEntriesTableTableManager get reviewLogEntries =>
+      $$ReviewLogEntriesTableTableManager(_db, _db.reviewLogEntries);
+  $$StudySessionEntriesTableTableManager get studySessionEntries =>
+      $$StudySessionEntriesTableTableManager(_db, _db.studySessionEntries);
 }

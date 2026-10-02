@@ -252,4 +252,106 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get profileMaxed => 'Le sommet est atteint, mabrouk !';
+
+  @override
+  String get revisionHubTitle => 'Révision';
+
+  @override
+  String get revisionTodayLabel => 'RÉVISION DU JOUR';
+
+  @override
+  String get revisionStart => 'Commencer la révision';
+
+  @override
+  String get revisionUpToDateTitle => 'Tu es à jour';
+
+  @override
+  String get revisionUpToDateSubtitle => 'Rien à réviser aujourd\'hui.';
+
+  @override
+  String revisionNextDue(String date) {
+    return 'Prochaine révision : $date';
+  }
+
+  @override
+  String get revisionNothingYet =>
+      'Tes révisions apparaîtront ici dès que tu auras mémorisé ton premier passage.';
+
+  @override
+  String get revisionCalendarTitle => 'Calendrier';
+
+  @override
+  String get revisionViewDay => 'Jour';
+
+  @override
+  String get revisionViewWeek => 'Semaine';
+
+  @override
+  String get revisionViewMonth => 'Mois';
+
+  @override
+  String get revisionNothingThatDay => 'Rien de prévu ce jour-là.';
+
+  @override
+  String revisionPassageRange(String surah, int start, int end) {
+    return '$surah · versets $start à $end';
+  }
+
+  @override
+  String revisionPassageSingle(String surah, int start) {
+    return '$surah · verset $start';
+  }
+
+  @override
+  String get revisionPreviousMonth => 'Mois précédent';
+
+  @override
+  String get revisionNextMonth => 'Mois suivant';
+
+  @override
+  String get revisionMasteryTitle => 'Ta maîtrise';
+
+  @override
+  String get revisionMasteryHint =>
+      'Calculée d\'après tes auto-évaluations : plus un verset est récité sans erreur, plus il devient solide.';
+
+  @override
+  String get masteryWeak => 'Faible';
+
+  @override
+  String get masteryMedium => 'Moyen';
+
+  @override
+  String get masterySolid => 'Solide';
+
+  @override
+  String get revisionQuitTooltip =>
+      'Quitter (ce que tu as déjà révisé est enregistré)';
+
+  @override
+  String get revisionDoneTitle => 'Révision terminée';
+
+  @override
+  String get revisionDoneAllClean =>
+      'Belle récitation, mabrouk ! Tout est bien en place.';
+
+  @override
+  String get revisionDoneEncourage =>
+      'Chaque révision ancre un peu plus : les versets hésitants reviendront bientôt pour mieux se fixer.';
+
+  @override
+  String revisionResultLine(String label, int n) {
+    return '$label · $n';
+  }
+
+  @override
+  String revisionRemaining(int n) {
+    return 'Il t\'en reste $n verset(s) à réviser aujourd\'hui.';
+  }
+
+  @override
+  String get revisionReviseMore => 'Réviser encore';
+
+  @override
+  String get revisionBack => 'Retour';
 }

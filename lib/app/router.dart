@@ -8,6 +8,8 @@ import '../features/path/path_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
 import '../features/reading/reading_screen.dart';
+import '../features/revision/screens/revision_hub_screen.dart';
+import '../features/revision/screens/revision_session_screen.dart';
 import '../features/reading/surah_reading_screen.dart';
 
 /// Squelette de navigation (Brique 0) : les grands onglets existent, même
@@ -94,6 +96,18 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/memoriser',
       builder: (context, state) => const MemorizationFlowScreen(),
+    ),
+    // Révision : même logique que la Mémorisation — hors du shell, lancée
+    // depuis la carte de l'Accueil.
+    GoRoute(
+      path: '/revision',
+      builder: (context, state) => const RevisionHubScreen(),
+      routes: [
+        GoRoute(
+          path: 'session',
+          builder: (context, state) => const RevisionSessionScreen(),
+        ),
+      ],
     ),
   ],
 );

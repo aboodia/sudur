@@ -3,40 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/database/memorization_repository.dart';
+import '../../core/format/french_date.dart';
 import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/gamification/memorizer_profile.dart';
 import '../../core/memorization/profile_resolver.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
-
-const _weekdays = [
-  'lundi',
-  'mardi',
-  'mercredi',
-  'jeudi',
-  'vendredi',
-  'samedi',
-  'dimanche',
-];
-const _months = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre',
-];
-
-String _frenchDateLabel(DateTime date) {
-  final weekday = _weekdays[date.weekday - 1];
-  final month = _months[date.month - 1];
-  return '${weekday[0].toUpperCase()}${weekday.substring(1)} ${date.day} $month';
-}
 
 /// "Accueil, session du jour" — la carte de session s'appuie sur le
 /// contrôleur de session pour rester cohérente avec ce qui sera réellement
@@ -57,7 +28,7 @@ class HomeScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           children: [
             Text(
-              _frenchDateLabel(DateTime.now()),
+              frenchDateLabel(DateTime.now()),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
@@ -130,6 +101,8 @@ class HomeScreen extends ConsumerWidget {
                     leading: const Icon(Icons.refresh),
                     title: Text('Révision · ${due.length} verset(s)'),
                     subtitle: const Text('À réviser aujourd\'hui'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/revision'),
                   ),
                 );
               },

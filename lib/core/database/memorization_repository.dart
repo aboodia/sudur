@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../memorization/passage_suggestion.dart';
+import '../memorization/review_calendar.dart';
 import '../memorization/review_scheduler.dart';
 import '../quran_reference/quran_reference_repository.dart';
 import 'app_database.dart';
@@ -120,20 +121,34 @@ class MemorizationRepository {
     return {for (final r in rows) '${r.surahNumber}:${r.ayahNumber}'};
   }
 
+  /// Verses whose review falls on [asOf]'s day or earlier — due the whole
+  /// day, not only from the minute they were scheduled at, so what the
+  /// calendar files under "today" is what a session actually offers.
   Future<List<AyahProgressEntry>> dueReviews(
     String profileId, {
     DateTime? asOf,
   }) async {
-    final cutoff = asOf ?? DateTime.now();
+    final cutoff = startOfNextDay(asOf ?? DateTime.now());
     return (_db.select(_db.ayahProgressEntries)
           ..where(
             (t) =>
                 t.profileId.equals(profileId) &
-                t.nextReviewAt.isSmallerOrEqualValue(cutoff),
+                t.nextReviewAt.isSmallerThanValue(cutoff),
           )
           ..orderBy([(t) => OrderingTerm.asc(t.nextReviewAt)]))
         .get();
   }
+
+  /// Every verse ever memorized through the guided parcours, with its
+  /// review state — what the calendar and the mastery view are built from.
+  Future<List<AyahProgressEntry>> allAyahProgress(String profileId) =>
+      (_db.select(_db.ayahProgressEntries)
+            ..where((t) => t.profileId.equals(profileId))
+            ..orderBy([
+              (t) => OrderingTerm.asc(t.surahNumber),
+              (t) => OrderingTerm.asc(t.ayahNumber),
+            ]))
+          .get();
 
   /// A verse just passed "Réciter" for the first time within its passage's
   /// guided session — creates its [AyahProgressEntries] row (first review
@@ -169,6 +184,7 @@ class MemorizationRepository {
           updatedAt: Value(now),
         ),
       );
+      await _log(profileId, surahNumber, ayahNumber, 'memorize', outcome, now);
       return;
     }
 
@@ -190,6 +206,7 @@ class MemorizationRepository {
           ),
         );
 
+    await _log(profileId, surahNumber, ayahNumber, 'memorize', outcome, now);
     await _bumpSurahProgress(profileId, surahNumber, surahTotalAyahs, now);
   }
 
@@ -217,10 +234,66 @@ class MemorizationRepository {
         lastOutcome: Value(outcome.name),
         reviewCycleStep: Value(result.nextCycleStep),
         nextReviewAt: Value(result.dueAt),
+        // A clean recitation means the shaky words held: stop halving this
+        // verse's intervals forever over a word revealed once while
+        // memorizing it.
+        fragileWordIndices: outcome == ReciteOutcome.clean
+            ? const Value('[]')
+            : const Value.absent(),
         updatedAt: Value(now),
       ),
     );
+    await _log(
+      row.profileId,
+      row.surahNumber,
+      row.ayahNumber,
+      'review',
+      outcome,
+      now,
+    );
   }
+
+  Future<void> _log(
+    String profileId,
+    int surahNumber,
+    int ayahNumber,
+    String kind,
+    ReciteOutcome outcome,
+    DateTime at,
+  ) => _db
+      .into(_db.reviewLogEntries)
+      .insert(
+        ReviewLogEntriesCompanion.insert(
+          id: _uuid.v4(),
+          profileId: profileId,
+          surahNumber: surahNumber,
+          ayahNumber: ayahNumber,
+          kind: kind,
+          outcome: outcome.name,
+          occurredAt: at,
+        ),
+      );
+
+  /// A finished guided passage ('memorization') or revision session
+  /// ('revision') — feeds the dashboard's time invested.
+  Future<void> logStudySession({
+    required String profileId,
+    required String kind,
+    required DateTime startedAt,
+    required Duration duration,
+    required int ayahCount,
+  }) => _db
+      .into(_db.studySessionEntries)
+      .insert(
+        StudySessionEntriesCompanion.insert(
+          id: _uuid.v4(),
+          profileId: profileId,
+          kind: kind,
+          startedAt: startedAt,
+          durationSeconds: duration.inSeconds,
+          ayahCount: ayahCount,
+        ),
+      );
 
   Future<void> _bumpSurahProgress(
     String profileId,
@@ -355,4 +428,12 @@ final todaysPassagePreviewProvider =
 final dueReviewsProvider = FutureProvider<List<AyahProgressEntry>>((ref) async {
   final profile = await ref.watch(currentProfileProvider.future);
   return ref.watch(memorizationRepositoryProvider).dueReviews(profile.id);
+});
+
+/// Every memorized verse with its review state (calendar, mastery).
+final ayahProgressProvider = FutureProvider<List<AyahProgressEntry>>((
+  ref,
+) async {
+  final profile = await ref.watch(currentProfileProvider.future);
+  return ref.watch(memorizationRepositoryProvider).allAyahProgress(profile.id);
 });

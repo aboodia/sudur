@@ -7,6 +7,7 @@ import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/quran_text/quran_text_repository.dart';
 import '../../../l10n/app_localizations.dart';
 import '../session_controller.dart';
+import '../widgets/outcome_tile.dart';
 import '../widgets/record_control.dart';
 import '../widgets/session_step_scaffold.dart';
 
@@ -111,20 +112,20 @@ class _ReciteScreenState extends ConsumerState<ReciteScreen> {
                 const SizedBox(height: 20),
                 Text(l10n.howWasRecitation, style: theme.textTheme.titleSmall),
                 const SizedBox(height: 8),
-                _OutcomeTile(
+                OutcomeTile(
                   title: l10n.outcomeClean,
                   subtitle: l10n.outcomeCleanSub,
                   selected: _selected == ReciteOutcome.clean,
                   onTap: () => setState(() => _selected = ReciteOutcome.clean),
                 ),
-                _OutcomeTile(
+                OutcomeTile(
                   title: l10n.outcomeHesitant,
                   subtitle: l10n.outcomeHesitantSub,
                   selected: _selected == ReciteOutcome.hesitant,
                   onTap: () =>
                       setState(() => _selected = ReciteOutcome.hesitant),
                 ),
-                _OutcomeTile(
+                OutcomeTile(
                   title: l10n.outcomeRedo,
                   subtitle: l10n.outcomeRedoSub,
                   selected: _selected == ReciteOutcome.redo,
@@ -142,75 +143,6 @@ class _ReciteScreenState extends ConsumerState<ReciteScreen> {
             ? null
             : () => controller.submitReciteOutcome(_selected!),
         child: Text(l10n.continueLabel),
-      ),
-    );
-  }
-}
-
-class _OutcomeTile extends StatelessWidget {
-  const _OutcomeTile({
-    required this.title,
-    required this.subtitle,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String title;
-  final String subtitle;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: selected
-                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
-                : null,
-            border: Border.all(
-              color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outlineVariant,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                selected
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-                color: selected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.outline,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(subtitle, style: theme.textTheme.bodySmall),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
