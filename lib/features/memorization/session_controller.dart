@@ -7,6 +7,7 @@ import '../../core/memorization/masking_strategy.dart';
 import '../../core/memorization/passage_suggestion.dart';
 import '../../core/memorization/review_scheduler.dart';
 import '../../core/memorization/study_session.dart';
+import '../../core/stats/progress_stats_provider.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 
 /// The 5 guided steps, in order — matches [Passages]' `currentStepIndex`.
@@ -258,6 +259,7 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
           outcome: outcome,
           fragileWordIndices: state.fragileIndices.toList(),
         );
+    ref.invalidate(progressStatsProvider);
 
     final newStatuses = {
       ...state.chainStatuses,
@@ -301,6 +303,7 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
       ayahCount: passage.ayahEnd - passage.ayahStart + 1,
     );
     ref.invalidate(ayahProgressProvider);
+    ref.invalidate(progressStatsProvider);
     ref.invalidate(surahProgressProvider);
     ref.invalidate(activeSessionProvider);
     ref.invalidate(todaysPassagePreviewProvider);

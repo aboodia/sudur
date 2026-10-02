@@ -354,4 +354,59 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get revisionBack => 'Retour';
+
+  @override
+  String get statsTitle => 'Statistiques de progression';
+
+  @override
+  String get statsSubtitle => 'Ton évolution dans la mémorisation';
+
+  @override
+  String get statsTileVerses => 'Versets';
+
+  @override
+  String get statsTileSurahs => 'Sourates';
+
+  @override
+  String get statsTileJuz => 'Juz';
+
+  @override
+  String get statsTileRetention => 'Rétention';
+
+  @override
+  String get statsTileStreak => 'Série';
+
+  @override
+  String get statsTileTime => 'Temps total';
+
+  @override
+  String get statsCaptionMemorized => 'mémorisés';
+
+  @override
+  String get statsCaptionCompleted => 'achevées';
+
+  @override
+  String get statsCaptionOutOf30 => 'sur 30';
+
+  @override
+  String get statsCaptionRetention => 'sur 30 jours';
+
+  @override
+  String get statsCaptionRetentionNone => 'pas encore de révision';
+
+  @override
+  String get statsCaptionStreak => 'assiduité';
+
+  @override
+  String get statsCaptionTime => 'dédié au Coran';
+
+  @override
+  String statsDays(int n) {
+    return '$n j';
+  }
+
+  @override
+  String statsPercent(int n) {
+    return '$n %';
+  }
 }

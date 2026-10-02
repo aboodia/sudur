@@ -8,6 +8,7 @@ import '../../core/database/profile_repository.dart';
 import '../../core/memorization/review_calendar.dart';
 import '../../core/memorization/review_scheduler.dart';
 import '../../core/memorization/study_session.dart';
+import '../../core/stats/progress_stats_provider.dart';
 
 /// Most verses one revision session offers — "sessions courtes (5-15 min)"
 /// per the cahier des charges. Whatever is left stays due and is offered by
@@ -108,6 +109,7 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
       outcome: outcome,
       hasFragileWords: _hasFragileWords(entry),
     );
+    ref.invalidate(progressStatsProvider);
 
     final results = [...state.results, outcome];
     final next = state.index + 1;

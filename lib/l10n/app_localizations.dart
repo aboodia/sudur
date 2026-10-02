@@ -663,6 +663,108 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Retour'**
   String get revisionBack;
+
+  /// No description provided for @statsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statistiques de progression'**
+  String get statsTitle;
+
+  /// No description provided for @statsSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton évolution dans la mémorisation'**
+  String get statsSubtitle;
+
+  /// No description provided for @statsTileVerses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Versets'**
+  String get statsTileVerses;
+
+  /// No description provided for @statsTileSurahs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sourates'**
+  String get statsTileSurahs;
+
+  /// No description provided for @statsTileJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Juz'**
+  String get statsTileJuz;
+
+  /// No description provided for @statsTileRetention.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rétention'**
+  String get statsTileRetention;
+
+  /// No description provided for @statsTileStreak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Série'**
+  String get statsTileStreak;
+
+  /// No description provided for @statsTileTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'Temps total'**
+  String get statsTileTime;
+
+  /// No description provided for @statsCaptionMemorized.
+  ///
+  /// In fr, this message translates to:
+  /// **'mémorisés'**
+  String get statsCaptionMemorized;
+
+  /// No description provided for @statsCaptionCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'achevées'**
+  String get statsCaptionCompleted;
+
+  /// No description provided for @statsCaptionOutOf30.
+  ///
+  /// In fr, this message translates to:
+  /// **'sur 30'**
+  String get statsCaptionOutOf30;
+
+  /// No description provided for @statsCaptionRetention.
+  ///
+  /// In fr, this message translates to:
+  /// **'sur 30 jours'**
+  String get statsCaptionRetention;
+
+  /// No description provided for @statsCaptionRetentionNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'pas encore de révision'**
+  String get statsCaptionRetentionNone;
+
+  /// No description provided for @statsCaptionStreak.
+  ///
+  /// In fr, this message translates to:
+  /// **'assiduité'**
+  String get statsCaptionStreak;
+
+  /// No description provided for @statsCaptionTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'dédié au Coran'**
+  String get statsCaptionTime;
+
+  /// No description provided for @statsDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} j'**
+  String statsDays(int n);
+
+  /// No description provided for @statsPercent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} %'**
+  String statsPercent(int n);
 }
 
 class _AppLocalizationsDelegate

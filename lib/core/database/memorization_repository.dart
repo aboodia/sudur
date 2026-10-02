@@ -253,6 +253,18 @@ class MemorizationRepository {
     );
   }
 
+  /// Every validation (first memorization or review) ever logged, oldest
+  /// first — the dashboard's streak and retention are computed from it.
+  Future<List<ReviewLogEntry>> reviewLog(String profileId) =>
+      (_db.select(_db.reviewLogEntries)
+            ..where((t) => t.profileId.equals(profileId))
+            ..orderBy([(t) => OrderingTerm.asc(t.occurredAt)]))
+          .get();
+
+  Future<List<StudySessionEntry>> studySessions(String profileId) => (_db.select(
+    _db.studySessionEntries,
+  )..where((t) => t.profileId.equals(profileId))).get();
+
   Future<void> _log(
     String profileId,
     int surahNumber,

@@ -160,4 +160,25 @@
   "@revisionRemaining": {"placeholders": {"n": {"type": "int"}}},
   "revisionReviseMore": "Réviser encore",
   "revisionBack": "Retour"
+  ,
+
+  "statsTitle": "Statistiques de progression",
+  "statsSubtitle": "Ton évolution dans la mémorisation",
+  "statsTileVerses": "Versets",
+  "statsTileSurahs": "Sourates",
+  "statsTileJuz": "Juz",
+  "statsTileRetention": "Rétention",
+  "statsTileStreak": "Série",
+  "statsTileTime": "Temps total",
+  "statsCaptionMemorized": "mémorisés",
+  "statsCaptionCompleted": "achevées",
+  "statsCaptionOutOf30": "sur 30",
+  "statsCaptionRetention": "sur 30 jours",
+  "statsCaptionRetentionNone": "pas encore de révision",
+  "statsCaptionStreak": "assiduité",
+  "statsCaptionTime": "dédié au Coran",
+  "statsDays": "{n} j",
+  "@statsDays": {"placeholders": {"n": {"type": "int"}}},
+  "statsPercent": "{n} %",
+  "@statsPercent": {"placeholders": {"n": {"type": "int"}}}
 }

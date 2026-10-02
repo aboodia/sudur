@@ -8,6 +8,9 @@ import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/gamification/memorizer_profile.dart';
 import '../../core/memorization/profile_resolver.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
+import '../../core/stats/progress_stats_provider.dart';
+import '../../l10n/app_localizations.dart';
+import 'widgets/progress_stats_section.dart';
 
 /// "Accueil, session du jour" — la carte de session s'appuie sur le
 /// contrôleur de session pour rester cohérente avec ce qui sera réellement
@@ -21,19 +24,34 @@ class HomeScreen extends ConsumerWidget {
     final previewAsync = ref.watch(todaysPassagePreviewProvider);
     final dueReviewsAsync = ref.watch(dueReviewsProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
+    final statsAsync = ref.watch(progressStatsProvider);
 
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Text(
-              frenchDateLabel(DateTime.now()),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              'Assalamu alaykum',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        frenchDateLabel(DateTime.now()),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Text(
+                        'Assalamu alaykum',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                if ((statsAsync.value?.streakDays ?? 0) > 0)
+                  _StreakChip(days: statsAsync.value!.streakDays),
+              ],
             ),
             const SizedBox(height: 16),
             surahProgressAsync.when(
@@ -109,8 +127,45 @@ class HomeScreen extends ConsumerWidget {
               loading: () => const SizedBox.shrink(),
               error: (_, _) => const SizedBox.shrink(),
             ),
+            const SizedBox(height: 24),
+            const ProgressStatsSection(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// The current streak, top right of the greeting — shown only while it is
+/// alive, so a day without study never greets the user with a "0".
+class _StreakChip extends StatelessWidget {
+  const _StreakChip({required this.days});
+
+  final int days;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.local_fire_department_outlined,
+            size: 20,
+            color: theme.colorScheme.tertiary,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            AppLocalizations.of(context).statsDays(days),
+            style: theme.textTheme.titleSmall,
+          ),
+        ],
       ),
     );
   }

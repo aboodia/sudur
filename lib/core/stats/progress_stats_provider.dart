@@ -1,0 +1,65 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../database/memorization_repository.dart';
+import '../database/profile_repository.dart';
+import '../quran_reference/quran_reference_repository.dart';
+import 'progress_stats.dart';
+
+/// The figures on the dashboard's "Statistiques de progression".
+class ProgressStats {
+  const ProgressStats({
+    required this.memorizedAyahs,
+    required this.completedSurahs,
+    required this.juz,
+    required this.retention,
+    required this.streakDays,
+    required this.studyTime,
+  });
+
+  final int memorizedAyahs;
+  final int completedSurahs;
+
+  /// How much of the Quran is memorized, in Juz (0 to 30).
+  final double juz;
+
+  /// Share of the last 30 days' reviews that held (0 to 1), null without
+  /// any review in that window.
+  final double? retention;
+
+  final int streakDays;
+  final Duration studyTime;
+}
+
+final progressStatsProvider = FutureProvider<ProgressStats>((ref) async {
+  final profile = await ref.watch(currentProfileProvider.future);
+  final repo = ref.watch(memorizationRepositoryProvider);
+  final reference = await ref.watch(quranReferenceProvider.future);
+
+  final surahRows = await repo.allSurahProgress(profile.id);
+  final ayahRows = await repo.allAyahProgress(profile.id);
+  final log = await repo.reviewLog(profile.id);
+  final sessions = await repo.studySessions(profile.id);
+  final now = DateTime.now();
+
+  // Verses memorized through the guided parcours have their own rows;
+  // sourates declared in the onboarding have none (a hafiz would mean
+  // thousands of rows), they are simply complete.
+  final memorized = <({int surah, int ayah})>{
+    for (final r in ayahRows) (surah: r.surahNumber, ayah: r.ayahNumber),
+    for (final r in surahRows.where((r) => r.completedAt != null))
+      for (var a = 1; a <= r.totalAyahCount; a++)
+        (surah: r.surahNumber, ayah: a),
+  };
+
+  return ProgressStats(
+    memorizedAyahs: memorized.length,
+    completedSurahs: surahRows.where((r) => r.completedAt != null).length,
+    juz: juzEquivalent(reference, memorized),
+    retention: computeRetention([
+      for (final l in log.where((l) => l.kind == 'review'))
+        (at: l.occurredAt, outcome: l.outcome),
+    ], now),
+    streakDays: computeStreak(log.map((l) => l.occurredAt), now),
+    studyTime: totalStudyTime(sessions.map((s) => s.durationSeconds)),
+  );
+});
