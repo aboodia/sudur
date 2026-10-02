@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/audio/audio_playback_controller.dart';
 import 'screens/chain_screen.dart';
 import 'screens/completed_screen.dart';
 import 'screens/discover_screen.dart';
@@ -24,12 +25,22 @@ class MemorizationFlowScreen extends ConsumerStatefulWidget {
 
 class _MemorizationFlowScreenState
     extends ConsumerState<MemorizationFlowScreen> {
+  late final AudioPlaybackController _audio;
+
   @override
   void initState() {
     super.initState();
+    _audio = ref.read(audioPlaybackProvider.notifier);
     Future.microtask(
       () => ref.read(guidedSessionProvider.notifier).startOrResume(),
     );
+  }
+
+  @override
+  void dispose() {
+    // Deferred: a provider can't be modified while the tree is unmounting.
+    Future.microtask(_audio.endGuidedListening);
+    super.dispose();
   }
 
   @override

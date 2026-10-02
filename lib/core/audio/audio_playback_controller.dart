@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../quran_text/quran_text_repository.dart';
 import 'ayah_audio_cache.dart';
+import 'playback_plan.dart';
 import 'playback_state.dart';
 import 'reciter.dart';
 
@@ -136,7 +137,19 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   Future<void> stop() async {
     await _player.stop();
     _hasLoadedSource = false;
+    // The whole app scope can be torn down while the player is stopping.
+    if (!ref.mounted) return;
     state = state.copyWith(isPlaying: false);
+  }
+
+  /// Leaving a guided Mémorisation session: stop, and drop its special
+  /// repeat mode, so the Reading mini-player isn't left looping a range or
+  /// stopping after N plays.
+  Future<void> endGuidedListening() async {
+    if (!ref.mounted) return;
+    await stop();
+    if (!ref.mounted) return;
+    setNoRepeat();
   }
 
   Future<void> setSpeed(double speed) async {
@@ -168,6 +181,16 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     );
   }
 
+  /// Play the current ayah [repeats] + 1 times, then stop on it — Répéter
+  /// must never run on into the following verse.
+  void setRepeatThenStop(int repeats) {
+    state = state.copyWith(
+      repeatMode: RepeatMode.repeatThenStop,
+      repeatTarget: repeats,
+      repeatProgress: 0,
+    );
+  }
+
   /// Repeat the current ayah forever — the mini-player's "boucle infinie"
   /// option.
   void setInfiniteRepeat() {
@@ -189,13 +212,18 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     );
   }
 
+  /// Skip to the next ayah — crossing into the next sourate after the
+  /// last ayah of this one.
   Future<void> next() async {
-    final repo = await ref.read(quranTextProvider.future);
     if (!state.hasCurrentAyah) return;
-    final surah = repo.surah(state.surahNumber!);
-    if (state.ayahNumber! < surah.ayahs.length) {
-      await playFrom(state.surahNumber!, state.ayahNumber! + 1);
-    }
+    final repo = await ref.read(quranTextProvider.future);
+    final target = ayahAfter(
+      state.surahNumber!,
+      state.ayahNumber!,
+      ayahCount: repo.surah(state.surahNumber!).ayahs.length,
+    );
+    if (target == null) return;
+    await playFrom(target.surah, target.ayah);
   }
 
   Future<void> previous() async {
@@ -206,32 +234,37 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   }
 
   Future<void> _onAyahCompleted() async {
-    switch (state.repeatMode) {
-      case RepeatMode.off:
-        await next();
-      case RepeatMode.repeatAyah:
+    if (!state.hasCurrentAyah) return;
+    final repo = await ref.read(quranTextProvider.future);
+    final action = afterAyahCompleted(
+      state,
+      ayahCount: repo.surah(state.surahNumber!).ayahs.length,
+    );
+
+    switch (action) {
+      case ReplayAyah(:final repeatProgress):
+        state = state.copyWith(repeatProgress: repeatProgress);
         await _loadAndPlayCurrent();
-      case RepeatMode.repeatRange:
-        final start = state.repeatRangeStart ?? state.ayahNumber!;
-        final end = state.repeatRangeEnd ?? state.ayahNumber!;
-        final nextAyah = (state.ayahNumber ?? start) + 1;
-        if (nextAyah > end) {
-          state = state.copyWith(ayahNumber: start);
-        } else {
-          state = state.copyWith(ayahNumber: nextAyah);
-        }
+      case PlayAyah(:final surah, :final ayah, :final repeatProgress):
+        state = state.copyWith(
+          surahNumber: surah,
+          ayahNumber: ayah,
+          repeatProgress: repeatProgress,
+        );
         await _loadAndPlayCurrent();
-      case RepeatMode.repeatEachAyahNTimes:
-        // repeatTarget is how many times to REPEAT (the "1"/"2"/"3" on the
-        // button), so the ayah plays repeatTarget + 1 times in total —
-        // repeatProgress counts repeats done so far, not total plays.
-        if (state.repeatProgress < state.repeatTarget) {
-          state = state.copyWith(repeatProgress: state.repeatProgress + 1);
-          await _loadAndPlayCurrent();
-        } else {
-          state = state.copyWith(repeatProgress: 0);
-          await next();
-        }
+      case StopPlayback(:final lineUp):
+        // Truly stop (the player otherwise keeps reporting `playing` on a
+        // finished source) and drop the loaded source, so that play loads
+        // the lined-up ayah instead of "resuming" the finished one.
+        await _player.stop();
+        _hasLoadedSource = false;
+        state = state.copyWith(
+          surahNumber: lineUp?.surah,
+          ayahNumber: lineUp?.ayah,
+          isPlaying: false,
+          isLoading: false,
+          repeatProgress: 0,
+        );
     }
   }
 }

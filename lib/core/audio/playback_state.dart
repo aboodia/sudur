@@ -6,7 +6,15 @@
 /// - [repeatRange] : boucle sur une plage d'ayahs choisie par l'utilisateur.
 /// - [repeatEachAyahNTimes] : rejoue chaque ayah N fois avant de passer au
 ///   suivant — mode répétition pour la mémorisation.
-enum RepeatMode { off, repeatAyah, repeatRange, repeatEachAyahNTimes }
+/// - [repeatThenStop] : joue l'ayah courant N fois puis s'arrête, sans
+///   jamais passer au suivant — l'étape Répéter de la Mémorisation.
+enum RepeatMode {
+  off,
+  repeatAyah,
+  repeatRange,
+  repeatEachAyahNTimes,
+  repeatThenStop,
+}
 
 class ReadingPlaybackState {
   const ReadingPlaybackState({

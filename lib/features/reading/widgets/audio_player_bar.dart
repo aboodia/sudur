@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/audio/playback_state.dart';
 import '../../../core/audio/reciter.dart';
+import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 
 const _kSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
@@ -16,7 +17,12 @@ const _kSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
 /// autre onglet — plutôt que de devoir renaviguer vers le bon écran pour
 /// le retrouver.
 class AudioPlayerBar extends ConsumerWidget {
-  const AudioPlayerBar({super.key});
+  const AudioPlayerBar({super.key, this.onShowPage});
+
+  /// Called with the Mushaf page of the playing ayah when its name is
+  /// tapped, by a screen that already shows the Mushaf (it just turns to
+  /// that page). Null elsewhere: the Mushaf is then opened on that page.
+  final void Function(int page)? onShowPage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,9 +67,17 @@ class AudioPlayerBar extends ConsumerWidget {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () => context.push(
-                    '/lecture/sourate/${playback.surahNumber}?ayah=${playback.ayahNumber}',
-                  ),
+                  onTap: () async {
+                    final mushaf = await ref.read(mushafRepositoryProvider.future);
+                    final page =
+                        mushaf.pageForAyah(playback.surahNumber!, playback.ayahNumber!) ?? 1;
+                    if (!context.mounted) return;
+                    if (onShowPage != null) {
+                      onShowPage!(page);
+                    } else {
+                      context.push('/lecture/mushaf?page=$page');
+                    }
+                  },
                   child: Text(
                     '$surahName · verset ${playback.ayahNumber}'
                     '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget + 1})' : ''}',
@@ -99,6 +113,7 @@ class _RepeatModeButton extends StatelessWidget {
     switch (playback.repeatMode) {
       case RepeatMode.off:
       case RepeatMode.repeatRange:
+      case RepeatMode.repeatThenStop:
         controller.setRepeatCount(1);
       case RepeatMode.repeatEachAyahNTimes:
         if (playback.repeatTarget < 3) {
@@ -115,6 +130,7 @@ class _RepeatModeButton extends StatelessWidget {
     switch (playback.repeatMode) {
       case RepeatMode.off:
       case RepeatMode.repeatRange:
+      case RepeatMode.repeatThenStop:
         return Icon(Icons.repeat, color: color);
       case RepeatMode.repeatAyah:
         return Text('∞', style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.bold));

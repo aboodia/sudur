@@ -54,6 +54,17 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
     ref.read(audioPlaybackProvider.notifier).prepare(firstAyah.surah, firstAyah.ayah);
   }
 
+  /// Turns to [page] — the mini-player's "go to the playing ayah".
+  void _showPage(int page) {
+    if (_controller.hasClients && page != _currentPage) {
+      _controller.animateToPage(
+        page - 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -148,7 +159,7 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         child: _showChrome
-            ? const AudioPlayerBar()
+            ? AudioPlayerBar(onShowPage: _showPage)
             : _CollapsedPageBadge(
                 pageNumber: _currentPage,
                 onTap: () => setState(() => _showChrome = true),

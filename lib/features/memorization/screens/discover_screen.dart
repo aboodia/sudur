@@ -40,12 +40,13 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   /// Sets up the mini-player (range, first ayah) without starting
   /// playback — Découvrir waits for the user to press play themselves,
-  /// same as every other step.
+  /// same as every other step. `select` (not `prepare`) so the player
+  /// really moves to this passage even if another ayah is still current.
   void _prepare() {
     if (!mounted) return;
     final audio = ref.read(audioPlaybackProvider.notifier);
     audio.setRepeatRange(widget.passage.ayahStart, widget.passage.ayahEnd);
-    audio.prepare(widget.passage.surahNumber, widget.passage.ayahStart);
+    audio.select(widget.passage.surahNumber, widget.passage.ayahStart);
   }
 
   void _play() {

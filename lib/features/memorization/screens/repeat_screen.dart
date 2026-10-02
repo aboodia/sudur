@@ -37,20 +37,24 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
     // state-notification cascade (e.g. resuming straight into Répéter on
     // app start), where writing to audioPlaybackProvider right away is
     // rejected by Riverpod.
-    Future.microtask(_play);
+    Future.microtask(_prepare);
   }
 
   @override
   void didUpdateWidget(covariant RepeatScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.ayahNumber != widget.ayahNumber) _play();
+    if (oldWidget.ayahNumber != widget.ayahNumber) _prepare();
   }
 
-  void _play() {
+  /// Lines up this verse — [_defaultRepeatTimes] listens, then stop on it,
+  /// never on to the next verse — without starting playback: it waits for
+  /// the user to press play. `select` (not `prepare`) so the player really
+  /// moves to this verse even if the previous one is still current.
+  void _prepare() {
     if (!mounted) return;
     final audio = ref.read(audioPlaybackProvider.notifier);
-    audio.setRepeatCount(_defaultRepeatTimes - 1);
-    audio.playFrom(widget.passage.surahNumber, widget.ayahNumber);
+    audio.setRepeatThenStop(_defaultRepeatTimes - 1);
+    audio.select(widget.passage.surahNumber, widget.ayahNumber);
   }
 
   @override
