@@ -1,0 +1,158 @@
+// Widget tests for the "Suivi" tab of Le Chemin. The Mushaf coverage is
+// injected (the layout asset is covered by its own tests); the database is
+// filled before the scope, as in the other screen tests.
+
+import 'package:drift/native.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/core/database/memorization_repository.dart';
+import 'package:sudur/core/database/profile_repository.dart';
+import 'package:sudur/core/path/surah_stories.dart';
+import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
+import 'package:sudur/core/stats/progress_history_provider.dart';
+import 'package:sudur/features/path/path_screen.dart';
+import 'package:sudur/l10n/app_localizations.dart';
+
+late QuranReferenceRepository _reference;
+
+Future<void> _settle(WidgetTester tester) async {
+  for (var i = 0; i < 100; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+    if (i >= 3 && find.byType(CircularProgressIndicator).evaluate().isEmpty) {
+      break;
+    }
+  }
+  await tester.pump(const Duration(milliseconds: 100));
+}
+
+Future<void> _openFollowUp(
+  WidgetTester tester,
+  AppDatabase db, {
+  List<double>? coverage,
+}) async {
+  tester.view.physicalSize = const Size(900, 3000);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+
+  final router = GoRouter(
+    initialLocation: '/chemin',
+    routes: [GoRoute(path: '/chemin', builder: (_, _) => const PathScreen())],
+  );
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        appDatabaseProvider.overrideWithValue(db),
+        quranReferenceProvider.overrideWith((ref) => _reference),
+        surahStoriesProvider.overrideWith((ref) => const {}),
+        mushafCoverageProvider.overrideWith(
+          (ref) async => coverage ?? List.filled(604, 0.0),
+        ),
+      ],
+      child: MaterialApp.router(
+        routerConfig: router,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    ),
+  );
+  await _settle(tester);
+  await tester.tap(find.text('Suivi'));
+  await _settle(tester);
+}
+
+void main() {
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    _reference = await QuranReferenceRepository.load();
+  });
+
+  testWidgets('a new user sees encouraging empty states, not blank charts', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    await _openFollowUp(tester, db);
+
+    expect(tester.takeException(), isNull);
+    expect(
+      find.text('Ta courbe commencera avec ton premier passage mémorisé.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Ton historique apparaîtra ici dès ta première session.'),
+      findsOneWidget,
+    );
+    expect(find.text('0 page(s) complète(s) · 0 entamée(s) sur 604'), findsOne);
+  });
+
+  testWidgets('sessions are listed newest first with kind and duration', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    final repo = MemorizationRepository(db);
+    final now = DateTime.now();
+    await repo.logStudySession(
+      profileId: profile.id,
+      kind: 'memorization',
+      startedAt: now.subtract(const Duration(days: 1)),
+      duration: const Duration(minutes: 12),
+      ayahCount: 4,
+    );
+    await repo.logStudySession(
+      profileId: profile.id,
+      kind: 'revision',
+      startedAt: now.subtract(const Duration(days: 2)),
+      duration: const Duration(seconds: 20),
+      ayahCount: 7,
+    );
+
+    await _openFollowUp(tester, db);
+    await tester.scrollUntilVisible(
+      find.text('Mémorisation · 4 verset(s)'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+
+    expect(find.text('Mémorisation · 4 verset(s)'), findsOneWidget);
+    expect(find.textContaining('Hier'), findsOneWidget);
+    expect(find.textContaining('· 12 min'), findsOneWidget);
+    // A real session of twenty seconds is never shown as "0 min".
+    expect(find.text('Révision · 7 verset(s)'), findsOneWidget);
+    expect(find.textContaining('· 1 min'), findsOneWidget);
+  });
+
+  testWidgets('the curve reports the gain over the chosen period', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    // Declared today: its 7 verses are new within the last 30 days.
+    await MemorizationRepository(db).markSurahMemorized(profile.id, 1, 7);
+
+    await _openFollowUp(tester, db);
+
+    expect(find.text('+7 verset(s) sur la période'), findsOneWidget);
+    expect(find.text('30 j'), findsOneWidget);
+
+    await tester.tap(find.text('Tout'));
+    await _settle(tester);
+    expect(tester.takeException(), isNull);
+    expect(find.text('Courbe de progression'), findsOneWidget);
+  });
+
+  testWidgets('the map summary counts complete and started pages', (
+    tester,
+  ) async {
+    final coverage = List.filled(604, 0.0);
+    coverage[0] = 1.0;
+    coverage[1] = 1.0;
+    coverage[2] = 0.4;
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    await _openFollowUp(tester, db, coverage: coverage);
+
+    expect(find.text('2 page(s) complète(s) · 1 entamée(s) sur 604'), findsOne);
+  });
+}

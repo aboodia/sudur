@@ -487,4 +487,82 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get storyOpen => 'Voir l\'histoire';
+
+  @override
+  String get pathTabTrace => 'Tracé';
+
+  @override
+  String get pathTabFollowUp => 'Suivi';
+
+  @override
+  String get curveTitle => 'Courbe de progression';
+
+  @override
+  String get curvePeriod30 => '30 j';
+
+  @override
+  String get curvePeriod90 => '90 j';
+
+  @override
+  String get curvePeriodAll => 'Tout';
+
+  @override
+  String curveGain(int n) {
+    return '+$n verset(s) sur la période';
+  }
+
+  @override
+  String get curveNoGain => 'Pas de nouveau verset sur la période.';
+
+  @override
+  String get curveEmpty =>
+      'Ta courbe commencera avec ton premier passage mémorisé.';
+
+  @override
+  String curveSemantics(int from, int to) {
+    return 'Versets mémorisés : $from au début de la période, $to aujourd\'hui';
+  }
+
+  @override
+  String get mapTitle => 'Carte du Mushaf';
+
+  @override
+  String get mapSubtitle => 'Chaque case est une page des 604 du Mushaf.';
+
+  @override
+  String mapSummary(int full, int partial, int total) {
+    return '$full page(s) complète(s) · $partial entamée(s) sur $total';
+  }
+
+  @override
+  String get mapLegendNone => 'Pas commencée';
+
+  @override
+  String get mapLegendPartial => 'En cours';
+
+  @override
+  String get mapLegendFull => 'Complète';
+
+  @override
+  String get historyTitle => 'Historique';
+
+  @override
+  String get historyEmpty =>
+      'Ton historique apparaîtra ici dès ta première session.';
+
+  @override
+  String get historyKindMemorization => 'Mémorisation';
+
+  @override
+  String get historyKindRevision => 'Révision';
+
+  @override
+  String historyLine(String kind, int n) {
+    return '$kind · $n verset(s)';
+  }
+
+  @override
+  String historyDetail(String when, int min) {
+    return '$when · $min min';
+  }
 }

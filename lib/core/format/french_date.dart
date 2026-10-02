@@ -48,10 +48,12 @@ String frenchDateLabel(DateTime date) =>
 String frenchFullDate(DateTime date) =>
     '${date.day} ${frenchMonth(date.month)} ${date.year}';
 
-/// "aujourd'hui", "demain" or "lundi 5 octobre" — [day] relative to [today].
+/// "aujourd'hui", "demain", "hier" or "lundi 5 octobre" — [day] relative
+/// to [today].
 String frenchRelativeDay(DateTime day, DateTime today) {
   final diff = daysBetween(today, day);
   if (diff == 0) return 'aujourd\'hui';
   if (diff == 1) return 'demain';
+  if (diff == -1) return 'hier';
   return '${frenchWeekday(day.weekday)} ${day.day} ${frenchMonth(day.month)}';
 }

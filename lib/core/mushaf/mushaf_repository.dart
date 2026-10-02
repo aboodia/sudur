@@ -99,6 +99,29 @@ class MushafRepository {
     return pageForWordId(wordId);
   }
 
+  Map<({int surah, int ayah}), int>? _firstPageByAyah;
+
+  /// For every ayah, the page on which it begins — built in one pass over
+  /// the layout (and cached), where calling [pageForAyah] for each of the
+  /// 6,236 ayahs would scan the whole layout every time.
+  Map<({int surah, int ayah}), int> firstPageByAyah() =>
+      _firstPageByAyah ??= _buildFirstPageByAyah();
+
+  Map<({int surah, int ayah}), int> _buildFirstPageByAyah() {
+    final result = <({int surah, int ayah}), int>{};
+    for (var page = 1; page <= pageCount; page++) {
+      for (final line in _linesByPage[page] ?? const <MushafLine>[]) {
+        if (!line.hasWords) continue;
+        for (var id = line.firstWordId!; id <= line.lastWordId!; id++) {
+          final word = _words[id];
+          if (word == null) continue;
+          result.putIfAbsent((surah: word.surah, ayah: word.ayah), () => page);
+        }
+      }
+    }
+    return result;
+  }
+
   /// The (surah, ayah) of the first ayah on [page] — a page can start
   /// mid-sourate, so this is what labels the page header (surah name, Juz)
   /// rather than assuming the page's own banner line.

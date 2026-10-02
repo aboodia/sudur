@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../database/memorization_repository.dart';
 import '../database/profile_repository.dart';
 import '../quran_reference/quran_reference_repository.dart';
+import 'memorized_set.dart';
 import 'progress_stats.dart';
 
 /// The figures on the dashboard's "Statistiques de progression".
@@ -41,15 +42,7 @@ final progressStatsProvider = FutureProvider<ProgressStats>((ref) async {
   final sessions = await repo.studySessions(profile.id);
   final now = DateTime.now();
 
-  // Verses memorized through the guided parcours have their own rows;
-  // sourates declared in the onboarding have none (a hafiz would mean
-  // thousands of rows), they are simply complete.
-  final memorized = <({int surah, int ayah})>{
-    for (final r in ayahRows) (surah: r.surahNumber, ayah: r.ayahNumber),
-    for (final r in surahRows.where((r) => r.completedAt != null))
-      for (var a = 1; a <= r.totalAyahCount; a++)
-        (surah: r.surahNumber, ayah: a),
-  };
+  final memorized = memorizedAyahSet(surahRows, ayahRows);
 
   return ProgressStats(
     memorizedAyahs: memorized.length,

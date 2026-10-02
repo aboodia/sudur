@@ -212,4 +212,35 @@
   "storySource": "Source : {source}",
   "@storySource": {"placeholders": {"source": {"type": "String"}}},
   "storyOpen": "Voir l'histoire"
+  ,
+
+  "pathTabTrace": "Tracé",
+  "pathTabFollowUp": "Suivi",
+  "curveTitle": "Courbe de progression",
+  "curvePeriod30": "30 j",
+  "curvePeriod90": "90 j",
+  "curvePeriodAll": "Tout",
+  "curveGain": "+{n} verset(s) sur la période",
+  "@curveGain": {"placeholders": {"n": {"type": "int"}}},
+  "curveNoGain": "Pas de nouveau verset sur la période.",
+  "curveEmpty": "Ta courbe commencera avec ton premier passage mémorisé.",
+  "curveSemantics": "Versets mémorisés : {from} au début de la période, {to} aujourd'hui",
+  "@curveSemantics": {"placeholders": {"from": {"type": "int"}, "to": {"type": "int"}}},
+  "mapTitle": "Carte du Mushaf",
+  "mapSubtitle": "Chaque case est une page des 604 du Mushaf.",
+  "mapSummary": "{full} page(s) complète(s) · {partial} entamée(s) sur {total}",
+  "@mapSummary": {
+    "placeholders": {"full": {"type": "int"}, "partial": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "mapLegendNone": "Pas commencée",
+  "mapLegendPartial": "En cours",
+  "mapLegendFull": "Complète",
+  "historyTitle": "Historique",
+  "historyEmpty": "Ton historique apparaîtra ici dès ta première session.",
+  "historyKindMemorization": "Mémorisation",
+  "historyKindRevision": "Révision",
+  "historyLine": "{kind} · {n} verset(s)",
+  "@historyLine": {"placeholders": {"kind": {"type": "String"}, "n": {"type": "int"}}},
+  "historyDetail": "{when} · {min} min",
+  "@historyDetail": {"placeholders": {"when": {"type": "String"}, "min": {"type": "int"}}}
 }

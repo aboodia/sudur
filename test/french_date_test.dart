@@ -11,6 +11,7 @@ void main() {
     final today = DateTime(2026, 10, 2, 15);
     expect(frenchRelativeDay(DateTime(2026, 10, 2, 1), today), "aujourd'hui");
     expect(frenchRelativeDay(DateTime(2026, 10, 3, 23), today), 'demain');
+    expect(frenchRelativeDay(DateTime(2026, 10, 1, 6), today), 'hier');
     expect(frenchRelativeDay(DateTime(2026, 10, 5), today), 'lundi 5 octobre');
   });
 

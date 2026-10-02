@@ -8,43 +8,80 @@ import '../../core/path/path_providers.dart';
 import '../../core/quran_reference/quran_reference_models.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import '../../l10n/app_localizations.dart';
+import 'widgets/follow_up_view.dart';
 import 'widgets/milestone_sheet.dart';
 
 /// Le Chemin (Siraat): the 114 sourates as milestones along one path —
-/// completed, current, still ahead — opening on where the user is now.
+/// completed, current, still ahead — opening on where the user is now,
+/// next to the detailed follow-up (curve, Mushaf map, history).
 class PathScreen extends ConsumerWidget {
   const PathScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final milestonesAsync = ref.watch(milestonesProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
 
-    return Scaffold(
-      body: SafeArea(
-        child: milestonesAsync.when(
-          data: (milestones) => referenceAsync.when(
-            data: (reference) =>
-                _PathContent(milestones: milestones, reference: reference),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, _) => Center(child: Text('Erreur : $err')),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.pathTitle),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: l10n.pathTabTrace),
+              Tab(text: l10n.pathTabFollowUp),
+            ],
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text('Erreur : $err')),
+        ),
+        body: TabBarView(
+          children: [
+            SafeArea(
+              child: milestonesAsync.when(
+                data: (milestones) => referenceAsync.when(
+                  data: (reference) => _PathContent(
+                    milestones: milestones,
+                    reference: reference,
+                  ),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (err, _) => Center(child: Text('Erreur : $err')),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, _) => Center(child: Text('Erreur : $err')),
+              ),
+            ),
+            const SafeArea(child: FollowUpView()),
+          ],
         ),
       ),
     );
   }
 }
 
-class _PathContent extends StatelessWidget {
+class _PathContent extends StatefulWidget {
   const _PathContent({required this.milestones, required this.reference});
 
   final List<Milestone> milestones;
   final QuranReferenceRepository reference;
 
   @override
+  State<_PathContent> createState() => _PathContentState();
+}
+
+class _PathContentState extends State<_PathContent>
+    with AutomaticKeepAliveClientMixin {
+  // Switching to the follow-up tab and back must not jump the path back to
+  // the current milestone.
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final milestones = widget.milestones;
+    final reference = widget.reference;
     final current = currentMilestone(milestones);
     // Open one step before the current milestone, so the way just walked
     // stays in view above it.
@@ -111,8 +148,6 @@ class _SummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.pathTitle, style: theme.textTheme.headlineMedium),
-          const SizedBox(height: 4),
           Text(
             l10n.pathSummaryTitle(done, milestones.length),
             style: theme.textTheme.titleMedium,

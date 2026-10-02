@@ -891,6 +891,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir l\'histoire'**
   String get storyOpen;
+
+  /// No description provided for @pathTabTrace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tracé'**
+  String get pathTabTrace;
+
+  /// No description provided for @pathTabFollowUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivi'**
+  String get pathTabFollowUp;
+
+  /// No description provided for @curveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe de progression'**
+  String get curveTitle;
+
+  /// No description provided for @curvePeriod30.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 j'**
+  String get curvePeriod30;
+
+  /// No description provided for @curvePeriod90.
+  ///
+  /// In fr, this message translates to:
+  /// **'90 j'**
+  String get curvePeriod90;
+
+  /// No description provided for @curvePeriodAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout'**
+  String get curvePeriodAll;
+
+  /// No description provided for @curveGain.
+  ///
+  /// In fr, this message translates to:
+  /// **'+{n} verset(s) sur la période'**
+  String curveGain(int n);
+
+  /// No description provided for @curveNoGain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de nouveau verset sur la période.'**
+  String get curveNoGain;
+
+  /// No description provided for @curveEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta courbe commencera avec ton premier passage mémorisé.'**
+  String get curveEmpty;
+
+  /// No description provided for @curveSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'Versets mémorisés : {from} au début de la période, {to} aujourd\'hui'**
+  String curveSemantics(int from, int to);
+
+  /// No description provided for @mapTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte du Mushaf'**
+  String get mapTitle;
+
+  /// No description provided for @mapSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque case est une page des 604 du Mushaf.'**
+  String get mapSubtitle;
+
+  /// No description provided for @mapSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{full} page(s) complète(s) · {partial} entamée(s) sur {total}'**
+  String mapSummary(int full, int partial, int total);
+
+  /// No description provided for @mapLegendNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas commencée'**
+  String get mapLegendNone;
+
+  /// No description provided for @mapLegendPartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get mapLegendPartial;
+
+  /// No description provided for @mapLegendFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Complète'**
+  String get mapLegendFull;
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get historyTitle;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton historique apparaîtra ici dès ta première session.'**
+  String get historyEmpty;
+
+  /// No description provided for @historyKindMemorization.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémorisation'**
+  String get historyKindMemorization;
+
+  /// No description provided for @historyKindRevision.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révision'**
+  String get historyKindRevision;
+
+  /// No description provided for @historyLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{kind} · {n} verset(s)'**
+  String historyLine(String kind, int n);
+
+  /// No description provided for @historyDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'{when} · {min} min'**
+  String historyDetail(String when, int min);
 }
 
 class _AppLocalizationsDelegate
