@@ -51,11 +51,13 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
   /// Prépare le mini-lecteur pour un ayah sans lancer sa lecture — utilisé
   /// à l'entrée sur un écran de lecture pour que la barre soit visible
   /// tout de suite, prête à jouer, sans attendre qu'on clique un ayah.
-  /// N'écrase jamais un ayah déjà courant (en cours de lecture, en pause,
-  /// ou déjà préparé ailleurs) : la lecture en tenue ailleurs dans l'app
-  /// prime toujours sur la simple ouverture d'un nouvel écran.
+  /// N'écrase jamais une lecture en cours (ou en chargement) ailleurs dans
+  /// l'app : elle prime sur la simple ouverture d'un nouvel écran. En
+  /// revanche, un ayah simplement à l'arrêt (en pause, ou resté là après une
+  /// session de Mémorisation) est remplacé : ouvrir une sourate cale le
+  /// lecteur dessus.
   void prepare(int surahNumber, int ayahNumber) {
-    if (state.hasCurrentAyah) return;
+    if (state.hasCurrentAyah && (state.isPlaying || state.isLoading)) return;
     _hasLoadedSource = false;
     state = state.copyWith(surahNumber: surahNumber, ayahNumber: ayahNumber);
   }
