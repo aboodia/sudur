@@ -20,7 +20,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
+          appDatabaseProvider.overrideWithValue(
+            AppDatabase.forTesting(NativeDatabase.memory()),
+          ),
         ],
         child: const SudurApp(),
       ),
@@ -31,11 +33,15 @@ void main() {
     expect(find.text('Accueil'), findsNothing);
   });
 
-  testWidgets('completing Onboarding reveals the 5 navigation tabs', (tester) async {
+  testWidgets('completing Onboarding reveals the 4 navigation tabs', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          appDatabaseProvider.overrideWithValue(AppDatabase.forTesting(NativeDatabase.memory())),
+          appDatabaseProvider.overrideWithValue(
+            AppDatabase.forTesting(NativeDatabase.memory()),
+          ),
         ],
         child: const SudurApp(),
       ),
@@ -54,7 +60,8 @@ void main() {
     expect(find.text('Accueil'), findsWidgets);
     expect(find.text('Lecture'), findsWidgets);
     expect(find.text('Chemin'), findsWidgets);
-    expect(find.text('Communauté'), findsWidgets);
+    // La Communauté (Brique 8) est volontairement retirée pour l'instant.
+    expect(find.text('Communauté'), findsNothing);
     expect(find.text('Profil'), findsWidgets);
   });
 }

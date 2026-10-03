@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/community/community_screen.dart';
 import '../features/gamification/success_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/memorization/memorization_flow_screen.dart';
@@ -71,14 +70,6 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/chemin',
               builder: (context, state) => const PathScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/communaute',
-              builder: (context, state) => const CommunityScreen(),
             ),
           ],
         ),
@@ -161,11 +152,6 @@ class _SudurScaffold extends StatelessWidget {
                     icon: Icon(Icons.route_outlined),
                     selectedIcon: Icon(Icons.route),
                     label: 'Chemin',
-                  ),
-                  NavigationDestination(
-                    icon: Icon(Icons.groups_outlined),
-                    selectedIcon: Icon(Icons.groups),
-                    label: 'Communauté',
                   ),
                   NavigationDestination(
                     icon: Icon(Icons.person_outline),

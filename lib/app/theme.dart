@@ -79,9 +79,9 @@ class SudurTheme {
 }
 
 /// Tab labels of the bottom bar. The default style spaces the letters out,
-/// which pushes "Communauté" past the width of one of five tabs on a phone
-/// and wraps its last letter onto a second line; without the extra spacing
-/// it stays on one line.
+/// which can push the longest label past the width of its tab on a phone
+/// and wrap its last letter onto a second line (as "Communauté" did with
+/// five tabs); without the extra spacing labels stay on one line.
 WidgetStateProperty<TextStyle?> navigationLabelStyle(ColorScheme scheme) =>
     WidgetStateProperty.resolveWith((states) {
       final selected = states.contains(WidgetState.selected);

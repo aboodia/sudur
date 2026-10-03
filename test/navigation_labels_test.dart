@@ -4,8 +4,8 @@ import 'package:sudur/app/theme.dart';
 import 'package:sudur/core/settings/theme_settings.dart';
 
 void main() {
-  // "Communauté" is the longest of five tab labels; with the default letter
-  // spacing it wrapped onto a second line on a phone. The test environment
+  // With the default letter spacing a long tab label wrapped onto a second
+  // line on a phone ("Communauté", when there were five tabs). The test environment
   // does not have the app's font, so it checks the cause: no extra spacing,
   // one line's worth of size, in every theme.
   for (final variant in SudurThemeVariant.values) {
