@@ -40,7 +40,14 @@ class _SurahReadingScreenState extends ConsumerState<SurahReadingScreen> {
     // à jouer l'ayah demandé sans attendre un premier tap — sauf si une
     // lecture est déjà en cours ailleurs, que [prepare] ne doit pas
     // écraser.
-    ref.read(audioPlaybackProvider.notifier).prepare(widget.surahNumber, widget.initialAyah ?? 1);
+    //
+    // Différé : modifier un provider pendant la construction de l'arbre est
+    // refusé par Riverpod (c'était l'erreur affichée en ouvrant cet écran
+    // depuis la vue Mushaf).
+    Future.microtask(() {
+      if (!mounted) return;
+      ref.read(audioPlaybackProvider.notifier).prepare(widget.surahNumber, widget.initialAyah ?? 1);
+    });
   }
 
   @override
