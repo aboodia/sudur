@@ -119,4 +119,16 @@ void main() {
     );
     expect(n, 2);
   });
+
+  test('isSameDay ignores the time of day', () {
+    expect(
+      isSameDay(DateTime(2026, 10, 3, 0, 1), DateTime(2026, 10, 3, 23)),
+      isTrue,
+    );
+    expect(
+      isSameDay(DateTime(2026, 10, 3, 23, 59), DateTime(2026, 10, 4)),
+      isFalse,
+    );
+    expect(isSameDay(DateTime(2025, 10, 3), DateTime(2026, 10, 3)), isFalse);
+  });
 }

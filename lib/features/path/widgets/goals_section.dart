@@ -8,46 +8,82 @@ import '../../../l10n/app_localizations.dart';
 
 /// Weekly and monthly goals: how many new verses, how many are done, and
 /// what is left — said as encouragement, never as a reproach.
-class GoalsSection extends ConsumerWidget {
+class GoalsSection extends ConsumerStatefulWidget {
   const GoalsSection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  ConsumerState<GoalsSection> createState() => _GoalsSectionState();
+}
+
+class _GoalsSectionState extends ConsumerState<GoalsSection>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // The goals are computed for a given day: coming back to an app left open
+  // overnight (or over a Monday) must not show the previous period.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) ref.invalidate(goalsProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final goalsAsync = ref.watch(goalsProvider);
 
     return goalsAsync.when(
-      data: (goals) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(l10n.goalsTitle, style: theme.textTheme.titleLarge),
-              ),
-              TextButton.icon(
-                onPressed: () => showGoalsEditor(context, goals),
-                icon: const Icon(Icons.tune, size: 18),
-                label: Text(l10n.goalsEdit),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _GoalCard(title: l10n.goalWeekTitle, progress: goals.week),
-          const SizedBox(height: 12),
-          _GoalCard(title: l10n.goalMonthTitle, progress: goals.month),
-          if (goals.weeklyIsDefault || goals.monthlyIsDefault) ...[
-            const SizedBox(height: 8),
-            Text(l10n.goalSuggested, style: theme.textTheme.bodySmall),
-          ],
-        ],
-      ),
+      data: (goals) {
+        if (!isSameDay(goals.computedOn, DateTime.now())) {
+          Future.microtask(() {
+            if (mounted) ref.invalidate(goalsProvider);
+          });
+        }
+        return _content(context, goals);
+      },
       loading: () => const SizedBox(
         height: 120,
         child: Center(child: CircularProgressIndicator()),
       ),
       error: (err, _) => Text('Erreur : $err'),
+    );
+  }
+
+  Widget _content(BuildContext context, GoalsState goals) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(l10n.goalsTitle, style: theme.textTheme.titleLarge),
+            ),
+            TextButton.icon(
+              onPressed: () => showGoalsEditor(context, goals),
+              icon: const Icon(Icons.tune, size: 18),
+              label: Text(l10n.goalsEdit),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _GoalCard(title: l10n.goalWeekTitle, progress: goals.week),
+        const SizedBox(height: 12),
+        _GoalCard(title: l10n.goalMonthTitle, progress: goals.month),
+        if (goals.weeklyIsDefault || goals.monthlyIsDefault) ...[
+          const SizedBox(height: 8),
+          Text(l10n.goalSuggested, style: theme.textTheme.bodySmall),
+        ],
+      ],
     );
   }
 }
@@ -150,19 +186,24 @@ class _GoalsEditor extends ConsumerStatefulWidget {
 }
 
 class _GoalsEditorState extends ConsumerState<_GoalsEditor> {
-  late int _weekly = widget.goals.week.goal;
-  late int _monthly = widget.goals.month.goal;
+  // What the user chose; null = follow the proposal. A value picked on
+  // purpose stays, even when it happens to equal today's proposal.
+  late int? _weeklyChoice = widget.goals.weeklyIsDefault
+      ? null
+      : widget.goals.week.goal;
+  late int? _monthlyChoice = widget.goals.monthlyIsDefault
+      ? null
+      : widget.goals.month.goal;
 
   Future<void> _save() async {
     final profile = await ref.read(currentProfileProvider.future);
-    final defaults = widget.goals.defaults;
-    // A value equal to the proposal is stored as "not chosen", so it keeps
-    // following the daily time if that changes.
-    final weekly = _weekly == defaults.weekly ? null : _weekly;
-    final monthly = _monthly == defaults.monthly ? null : _monthly;
     await ref
         .read(userProfileRepositoryProvider)
-        .setGoals(id: profile.id, weekly: weekly, monthly: monthly);
+        .setGoals(
+          id: profile.id,
+          weekly: _weeklyChoice,
+          monthly: _monthlyChoice,
+        );
     ref.invalidate(goalsProvider);
     if (mounted) Navigator.of(context).pop();
   }
@@ -172,8 +213,8 @@ class _GoalsEditorState extends ConsumerState<_GoalsEditor> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final defaults = widget.goals.defaults;
-    final isDefault =
-        _weekly == defaults.weekly && _monthly == defaults.monthly;
+    final weekly = _weeklyChoice ?? defaults.weekly;
+    final monthly = _monthlyChoice ?? defaults.monthly;
 
     return SafeArea(
       child: Padding(
@@ -193,23 +234,23 @@ class _GoalsEditorState extends ConsumerState<_GoalsEditor> {
             const SizedBox(height: 20),
             _Stepper(
               label: l10n.goalEditWeekly,
-              value: _weekly,
+              value: weekly,
               max: maxWeeklyGoal,
-              onChanged: (v) => setState(() => _weekly = v),
+              onChanged: (v) => setState(() => _weeklyChoice = v),
             ),
             const SizedBox(height: 12),
             _Stepper(
               label: l10n.goalEditMonthly,
-              value: _monthly,
+              value: monthly,
               max: maxMonthlyGoal,
-              onChanged: (v) => setState(() => _monthly = v),
+              onChanged: (v) => setState(() => _monthlyChoice = v),
             ),
             const SizedBox(height: 16),
-            if (!isDefault)
+            if (_weeklyChoice != null || _monthlyChoice != null)
               TextButton(
                 onPressed: () => setState(() {
-                  _weekly = defaults.weekly;
-                  _monthly = defaults.monthly;
+                  _weeklyChoice = null;
+                  _monthlyChoice = null;
                 }),
                 child: Text(l10n.goalEditReset),
               ),

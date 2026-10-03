@@ -13,6 +13,7 @@ import 'package:sudur/core/database/profile_repository.dart';
 import 'package:sudur/core/memorization/review_scheduler.dart';
 import 'package:sudur/core/path/surah_stories.dart';
 import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
+import 'package:sudur/core/stats/progress_history.dart';
 import 'package:sudur/core/stats/progress_history_provider.dart';
 import 'package:sudur/features/path/path_screen.dart';
 import 'package:sudur/l10n/app_localizations.dart';
@@ -242,5 +243,71 @@ void main() {
     final saved = await UserProfileRepository(db).getOrCreateLocalProfile();
     expect(saved.weeklyVerseGoal, 6);
     expect(saved.monthlyVerseGoal, 20);
+  });
+
+  testWidgets('a goal picked on purpose stays, even equal to the proposal', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    await UserProfileRepository(db).getOrCreateLocalProfile();
+
+    await _openFollowUp(tester, db);
+    final proposed = (await UserProfileRepository(
+      db,
+    ).getOrCreateLocalProfile()).dailyTargetMinutes;
+    expect(proposed, isNonZero);
+
+    await tester.tap(find.text('Modifier'));
+    await _settle(tester);
+    // Up then down: back on the proposed value, but chosen by the user.
+    await tester.tap(find.byTooltip('Augmenter').first);
+    await tester.pump();
+    await tester.tap(find.byTooltip('Diminuer').first);
+    await tester.pump();
+    await tester.tap(find.text('Enregistrer'));
+    await _settle(tester);
+
+    final saved = await UserProfileRepository(db).getOrCreateLocalProfile();
+    expect(saved.weeklyVerseGoal, isNotNull);
+    expect(saved.monthlyVerseGoal, isNull);
+  });
+
+  testWidgets('resetting goes back to the proposal', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    await UserProfileRepository(db)
+        .setGoals(id: profile.id, weekly: 5, monthly: 20);
+
+    await _openFollowUp(tester, db);
+    await tester.tap(find.text('Modifier'));
+    await _settle(tester);
+    await tester.tap(find.text('Revenir aux valeurs proposées'));
+    await tester.pump();
+    await tester.tap(find.text('Enregistrer'));
+    await _settle(tester);
+
+    final saved = await UserProfileRepository(db).getOrCreateLocalProfile();
+    expect(saved.weeklyVerseGoal, isNull);
+    expect(saved.monthlyVerseGoal, isNull);
+    expect(find.text("Proposé d'après ton temps quotidien."), findsOneWidget);
+  });
+
+  testWidgets('the Suivi tab keeps its period when switching tabs', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    await _openFollowUp(tester, db);
+
+    await tester.tap(find.text('90 j'));
+    await tester.pump();
+    await tester.tap(find.text('Tracé'));
+    await _settle(tester);
+    await tester.tap(find.text('Suivi'));
+    await _settle(tester);
+
+    final selector = tester.widget<SegmentedButton<HistoryPeriod>>(
+      find.byType(SegmentedButton<HistoryPeriod>),
+    );
+    expect(selector.selected, {HistoryPeriod.days90});
   });
 }

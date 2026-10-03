@@ -10,6 +10,7 @@ class GoalsState {
     required this.week,
     required this.month,
     required this.defaults,
+    required this.computedOn,
     required this.weeklyIsDefault,
     required this.monthlyIsDefault,
   });
@@ -19,6 +20,9 @@ class GoalsState {
 
   /// What the app proposes from the daily time and available days.
   final GoalPair defaults;
+
+  /// The day these figures were computed for.
+  final DateTime computedOn;
 
   /// Whether the goal shown is the proposed one (the user never set it).
   final bool weeklyIsDefault;
@@ -35,9 +39,7 @@ final goalsProvider = FutureProvider<GoalsState>((ref) async {
   final profile = await ref
       .watch(userProfileRepositoryProvider)
       .getOrCreateLocalProfile();
-  final ayahRows = await ref
-      .watch(memorizationRepositoryProvider)
-      .allAyahProgress(profile.id);
+  final ayahRows = await ref.watch(ayahProgressProvider.future);
 
   final defaults = defaultGoals(
     dailyTargetMinutes: profile.dailyTargetMinutes,
@@ -70,6 +72,7 @@ final goalsProvider = FutureProvider<GoalsState>((ref) async {
       today: today,
     ),
     defaults: defaults,
+    computedOn: today,
     weeklyIsDefault: profile.weeklyVerseGoal == null,
     monthlyIsDefault: profile.monthlyVerseGoal == null,
   );

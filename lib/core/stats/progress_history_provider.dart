@@ -16,10 +16,8 @@ import 'progress_stats_provider.dart';
 final memorizationEventsProvider = FutureProvider<List<MemorizationEvent>>((
   ref,
 ) async {
-  final profile = await ref.watch(currentProfileProvider.future);
-  final repo = ref.watch(memorizationRepositoryProvider);
-  final surahRows = await repo.allSurahProgress(profile.id);
-  final ayahRows = await repo.allAyahProgress(profile.id);
+  final surahRows = await ref.watch(surahProgressProvider.future);
+  final ayahRows = await ref.watch(ayahProgressProvider.future);
 
   final withVerseRows = {for (final r in ayahRows) r.surahNumber};
   return [
@@ -32,13 +30,11 @@ final memorizationEventsProvider = FutureProvider<List<MemorizationEvent>>((
 
 /// Memorized share of each of the 604 Mushaf pages (index 0 = page 1).
 final mushafCoverageProvider = FutureProvider<List<double>>((ref) async {
-  final profile = await ref.watch(currentProfileProvider.future);
-  final repo = ref.watch(memorizationRepositoryProvider);
   final mushaf = await ref.watch(mushafRepositoryProvider.future);
 
   final memorized = memorizedAyahSet(
-    await repo.allSurahProgress(profile.id),
-    await repo.allAyahProgress(profile.id),
+    await ref.watch(surahProgressProvider.future),
+    await ref.watch(ayahProgressProvider.future),
   );
   return pageCoverage(
     memorized: memorized,
@@ -65,6 +61,8 @@ final studyHistoryProvider = FutureProvider<List<StudySessionEntry>>((
 /// Everything computed from the user's activity goes stale when a verse is
 /// validated or a session ends: refresh it all from one place.
 void refreshProgressData(Ref ref) {
+  ref.invalidate(ayahProgressProvider);
+  ref.invalidate(surahProgressProvider);
   ref.invalidate(progressStatsProvider);
   ref.invalidate(memorizationEventsProvider);
   ref.invalidate(mushafCoverageProvider);

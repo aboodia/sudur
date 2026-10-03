@@ -21,11 +21,18 @@ class FollowUpView extends ConsumerStatefulWidget {
   ConsumerState<FollowUpView> createState() => _FollowUpViewState();
 }
 
-class _FollowUpViewState extends ConsumerState<FollowUpView> {
+class _FollowUpViewState extends ConsumerState<FollowUpView>
+    with AutomaticKeepAliveClientMixin {
   var _period = HistoryPeriod.days30;
+
+  // Switching to the Trace tab and back keeps the chosen period and the
+  // scroll position.
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 

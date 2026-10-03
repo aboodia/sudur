@@ -91,6 +91,10 @@ GoalProgress goalProgress({
   );
 }
 
+/// Whether [a] and [b] fall on the same calendar day.
+bool isSameDay(DateTime a, DateTime b) =>
+    a.year == b.year && a.month == b.month && a.day == b.day;
+
 /// Verses memorized in `[from, to)`, counting each verse once.
 int versesBetween(Iterable<DateTime> memorizedAt, DateTime from, DateTime to) {
   var n = 0;

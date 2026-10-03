@@ -36,8 +36,8 @@ final progressStatsProvider = FutureProvider<ProgressStats>((ref) async {
   final repo = ref.watch(memorizationRepositoryProvider);
   final reference = await ref.watch(quranReferenceProvider.future);
 
-  final surahRows = await repo.allSurahProgress(profile.id);
-  final ayahRows = await repo.allAyahProgress(profile.id);
+  final surahRows = await ref.watch(surahProgressProvider.future);
+  final ayahRows = await ref.watch(ayahProgressProvider.future);
   final log = await repo.reviewLog(profile.id);
   final sessions = await repo.studySessions(profile.id);
   final now = DateTime.now();

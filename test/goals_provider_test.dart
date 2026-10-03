@@ -105,4 +105,13 @@ void main() {
     expect(goals.week.goal, goals.defaults.weekly);
     expect(goals.weeklyIsDefault, isTrue);
   });
+
+  test('goals know which day they were computed for', () async {
+    final c = freshContainer();
+    addTearDown(c.dispose);
+
+    final goals = await c.read(goalsProvider.future);
+
+    expect(isSameDay(goals.computedOn, DateTime.now()), isTrue);
+  });
 }
