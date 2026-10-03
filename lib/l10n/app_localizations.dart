@@ -1323,6 +1323,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{n} nouveau(x) succès à découvrir'**
   String homeNewBadges(int n);
+
+  /// No description provided for @reminderTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sudur'**
+  String get reminderTitle;
+
+  /// No description provided for @reminderBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est l\'heure de ta session de mémorisation.'**
+  String get reminderBody;
+
+  /// No description provided for @reminderBodyComeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ravi de te retrouver quand tu veux : 5 minutes suffisent pour reprendre.'**
+  String get reminderBodyComeBack;
+
+  /// No description provided for @reminderSectionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel quotidien'**
+  String get reminderSectionTitle;
+
+  /// No description provided for @reminderSwitch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me rappeler chaque jour'**
+  String get reminderSwitch;
+
+  /// No description provided for @reminderTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure du rappel'**
+  String get reminderTime;
+
+  /// No description provided for @reminderExplain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seulement les jours où tu es disponible, et jamais si tu as déjà étudié.'**
+  String get reminderExplain;
+
+  /// No description provided for @reminderPermissionDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les notifications sont désactivées pour Sudur. Autorise-les dans les réglages du téléphone pour recevoir le rappel.'**
+  String get reminderPermissionDenied;
 }
 
 class _AppLocalizationsDelegate

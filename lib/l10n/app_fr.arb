@@ -313,5 +313,14 @@
   "achDescStreak": "Étudier {n} jours de suite.",
   "@achDescStreak": {"placeholders": {"n": {"type": "int"}}},
   "homeNewBadges": "{n} nouveau(x) succès à découvrir",
-  "@homeNewBadges": {"placeholders": {"n": {"type": "int"}}}
+  "@homeNewBadges": {"placeholders": {"n": {"type": "int"}}},
+
+  "reminderTitle": "Sudur",
+  "reminderBody": "C'est l'heure de ta session de mémorisation.",
+  "reminderBodyComeBack": "Ravi de te retrouver quand tu veux : 5 minutes suffisent pour reprendre.",
+  "reminderSectionTitle": "Rappel quotidien",
+  "reminderSwitch": "Me rappeler chaque jour",
+  "reminderTime": "Heure du rappel",
+  "reminderExplain": "Seulement les jours où tu es disponible, et jamais si tu as déjà étudié.",
+  "reminderPermissionDenied": "Les notifications sont désactivées pour Sudur. Autorise-les dans les réglages du téléphone pour recevoir le rappel."
 }

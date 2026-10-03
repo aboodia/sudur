@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/database/profile_repository.dart';
 import '../../l10n/app_localizations.dart';
+import 'widgets/reminder_card.dart';
 import 'widgets/theme_variant_picker.dart';
 
 /// Placeholder for Profil et paramètres (Brique 9 for the advanced parts).
@@ -53,6 +54,8 @@ class ProfileScreen extends ConsumerWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.push('/succes'),
             ),
+            const Divider(height: 1),
+            const ReminderCard(),
             const Divider(height: 1),
             const SizedBox(height: 8),
             const ThemeVariantPicker(),

@@ -755,4 +755,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String homeNewBadges(int n) {
     return '$n nouveau(x) succès à découvrir';
   }
+
+  @override
+  String get reminderTitle => 'Sudur';
+
+  @override
+  String get reminderBody => 'C\'est l\'heure de ta session de mémorisation.';
+
+  @override
+  String get reminderBodyComeBack =>
+      'Ravi de te retrouver quand tu veux : 5 minutes suffisent pour reprendre.';
+
+  @override
+  String get reminderSectionTitle => 'Rappel quotidien';
+
+  @override
+  String get reminderSwitch => 'Me rappeler chaque jour';
+
+  @override
+  String get reminderTime => 'Heure du rappel';
+
+  @override
+  String get reminderExplain =>
+      'Seulement les jours où tu es disponible, et jamais si tu as déjà étudié.';
+
+  @override
+  String get reminderPermissionDenied =>
+      'Les notifications sont désactivées pour Sudur. Autorise-les dans les réglages du téléphone pour recevoir le rappel.';
 }
