@@ -70,6 +70,22 @@ List<int> cumulativeSeries(
   return series;
 }
 
+/// Verses memorized from the start of [from] to the end of [to], inclusive
+/// — the gain over the period, first day included.
+int versesGained(
+  Iterable<MemorizationEvent> events, {
+  required DateTime from,
+  required DateTime to,
+}) {
+  final start = dateOnly(from);
+  final end = startOfNextDay(to);
+  var total = 0;
+  for (final e in events) {
+    if (!e.at.isBefore(start) && e.at.isBefore(end)) total += e.weight;
+  }
+  return total;
+}
+
 /// How much of each Mushaf page is memorized, from 0 to 1 (index 0 = page
 /// 1). A verse counts on the page where it begins — a verse running over
 /// two pages isn't counted twice.

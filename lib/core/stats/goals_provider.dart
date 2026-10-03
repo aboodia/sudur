@@ -25,10 +25,16 @@ class GoalsState {
   final bool monthlyIsDefault;
 }
 
+/// Reads the profile itself rather than through `currentProfileProvider`:
+/// that one also feeds `needsOnboardingProvider`, and reloading it would
+/// tear down the whole app (see `SudurApp`) just to change a goal.
+///
 /// Verses count toward a goal on the day the guided parcours validated them;
 /// sourates declared in the onboarding are not progress made this week.
 final goalsProvider = FutureProvider<GoalsState>((ref) async {
-  final profile = await ref.watch(currentProfileProvider.future);
+  final profile = await ref
+      .watch(userProfileRepositoryProvider)
+      .getOrCreateLocalProfile();
   final ayahRows = await ref
       .watch(memorizationRepositoryProvider)
       .allAyahProgress(profile.id);

@@ -153,17 +153,16 @@ class _GoalsEditorState extends ConsumerState<_GoalsEditor> {
   late int _weekly = widget.goals.week.goal;
   late int _monthly = widget.goals.month.goal;
 
-  Future<void> _save({required bool reset}) async {
+  Future<void> _save() async {
     final profile = await ref.read(currentProfileProvider.future);
     final defaults = widget.goals.defaults;
     // A value equal to the proposal is stored as "not chosen", so it keeps
     // following the daily time if that changes.
-    final weekly = reset || _weekly == defaults.weekly ? null : _weekly;
-    final monthly = reset || _monthly == defaults.monthly ? null : _monthly;
+    final weekly = _weekly == defaults.weekly ? null : _weekly;
+    final monthly = _monthly == defaults.monthly ? null : _monthly;
     await ref
         .read(userProfileRepositoryProvider)
         .setGoals(id: profile.id, weekly: weekly, monthly: monthly);
-    ref.invalidate(currentProfileProvider);
     ref.invalidate(goalsProvider);
     if (mounted) Navigator.of(context).pop();
   }
@@ -218,7 +217,7 @@ class _GoalsEditorState extends ConsumerState<_GoalsEditor> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () => _save(reset: false),
+                onPressed: _save,
                 child: Text(l10n.goalEditSave),
               ),
             ),

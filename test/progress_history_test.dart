@@ -158,4 +158,35 @@ void main() {
       expect(c, [0.0, 0.0, 0.0]);
     });
   });
+
+  group('versesGained', () {
+    test('counts the first and the last day of the period', () {
+      final events = <MemorizationEvent>[
+        (at: DateTime(2026, 9, 9, 23), weight: 4), // before
+        (at: DateTime(2026, 9, 10, 0, 5), weight: 2), // first day
+        (at: DateTime(2026, 9, 20, 12), weight: 1),
+        (at: DateTime(2026, 9, 30, 23, 59), weight: 3), // last day
+        (at: DateTime(2026, 10, 1, 0, 1), weight: 9), // after
+      ];
+      expect(
+        versesGained(
+          events,
+          from: DateTime(2026, 9, 10),
+          to: DateTime(2026, 9, 30),
+        ),
+        6,
+      );
+    });
+
+    test('is zero when nothing happened in the period', () {
+      expect(
+        versesGained(
+          [(at: DateTime(2026, 1, 1), weight: 5)],
+          from: DateTime(2026, 9, 1),
+          to: DateTime(2026, 9, 30),
+        ),
+        0,
+      );
+    });
+  });
 }

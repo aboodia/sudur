@@ -29,10 +29,26 @@ Future<void> _settle(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 100));
 }
 
+/// Records which providers get rebuilt, to catch a change that reloads the
+/// profile (and with it the whole app).
+base class _ReloadSpy extends ProviderObserver {
+  final reloaded = <Object>[];
+
+  @override
+  void didUpdateProvider(
+    ProviderObserverContext context,
+    Object? previousValue,
+    Object? newValue,
+  ) {
+    reloaded.add(context.provider);
+  }
+}
+
 Future<void> _openFollowUp(
   WidgetTester tester,
   AppDatabase db, {
   List<double>? coverage,
+  ProviderObserver? spy,
 }) async {
   tester.view.physicalSize = const Size(900, 3000);
   tester.view.devicePixelRatio = 1;
@@ -44,6 +60,7 @@ Future<void> _openFollowUp(
   );
   await tester.pumpWidget(
     ProviderScope(
+      observers: [?spy],
       overrides: [
         appDatabaseProvider.overrideWithValue(db),
         quranReferenceProvider.overrideWith((ref) => _reference),
@@ -204,7 +221,9 @@ void main() {
     await UserProfileRepository(db)
         .setGoals(id: profile.id, weekly: 5, monthly: 20);
 
-    await _openFollowUp(tester, db);
+    final spy = _ReloadSpy();
+    await _openFollowUp(tester, db, spy: spy);
+    spy.reloaded.clear();
     await tester.tap(find.text('Modifier'));
     await _settle(tester);
     expect(find.text('Tes objectifs'), findsOneWidget);
@@ -215,6 +234,11 @@ void main() {
     await _settle(tester);
 
     expect(find.text('0 / 6 versets'), findsOneWidget);
+    // The profile feeds the app's onboarding gate: reloading it would rebuild
+    // the whole app, and send the user back to the first tab.
+    expect(spy.reloaded, isNot(contains(currentProfileProvider)));
+    expect(find.text('Suivi'), findsOneWidget);
+    expect(find.text('Objectifs'), findsOneWidget);
     final saved = await UserProfileRepository(db).getOrCreateLocalProfile();
     expect(saved.weeklyVerseGoal, 6);
     expect(saved.monthlyVerseGoal, 20);

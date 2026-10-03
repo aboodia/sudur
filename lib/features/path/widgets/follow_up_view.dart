@@ -92,7 +92,7 @@ class _CurveSection extends ConsumerWidget {
         final today = dateOnly(DateTime.now());
         final start = historyStart(period, events, today);
         final series = cumulativeSeries(events, from: start, to: today);
-        final gain = series.last - series.first;
+        final gain = versesGained(events, from: start, to: today);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

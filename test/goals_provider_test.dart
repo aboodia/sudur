@@ -93,14 +93,14 @@ void main() {
     final repo = c.read(userProfileRepositoryProvider);
 
     await repo.setGoals(id: profile.id, weekly: 12, monthly: 40);
-    c.invalidate(currentProfileProvider);
+    c.invalidate(goalsProvider);
     var goals = await c.read(goalsProvider.future);
     expect(goals.week.goal, 12);
     expect(goals.month.goal, 40);
     expect(goals.weeklyIsDefault, isFalse);
 
     await repo.setGoals(id: profile.id, weekly: null, monthly: null);
-    c.invalidate(currentProfileProvider);
+    c.invalidate(goalsProvider);
     goals = await c.read(goalsProvider.future);
     expect(goals.week.goal, goals.defaults.weekly);
     expect(goals.weeklyIsDefault, isTrue);
