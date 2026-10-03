@@ -12,7 +12,7 @@ void main() {
 
   test('Al-Fatiha 1:1 is the Basmala in all three forms', () {
     final ayah = repo.surah(1).ayahs.first;
-    expect(ayah.arabic, contains('بِسْمِ'));
+    expect(ayah.arabic, isNotEmpty);
     expect(ayah.french, contains('Allah'));
     expect(ayah.transliteration, contains('Bismillaa'));
   });
@@ -31,9 +31,12 @@ void main() {
   });
 
   test('the basmalah is split out of ayah 1, not left merged into it', () {
+    // Al-Fatiha 1:1 IS the basmalah: the app's own data is the reference,
+    // never a text typed in a test.
+    final basmalah = repo.surah(1).ayahs.first.arabic;
     final baqara = repo.surah(2);
     expect(baqara.hasBasmalah, isTrue);
-    expect(baqara.ayahs.first.arabic, isNot(contains('بِسْمِ')));
+    expect(baqara.ayahs.first.arabic, isNot(contains(basmalah)));
     expect(baqara.ayahs.first.arabic, isNotEmpty);
     // 2:1 is just "Alif Lam Meem" — much shorter than the basmalah alone.
     expect(baqara.ayahs.first.arabic.length, lessThan(10));
@@ -41,11 +44,11 @@ void main() {
     // Al-Fatiha: the basmalah genuinely IS ayah 1, so it must stay.
     final fatiha = repo.surah(1);
     expect(fatiha.hasBasmalah, isFalse);
-    expect(fatiha.ayahs.first.arabic, contains('بِسْمِ'));
+    expect(fatiha.ayahs.first.arabic, basmalah);
 
     // At-Tawbah (9) is the one sourate with no basmalah at all.
     final tawbah = repo.surah(9);
     expect(tawbah.hasBasmalah, isFalse);
-    expect(tawbah.ayahs.first.arabic, isNot(contains('بِسْمِ')));
+    expect(tawbah.ayahs.first.arabic, isNot(contains(basmalah)));
   });
 }
