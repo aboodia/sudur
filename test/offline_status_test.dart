@@ -78,4 +78,48 @@ void main() {
       expect(formatBytes(1024 * 1024 * 1024 * 2), '2,00 Go');
     });
   });
+
+  group('estimateRemainingFontBytes', () {
+    test('uses the average size of the pages already on disk', () {
+      // 10 pages weighing 1000 bytes: 594 pages left at 100 bytes each.
+      expect(
+        estimateRemainingFontBytes(
+          cachedPages: 10,
+          fontBytes: 1000,
+          totalPages: 604,
+        ),
+        59400,
+      );
+    });
+
+    test('says nothing from too small a sample', () {
+      expect(
+        estimateRemainingFontBytes(
+          cachedPages: 2,
+          fontBytes: 1000,
+          totalPages: 604,
+        ),
+        isNull,
+      );
+      expect(
+        estimateRemainingFontBytes(
+          cachedPages: 0,
+          fontBytes: 0,
+          totalPages: 604,
+        ),
+        isNull,
+      );
+    });
+
+    test('nothing left means no estimate', () {
+      expect(
+        estimateRemainingFontBytes(
+          cachedPages: 604,
+          fontBytes: 1000,
+          totalPages: 604,
+        ),
+        isNull,
+      );
+    });
+  });
 }

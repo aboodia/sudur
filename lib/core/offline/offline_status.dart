@@ -44,3 +44,16 @@ String formatBytes(int bytes) {
   final gb = mb / 1024;
   return '${gb.toStringAsFixed(2).replaceAll('.', ',')} Go';
 }
+
+/// How much is still to download for the Mushaf pages, estimated from the
+/// pages already on disk (their average size) — null while there are too
+/// few of them to tell, so no figure is ever invented.
+int? estimateRemainingFontBytes({
+  required int cachedPages,
+  required int fontBytes,
+  required int totalPages,
+}) {
+  const minimumSample = 5;
+  if (cachedPages < minimumSample || cachedPages >= totalPages) return null;
+  return (fontBytes / cachedPages * (totalPages - cachedPages)).round();
+}

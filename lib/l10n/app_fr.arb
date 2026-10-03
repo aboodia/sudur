@@ -370,11 +370,15 @@
   "readingTitle": "Lecture",
   "readingMode": "Affichage du texte",
   "readingModeArabic": "Arabe",
-  "readingModeTranslit": "Translittération",
+  "readingModeTranslit": "Translit.",
   "readingModeBilingual": "Bilingue",
   "readingScale": "Taille du texte",
   "audioSectionTitle": "Audio",
   "audioReciter": "Récitant",
   "audioSpeed": "Vitesse par défaut",
-  "offlineTileSubtitle": "Mushaf et audio sans connexion"
+  "offlineTileSubtitle": "Mushaf et audio sans connexion",
+
+  "offlineMushafEstimate": "Environ {size} restent à télécharger. Préfère le Wi-Fi.",
+  "@offlineMushafEstimate": {"placeholders": {"size": {"type": "String"}}},
+  "offlineMushafWifi": "Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi."
 }

@@ -26,6 +26,7 @@ class ProfileScreen extends ConsumerWidget {
           children: [
             profileAsync.when(
               data: (profile) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ProfileHeader(profile: profile),
                   SettingsHeading(l10n.planTitle),

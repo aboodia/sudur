@@ -90,6 +90,12 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('Contenus hors-ligne'), findsOneWidget);
     expect(find.text('0 pages sur 604 téléchargées'), findsOneWidget);
+    expect(
+      find.text(
+        'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.',
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Tout télécharger'), findsOneWidget);
     expect(find.text('Supprimer les pages'), findsNothing);
     expect(find.text('Supprimer tout l\'audio'), findsNothing);
@@ -137,6 +143,8 @@ void main() {
     );
 
     expect(find.text('3 pages sur 604 téléchargées'), findsOneWidget);
+    // Too few pages to estimate from: the general warning, no invented size.
+    expect(find.textContaining('Environ'), findsNothing);
     expect(find.text('Espace utilisé : 3,0 Mo'), findsOneWidget);
 
     await tester.tap(find.text('Supprimer les pages'));
@@ -209,5 +217,21 @@ void main() {
     await tester.tap(find.byTooltip('Arrêter').last);
     await tester.pump();
     expect(fake.calls, ['cancelAudio']);
+  });
+
+  testWidgets('with enough pages on disk, the size left is estimated', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      OfflineState(
+        loaded: true,
+        cachedPages: {for (var p = 1; p <= 10; p++) p},
+        fontBytes: 10 * 1024 * 1024,
+      ),
+    );
+
+    // 594 pages left at 1 Mo each.
+    expect(find.textContaining('Environ 594,0 Mo'), findsOneWidget);
   });
 }

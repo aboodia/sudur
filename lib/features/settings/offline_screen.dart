@@ -127,6 +127,17 @@ class _MushafSection extends ConsumerWidget {
 
   final OfflineState state;
 
+  String _sizeWarning(AppLocalizations l10n) {
+    final remaining = estimateRemainingFontBytes(
+      cachedPages: state.cachedPages.length,
+      fontBytes: state.fontBytes,
+      totalPages: MushafFontCache.pageCount,
+    );
+    return remaining == null
+        ? l10n.offlineMushafWifi
+        : l10n.offlineMushafEstimate(formatBytes(remaining));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -174,6 +185,10 @@ class _MushafSection extends ConsumerWidget {
                 color: theme.colorScheme.error,
               ),
             ),
+          ],
+          if (!state.fontsRunning && !state.fontsComplete) ...[
+            const SizedBox(height: 8),
+            Text(_sizeWarning(l10n), style: theme.textTheme.bodySmall),
           ],
           const SizedBox(height: 12),
           Wrap(

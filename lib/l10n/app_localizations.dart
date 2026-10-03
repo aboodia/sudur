@@ -1603,7 +1603,7 @@ abstract class AppLocalizations {
   /// No description provided for @readingModeTranslit.
   ///
   /// In fr, this message translates to:
-  /// **'Translittération'**
+  /// **'Translit.'**
   String get readingModeTranslit;
 
   /// No description provided for @readingModeBilingual.
@@ -1641,6 +1641,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mushaf et audio sans connexion'**
   String get offlineTileSubtitle;
+
+  /// No description provided for @offlineMushafEstimate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Environ {size} restent à télécharger. Préfère le Wi-Fi.'**
+  String offlineMushafEstimate(String size);
+
+  /// No description provided for @offlineMushafWifi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.'**
+  String get offlineMushafWifi;
 }
 
 class _AppLocalizationsDelegate

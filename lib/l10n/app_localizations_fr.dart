@@ -916,7 +916,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get readingModeArabic => 'Arabe';
 
   @override
-  String get readingModeTranslit => 'Translittération';
+  String get readingModeTranslit => 'Translit.';
 
   @override
   String get readingModeBilingual => 'Bilingue';
@@ -935,4 +935,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get offlineTileSubtitle => 'Mushaf et audio sans connexion';
+
+  @override
+  String offlineMushafEstimate(String size) {
+    return 'Environ $size restent à télécharger. Préfère le Wi-Fi.';
+  }
+
+  @override
+  String get offlineMushafWifi =>
+      'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.';
 }
