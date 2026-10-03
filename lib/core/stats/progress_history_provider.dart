@@ -6,6 +6,7 @@ import '../database/profile_repository.dart';
 import '../mushaf/mushaf_repository.dart';
 import 'memorized_set.dart';
 import 'progress_history.dart';
+import '../gamification/achievements_provider.dart';
 import 'goals_provider.dart';
 import 'progress_stats_provider.dart';
 
@@ -68,4 +69,5 @@ void refreshProgressData(Ref ref) {
   ref.invalidate(mushafCoverageProvider);
   ref.invalidate(studyHistoryProvider);
   ref.invalidate(goalsProvider);
+  ref.invalidate(achievementsProvider);
 }

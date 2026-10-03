@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/database/memorization_repository.dart';
 import '../../core/format/french_date.dart';
+import '../../core/gamification/achievements_provider.dart';
 import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/gamification/memorizer_profile.dart';
 import '../../core/memorization/profile_resolver.dart';
@@ -25,6 +26,7 @@ class HomeScreen extends ConsumerWidget {
     final dueReviewsAsync = ref.watch(dueReviewsProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
     final statsAsync = ref.watch(progressStatsProvider);
+    final newBadges = ref.watch(achievementsProvider).value?.newCount ?? 0;
 
     return Scaffold(
       body: SafeArea(
@@ -53,6 +55,10 @@ class HomeScreen extends ConsumerWidget {
                   _StreakChip(days: statsAsync.value!.streakDays),
               ],
             ),
+            if (newBadges > 0) ...[
+              const SizedBox(height: 12),
+              _NewBadgesBanner(count: newBadges),
+            ],
             const SizedBox(height: 16),
             surahProgressAsync.when(
               data: (rows) => _ProfileCard(
@@ -146,26 +152,54 @@ class _StreakChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(20),
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () => context.push('/succes'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.local_fire_department_outlined,
+              size: 20,
+              color: theme.colorScheme.tertiary,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              AppLocalizations.of(context).statsDays(days),
+              style: theme.textTheme.titleSmall,
+            ),
+          ],
+        ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.local_fire_department_outlined,
-            size: 20,
-            color: theme.colorScheme.tertiary,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context).statsDays(days),
-            style: theme.textTheme.titleSmall,
-          ),
-        ],
+    );
+  }
+}
+
+/// A soft nudge when badges were earned since the user last looked.
+class _NewBadgesBanner extends StatelessWidget {
+  const _NewBadgesBanner({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+      child: ListTile(
+        leading: Icon(
+          Icons.workspace_premium,
+          color: theme.colorScheme.tertiary,
+        ),
+        title: Text(AppLocalizations.of(context).homeNewBadges(count)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => context.push('/succes'),
       ),
     );
   }

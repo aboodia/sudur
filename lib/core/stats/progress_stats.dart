@@ -1,27 +1,7 @@
-import '../memorization/review_calendar.dart';
 import '../quran_reference/quran_reference_repository.dart';
 
 // Pure computations behind the dashboard's progress tiles — no Flutter,
 // no database. Every figure comes from what the user actually did.
-
-/// Consecutive days of activity ending today. Today not being over yet,
-/// a streak whose last day was yesterday is still alive: it only breaks
-/// once a whole day has passed without activity.
-int computeStreak(Iterable<DateTime> activityTimes, DateTime now) {
-  final days = {for (final t in activityTimes) dateOnly(t)};
-  var day = dateOnly(now);
-  if (!days.contains(day)) {
-    day = DateTime(day.year, day.month, day.day - 1);
-  }
-  var streak = 0;
-  while (days.contains(day)) {
-    streak++;
-    // The constructor, not `subtract(Duration(days: 1))`: that lands an
-    // hour off across a clock change and can skip or repeat a date.
-    day = DateTime(day.year, day.month, day.day - 1);
-  }
-  return streak;
-}
 
 /// Share of recent reviews that held (anything but "à reprendre"), from 0
 /// to 1 — null when there was no review in the window, so the dashboard

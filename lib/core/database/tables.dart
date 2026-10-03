@@ -209,3 +209,28 @@ class StudySessionEntries extends Table {
   @override
   Set<Column> get primaryKey => {id};
 }
+
+/// A badge the user has earned (see `achievements.dart`): kept once earned,
+/// even if the figure that earned it later drops (a streak that ends).
+class AchievementUnlocks extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId =>
+      text().references(UserProfiles, #id, onDelete: KeyAction.cascade)();
+
+  /// `AchievementDef.key`, e.g. "juz_5".
+  TextColumn get achievementKey => text()();
+
+  DateTimeColumn get unlockedAt => dateTime()();
+
+  /// When the user opened the badge screen after earning it; null while the
+  /// badge is still "new".
+  DateTimeColumn get seenAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {profileId, achievementKey},
+  ];
+}

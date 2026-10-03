@@ -10,69 +10,6 @@ void main() {
     reference = await QuranReferenceRepository.load();
   });
 
-  group('computeStreak', () {
-    final now = DateTime(2026, 10, 2, 15);
-
-    test('is zero with no activity', () {
-      expect(computeStreak(const [], now), 0);
-    });
-
-    test('counts consecutive days ending today', () {
-      final streak = computeStreak([
-        DateTime(2026, 10, 2, 8),
-        DateTime(2026, 10, 1, 22),
-        DateTime(2026, 9, 30, 6),
-      ], now);
-      expect(streak, 3);
-    });
-
-    test('several events on one day count once', () {
-      final streak = computeStreak([
-        DateTime(2026, 10, 2, 8),
-        DateTime(2026, 10, 2, 9),
-        DateTime(2026, 10, 2, 20),
-      ], now);
-      expect(streak, 1);
-    });
-
-    test('a streak last extended yesterday is still alive today', () {
-      final streak = computeStreak([
-        DateTime(2026, 10, 1, 9),
-        DateTime(2026, 9, 30, 9),
-      ], now);
-      expect(streak, 2);
-    });
-
-    test('a whole day without activity breaks it', () {
-      final streak = computeStreak([
-        DateTime(2026, 9, 30, 9),
-        DateTime(2026, 9, 29, 9),
-      ], now);
-      expect(streak, 0);
-    });
-
-    test('a gap ends the count at the gap', () {
-      final streak = computeStreak([
-        DateTime(2026, 10, 2),
-        DateTime(2026, 10, 1),
-        DateTime(2026, 9, 28),
-        DateTime(2026, 9, 27),
-      ], now);
-      expect(streak, 2);
-    });
-
-    test('runs across the autumn clock change without skipping a day', () {
-      // France goes back to winter time on 25 October 2026.
-      final streak = computeStreak([
-        DateTime(2026, 10, 26, 7),
-        DateTime(2026, 10, 25, 7),
-        DateTime(2026, 10, 24, 7),
-        DateTime(2026, 10, 23, 7),
-      ], DateTime(2026, 10, 26, 20));
-      expect(streak, 4);
-    });
-  });
-
   group('computeRetention', () {
     final now = DateTime(2026, 10, 2);
 

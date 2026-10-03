@@ -626,4 +626,133 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get goalEditIncrease => 'Augmenter';
+
+  @override
+  String get successTitle => 'Régularité et succès';
+
+  @override
+  String get streakTitle => 'Ta régularité';
+
+  @override
+  String streakCurrent(int n) {
+    return '$n jour(s) de suite';
+  }
+
+  @override
+  String streakBest(int n) {
+    return 'Meilleure série : $n j';
+  }
+
+  @override
+  String get streakNone => 'Ta série commence avec ta prochaine session.';
+
+  @override
+  String get streakDoneToday => 'C\'est fait pour aujourd\'hui, bravo.';
+
+  @override
+  String get streakAtRisk =>
+      'Ta série est en jeu aujourd\'hui : même 5 minutes suffisent.';
+
+  @override
+  String get streakJokersTitle => 'Jokers';
+
+  @override
+  String streakJokersLeft(int n) {
+    return '$n joker(s) en réserve';
+  }
+
+  @override
+  String get streakJokerExplain =>
+      'Un joker garde ta série en vie quand tu manques un jour. Tu en gagnes un tous les 7 jours de régularité, et tu peux en garder 2.';
+
+  @override
+  String streakNextJoker(int n) {
+    return 'Prochain joker dans $n jour(s) d\'étude.';
+  }
+
+  @override
+  String get streakJokerFull => 'Ta réserve de jokers est pleine.';
+
+  @override
+  String streakCovered(String date) {
+    return 'Un joker a protégé ta série le $date.';
+  }
+
+  @override
+  String get streakRestDays =>
+      'Les jours où tu n\'es pas disponible ne cassent jamais ta série.';
+
+  @override
+  String get badgesTitle => 'Succès';
+
+  @override
+  String badgesCount(int earned, int total) {
+    return '$earned sur $total';
+  }
+
+  @override
+  String get badgeNew => 'Nouveau';
+
+  @override
+  String badgeEarnedOn(String date) {
+    return 'Obtenu le $date';
+  }
+
+  @override
+  String badgeProgress(String done, String target) {
+    return '$done / $target';
+  }
+
+  @override
+  String get achTitleFirstVerse => 'Premier verset';
+
+  @override
+  String achTitleVerses(int n) {
+    return '$n versets';
+  }
+
+  @override
+  String get achTitleFirstJuz => 'Premier Juz';
+
+  @override
+  String achTitleJuz(int n) {
+    return '$n Juz';
+  }
+
+  @override
+  String get achTitleKhatm => 'Coran complet';
+
+  @override
+  String achTitleStreak(int n) {
+    return '$n jours de régularité';
+  }
+
+  @override
+  String get achDescFirstVerse => 'Mémoriser ton premier verset.';
+
+  @override
+  String achDescVerses(int n) {
+    return 'Mémoriser $n versets.';
+  }
+
+  @override
+  String get achDescFirstJuz => 'Mémoriser un Juz entier.';
+
+  @override
+  String achDescJuz(int n) {
+    return 'Mémoriser $n Juz.';
+  }
+
+  @override
+  String get achDescKhatm => 'Mémoriser les 30 Juz du Coran.';
+
+  @override
+  String achDescStreak(int n) {
+    return 'Étudier $n jours de suite.';
+  }
+
+  @override
+  String homeNewBadges(int n) {
+    return '$n nouveau(x) succès à découvrir';
+  }
 }

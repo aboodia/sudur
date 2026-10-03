@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../database/memorization_repository.dart';
+import '../gamification/streak.dart';
 import '../database/profile_repository.dart';
 import '../quran_reference/quran_reference_repository.dart';
 import 'memorized_set.dart';
@@ -13,7 +14,7 @@ class ProgressStats {
     required this.completedSurahs,
     required this.juz,
     required this.retention,
-    required this.streakDays,
+    required this.streak,
     required this.studyTime,
   });
 
@@ -27,7 +28,9 @@ class ProgressStats {
   /// any review in that window.
   final double? retention;
 
-  final int streakDays;
+  final StreakState streak;
+
+  int get streakDays => streak.current;
   final Duration studyTime;
 }
 
@@ -52,7 +55,11 @@ final progressStatsProvider = FutureProvider<ProgressStats>((ref) async {
       for (final l in log.where((l) => l.kind == 'review'))
         (at: l.occurredAt, outcome: l.outcome),
     ], now),
-    streakDays: computeStreak(log.map((l) => l.occurredAt), now),
+    streak: computeStreakState(
+      log.map((l) => l.occurredAt),
+      now,
+      availableDaysMask: profile.availableDaysMask,
+    ),
     studyTime: totalStudyTime(sessions.map((s) => s.durationSeconds)),
   );
 });

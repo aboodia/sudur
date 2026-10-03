@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/community/community_screen.dart';
+import '../features/gamification/success_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/memorization/memorization_flow_screen.dart';
 import '../features/path/path_screen.dart';
@@ -96,6 +97,12 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/memoriser',
       builder: (context, state) => const MemorizationFlowScreen(),
+    ),
+    // Régularité et succès : ouvert depuis l'Accueil et le Profil, hors du
+    // shell comme les sessions.
+    GoRoute(
+      path: '/succes',
+      builder: (context, state) => const SuccessScreen(),
     ),
     // Révision : même logique que la Mémorisation — hors du shell, lancée
     // depuis la carte de l'Accueil.

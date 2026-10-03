@@ -16,6 +16,7 @@ part 'app_database.g.dart';
     Bookmarks,
     ReviewLogEntries,
     StudySessionEntries,
+    AchievementUnlocks,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -24,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -54,6 +55,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 5) {
         await m.addColumn(userProfiles, userProfiles.weeklyVerseGoal);
         await m.addColumn(userProfiles, userProfiles.monthlyVerseGoal);
+      }
+      if (from < 6) {
+        await m.createTable(achievementUnlocks);
       }
     },
   );

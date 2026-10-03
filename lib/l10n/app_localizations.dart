@@ -1131,6 +1131,198 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Augmenter'**
   String get goalEditIncrease;
+
+  /// No description provided for @successTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régularité et succès'**
+  String get successTitle;
+
+  /// No description provided for @streakTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta régularité'**
+  String get streakTitle;
+
+  /// No description provided for @streakCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} jour(s) de suite'**
+  String streakCurrent(int n);
+
+  /// No description provided for @streakBest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Meilleure série : {n} j'**
+  String streakBest(int n);
+
+  /// No description provided for @streakNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta série commence avec ta prochaine session.'**
+  String get streakNone;
+
+  /// No description provided for @streakDoneToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait pour aujourd\'hui, bravo.'**
+  String get streakDoneToday;
+
+  /// No description provided for @streakAtRisk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta série est en jeu aujourd\'hui : même 5 minutes suffisent.'**
+  String get streakAtRisk;
+
+  /// No description provided for @streakJokersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jokers'**
+  String get streakJokersTitle;
+
+  /// No description provided for @streakJokersLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} joker(s) en réserve'**
+  String streakJokersLeft(int n);
+
+  /// No description provided for @streakJokerExplain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un joker garde ta série en vie quand tu manques un jour. Tu en gagnes un tous les 7 jours de régularité, et tu peux en garder 2.'**
+  String get streakJokerExplain;
+
+  /// No description provided for @streakNextJoker.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochain joker dans {n} jour(s) d\'étude.'**
+  String streakNextJoker(int n);
+
+  /// No description provided for @streakJokerFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta réserve de jokers est pleine.'**
+  String get streakJokerFull;
+
+  /// No description provided for @streakCovered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un joker a protégé ta série le {date}.'**
+  String streakCovered(String date);
+
+  /// No description provided for @streakRestDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les jours où tu n\'es pas disponible ne cassent jamais ta série.'**
+  String get streakRestDays;
+
+  /// No description provided for @badgesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Succès'**
+  String get badgesTitle;
+
+  /// No description provided for @badgesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{earned} sur {total}'**
+  String badgesCount(int earned, int total);
+
+  /// No description provided for @badgeNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau'**
+  String get badgeNew;
+
+  /// No description provided for @badgeEarnedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obtenu le {date}'**
+  String badgeEarnedOn(String date);
+
+  /// No description provided for @badgeProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} / {target}'**
+  String badgeProgress(String done, String target);
+
+  /// No description provided for @achTitleFirstVerse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premier verset'**
+  String get achTitleFirstVerse;
+
+  /// No description provided for @achTitleVerses.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} versets'**
+  String achTitleVerses(int n);
+
+  /// No description provided for @achTitleFirstJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premier Juz'**
+  String get achTitleFirstJuz;
+
+  /// No description provided for @achTitleJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} Juz'**
+  String achTitleJuz(int n);
+
+  /// No description provided for @achTitleKhatm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coran complet'**
+  String get achTitleKhatm;
+
+  /// No description provided for @achTitleStreak.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} jours de régularité'**
+  String achTitleStreak(int n);
+
+  /// No description provided for @achDescFirstVerse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoriser ton premier verset.'**
+  String get achDescFirstVerse;
+
+  /// No description provided for @achDescVerses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoriser {n} versets.'**
+  String achDescVerses(int n);
+
+  /// No description provided for @achDescFirstJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoriser un Juz entier.'**
+  String get achDescFirstJuz;
+
+  /// No description provided for @achDescJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoriser {n} Juz.'**
+  String achDescJuz(int n);
+
+  /// No description provided for @achDescKhatm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoriser les 30 Juz du Coran.'**
+  String get achDescKhatm;
+
+  /// No description provided for @achDescStreak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Étudier {n} jours de suite.'**
+  String achDescStreak(int n);
+
+  /// No description provided for @homeNewBadges.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} nouveau(x) succès à découvrir'**
+  String homeNewBadges(int n);
 }
 
 class _AppLocalizationsDelegate

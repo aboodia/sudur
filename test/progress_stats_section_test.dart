@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sudur/core/gamification/streak.dart';
 import 'package:sudur/core/stats/progress_stats_provider.dart';
 import 'package:sudur/features/home/widgets/progress_stats_section.dart';
 import 'package:sudur/l10n/app_localizations.dart';
@@ -27,12 +28,20 @@ void main() {
   testWidgets('shows the six figures with French formatting', (tester) async {
     await _pump(
       tester,
-      const ProgressStats(
+      ProgressStats(
         memorizedAyahs: 29,
         completedSurahs: 6,
         juz: 1.26,
         retention: 0.75,
-        streakDays: 3,
+        streak: computeStreakState([
+          for (var i = 0; i < 3; i++)
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day - i,
+              9,
+            ),
+        ], DateTime.now()),
         studyTime: Duration(minutes: 125),
       ),
     );
@@ -56,7 +65,7 @@ void main() {
         completedSurahs: 0,
         juz: 0,
         retention: null,
-        streakDays: 0,
+        streak: StreakState.empty,
         studyTime: Duration.zero,
       ),
     );

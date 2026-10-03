@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/database/profile_repository.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/theme_variant_picker.dart';
 
 /// Placeholder for Profil et paramètres (Brique 9 for the advanced parts).
@@ -27,7 +29,9 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     Text('Profil local créé (id: ${profile.id})'),
                     Text('Niveau : ${profile.memorizationLevel}'),
-                    Text('Objectif quotidien : ${profile.dailyTargetMinutes} min'),
+                    Text(
+                      'Objectif quotidien : ${profile.dailyTargetMinutes} min',
+                    ),
                     const SizedBox(height: 4),
                     const Text('Réglages complets — à venir (Brique 9)'),
                   ],
@@ -41,6 +45,13 @@ class ProfileScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 child: Text('Erreur de chargement du profil : $err'),
               ),
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.workspace_premium_outlined),
+              title: Text(AppLocalizations.of(context).successTitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/succes'),
             ),
             const Divider(height: 1),
             const SizedBox(height: 8),
