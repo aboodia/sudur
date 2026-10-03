@@ -21,6 +21,8 @@ class MushafLineRow extends StatelessWidget {
     required this.words,
     required this.fontFamily,
     required this.textScale,
+    required this.ink,
+    required this.highlight,
     required this.onWordTap,
     this.playingSurah,
     this.playingAyah,
@@ -30,6 +32,11 @@ class MushafLineRow extends StatelessWidget {
   final List<MushafWord> words;
   final String? fontFamily;
   final double textScale;
+
+  /// The color of the text, and the background of the word being played —
+  /// chosen by the page (see [MushafPaper]) rather than taken from the theme.
+  final Color ink;
+  final Color highlight;
   final void Function(MushafWord word) onWordTap;
 
   /// The ayah the audio player is currently on, if any — words belonging
@@ -46,7 +53,11 @@ class MushafLineRow extends StatelessWidget {
         fit: BoxFit.contain,
         child: Text(
           surahNameLigature(line.surahNumber!),
-          style: TextStyle(fontFamily: 'SurahNameV4', fontSize: 40 * textScale),
+          style: TextStyle(
+            fontFamily: 'SurahNameV4',
+            fontSize: 40 * textScale,
+            color: ink,
+          ),
         ),
       );
     }
@@ -56,7 +67,11 @@ class MushafLineRow extends StatelessWidget {
         fit: BoxFit.contain,
         child: Text(
           _kBismillahLigature,
-          style: TextStyle(fontFamily: 'QuranCommon', fontSize: 34 * textScale),
+          style: TextStyle(
+            fontFamily: 'QuranCommon',
+            fontSize: 34 * textScale,
+            color: ink,
+          ),
         ),
       );
     }
@@ -84,17 +99,48 @@ class MushafLineRow extends StatelessWidget {
               onTap: () => onWordTap(word),
               child: Container(
                 color: word.surah == playingSurah && word.ayah == playingAyah
-                    ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.6)
+                    ? highlight
                     : null,
                 padding: EdgeInsets.symmetric(horizontal: 4.0 * textScale),
                 child: Text(
                   word.text,
-                  style: TextStyle(fontFamily: fontFamily, fontSize: 22 * textScale),
+                  style: TextStyle(fontFamily: fontFamily, fontSize: 22 * textScale, color: ink),
                 ),
               ),
             ),
         ],
       ),
+    );
+  }
+}
+
+/// The colors of a Mushaf page. The page is always dark ink on light paper,
+/// whatever the app's theme: the tajweed font draws its plain letters in
+/// black, which disappear on a dark background, and a printed Mushaf is
+/// light anyway.
+class MushafPaper {
+  const MushafPaper({
+    required this.paper,
+    required this.ink,
+    required this.highlight,
+  });
+
+  final Color paper;
+  final Color ink;
+  final Color highlight;
+
+  factory MushafPaper.of(ThemeData theme) {
+    if (theme.brightness == Brightness.dark) {
+      return const MushafPaper(
+        paper: Color(0xFFF4EFE7),
+        ink: Color(0xFF181D24),
+        highlight: Color(0xFFCFDCF2),
+      );
+    }
+    return MushafPaper(
+      paper: theme.colorScheme.surface,
+      ink: theme.colorScheme.onSurface,
+      highlight: theme.colorScheme.primaryContainer.withValues(alpha: 0.6),
     );
   }
 }

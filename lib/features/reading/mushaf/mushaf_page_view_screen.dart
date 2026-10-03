@@ -297,7 +297,10 @@ class _MushafPageBody extends ConsumerWidget {
         // landscape one turns into giant lines (see [mushafPageWidth]). The
         // page is centered and scrolls vertically when it is taller than
         // the viewport.
-        return LayoutBuilder(
+        final paper = MushafPaper.of(Theme.of(context));
+        return ColoredBox(
+          color: paper.paper,
+          child: LayoutBuilder(
           builder: (context, constraints) {
             const padding = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
             final pageWidth = mushafPageWidth(
@@ -319,6 +322,8 @@ class _MushafPageBody extends ConsumerWidget {
                             words: mushaf.wordsForLine(line),
                             fontFamily: fontFamily,
                             textScale: settings.textScale,
+                            ink: paper.ink,
+                            highlight: paper.highlight,
                             playingSurah: playback.surahNumber,
                             playingAyah: playback.ayahNumber,
                             onWordTap: (word) => controller.select(word.surah, word.ayah),
@@ -330,7 +335,7 @@ class _MushafPageBody extends ConsumerWidget {
               ),
             );
           },
-        );
+        ));
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => _OfflineFallback(onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber))),

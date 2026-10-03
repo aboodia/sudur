@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sudur/app/theme.dart';
 import 'package:sudur/core/settings/theme_settings.dart';
 import 'package:sudur/features/home/home_screen.dart';
+import 'package:sudur/features/reading/mushaf/mushaf_line_row.dart';
 
 /// WCAG contrast ratio between two colors.
 double contrast(Color a, Color b) {
@@ -80,6 +81,31 @@ void main() {
             contrast(sessionLabelColor(s), s.primary),
             greaterThanOrEqualTo(minimum),
           );
+        },
+      );
+    }
+  }
+
+  // A Mushaf page is dark ink on light paper in every theme: the tajweed
+  // font's plain letters are black, and vanish on a dark background.
+  for (final variant in SudurThemeVariant.values) {
+    for (final brightness in Brightness.values) {
+      test(
+        'the Mushaf page is readable (${variant.name}, ${brightness.name})',
+        () {
+          final theme = brightness == Brightness.light
+              ? SudurTheme.light(variant)
+              : SudurTheme.dark(variant);
+          final page = MushafPaper.of(theme);
+          // The paper itself is light even when the theme is dark.
+          expect(page.paper.computeLuminance(), greaterThan(0.5));
+          expect(contrast(page.ink, page.paper), greaterThanOrEqualTo(7.0));
+          // The ink stays legible on the word being played.
+          // (The highlight is drawn over the paper, so it is judged blended.)
+          final played = Color.alphaBlend(page.highlight, page.paper);
+          expect(contrast(page.ink, played), greaterThanOrEqualTo(4.5));
+          // Pure black glyphs (the font's own color) show up on the paper.
+          expect(contrast(Colors.black, page.paper), greaterThanOrEqualTo(7.0));
         },
       );
     }
