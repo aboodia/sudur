@@ -69,7 +69,7 @@ class SurahListView extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          playback.isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
+                          playback.isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill,
                           color: theme.colorScheme.primary,
                         ),
                         const SizedBox(width: 2),

@@ -51,9 +51,11 @@ class ProgressCurve extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Set back from the edge: the line ends there, and would run
+                  // through the figure.
                   Positioned(
                     top: 0,
-                    right: 0,
+                    right: 14,
                     child: Text('$last', style: theme.textTheme.labelMedium),
                   ),
                   Positioned(

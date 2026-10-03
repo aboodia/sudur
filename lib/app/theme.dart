@@ -54,6 +54,7 @@ class SudurTheme {
         indicatorShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(config.cornerRadius),
         ),
+        labelTextStyle: navigationLabelStyle(scheme),
       ),
       extensions: [tokens],
     );
@@ -76,3 +77,18 @@ class SudurTheme {
     );
   }
 }
+
+/// Tab labels of the bottom bar. The default style spaces the letters out,
+/// which pushes "Communauté" past the width of one of five tabs on a phone
+/// and wraps its last letter onto a second line; without the extra spacing
+/// it stays on one line.
+WidgetStateProperty<TextStyle?> navigationLabelStyle(ColorScheme scheme) =>
+    WidgetStateProperty.resolveWith((states) {
+      final selected = states.contains(WidgetState.selected);
+      return TextStyle(
+        fontSize: 12,
+        letterSpacing: 0,
+        fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+        color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
+      );
+    });
