@@ -782,4 +782,157 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get reminderPermissionDenied =>
       'Les notifications sont désactivées pour Sudur. Autorise-les dans les réglages du téléphone pour recevoir le rappel.';
+
+  @override
+  String get offlineTitle => 'Contenus hors-ligne';
+
+  @override
+  String get offlineIntro =>
+      'Le texte arabe, la traduction et la translittération sont déjà dans l\'application. Télécharge ici ce qui demande internet : les pages du Mushaf et l\'audio.';
+
+  @override
+  String offlineStorage(String size) {
+    return 'Espace utilisé : $size';
+  }
+
+  @override
+  String get offlineMushafTitle => 'Pages du Mushaf';
+
+  @override
+  String offlineMushafCount(int n) {
+    return '$n pages sur 604 téléchargées';
+  }
+
+  @override
+  String get offlineMushafDownload => 'Tout télécharger';
+
+  @override
+  String get offlineMushafStop => 'Arrêter';
+
+  @override
+  String get offlineMushafDelete => 'Supprimer les pages';
+
+  @override
+  String offlineProgress(int done, int total) {
+    return '$done / $total';
+  }
+
+  @override
+  String offlineFailed(int n) {
+    return '$n échec(s) : vérifie ta connexion puis réessaie.';
+  }
+
+  @override
+  String offlineAudioTitle(String reciter) {
+    return 'Audio de $reciter';
+  }
+
+  @override
+  String get offlineAudioHint =>
+      'Télécharge les sourates que tu veux écouter sans connexion. Le récitant se change dans les réglages audio.';
+
+  @override
+  String offlineSurahVerses(int n, int total) {
+    return '$n / $total versets';
+  }
+
+  @override
+  String get offlineSurahDownload => 'Télécharger';
+
+  @override
+  String get offlineSurahDelete => 'Supprimer';
+
+  @override
+  String get offlineAudioDeleteAll => 'Supprimer tout l\'audio';
+
+  @override
+  String get offlineConfirmTitle => 'Supprimer ces contenus ?';
+
+  @override
+  String get offlineConfirmBody =>
+      'Tu pourras les télécharger de nouveau. Ils seront aussi récupérés à la demande, quand tu auras internet.';
+
+  @override
+  String get offlineConfirmYes => 'Supprimer';
+
+  @override
+  String get offlineConfirmNo => 'Annuler';
+
+  @override
+  String get profileTitle => 'Profil et réglages';
+
+  @override
+  String get profileNameLabel => 'Prénom';
+
+  @override
+  String get profileNameHint => 'Comment veux-tu qu\'on t\'appelle ?';
+
+  @override
+  String get profileNameEmpty => 'Non renseigné';
+
+  @override
+  String get profileNameSave => 'Enregistrer';
+
+  @override
+  String get profileLevel => 'Niveau';
+
+  @override
+  String get levelBeginner => 'Débutant';
+
+  @override
+  String get levelOngoing => 'En cours de mémorisation';
+
+  @override
+  String get levelHafiz => 'Hafiz';
+
+  @override
+  String get planTitle => 'Plan d\'étude';
+
+  @override
+  String get planMinutes => 'Temps par jour';
+
+  @override
+  String planMinutesValue(int n) {
+    return '$n min';
+  }
+
+  @override
+  String get planDays => 'Jours disponibles';
+
+  @override
+  String get planDaysNeedOne => 'Garde au moins un jour disponible.';
+
+  @override
+  String get planExplain =>
+      'Ton plan règle tes objectifs, ton rappel et ta série : un jour où tu n\'es pas disponible ne la casse jamais.';
+
+  @override
+  String get readingTitle => 'Lecture';
+
+  @override
+  String get readingMode => 'Affichage du texte';
+
+  @override
+  String get readingModeArabic => 'Arabe';
+
+  @override
+  String get readingModeTranslit => 'Translittération';
+
+  @override
+  String get readingModeBilingual => 'Bilingue';
+
+  @override
+  String get readingScale => 'Taille du texte';
+
+  @override
+  String get audioSectionTitle => 'Audio';
+
+  @override
+  String get audioReciter => 'Récitant';
+
+  @override
+  String get audioSpeed => 'Vitesse par défaut';
+
+  @override
+  String get offlineTileSubtitle => 'Mushaf et audio sans connexion';
 }

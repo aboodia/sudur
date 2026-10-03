@@ -37,6 +37,7 @@ class UserProfileRepository {
   /// derived level, availability and completion flag once, at the end.
   Future<void> updateProfile({
     required String id,
+    String? displayName,
     String? memorizationLevel,
     int? availableDaysMask,
     int? dailyTargetMinutes,
@@ -44,6 +45,9 @@ class UserProfileRepository {
   }) async {
     await (_db.update(_db.userProfiles)..where((p) => p.id.equals(id))).write(
       UserProfilesCompanion(
+        displayName: displayName != null
+            ? Value(displayName)
+            : const Value.absent(),
         memorizationLevel: memorizationLevel != null
             ? Value(memorizationLevel)
             : const Value.absent(),

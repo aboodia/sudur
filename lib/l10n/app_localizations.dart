@@ -1371,6 +1371,276 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Les notifications sont désactivées pour Sudur. Autorise-les dans les réglages du téléphone pour recevoir le rappel.'**
   String get reminderPermissionDenied;
+
+  /// No description provided for @offlineTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contenus hors-ligne'**
+  String get offlineTitle;
+
+  /// No description provided for @offlineIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le texte arabe, la traduction et la translittération sont déjà dans l\'application. Télécharge ici ce qui demande internet : les pages du Mushaf et l\'audio.'**
+  String get offlineIntro;
+
+  /// No description provided for @offlineStorage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espace utilisé : {size}'**
+  String offlineStorage(String size);
+
+  /// No description provided for @offlineMushafTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pages du Mushaf'**
+  String get offlineMushafTitle;
+
+  /// No description provided for @offlineMushafCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} pages sur 604 téléchargées'**
+  String offlineMushafCount(int n);
+
+  /// No description provided for @offlineMushafDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout télécharger'**
+  String get offlineMushafDownload;
+
+  /// No description provided for @offlineMushafStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter'**
+  String get offlineMushafStop;
+
+  /// No description provided for @offlineMushafDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer les pages'**
+  String get offlineMushafDelete;
+
+  /// No description provided for @offlineProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} / {total}'**
+  String offlineProgress(int done, int total);
+
+  /// No description provided for @offlineFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} échec(s) : vérifie ta connexion puis réessaie.'**
+  String offlineFailed(int n);
+
+  /// No description provided for @offlineAudioTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Audio de {reciter}'**
+  String offlineAudioTitle(String reciter);
+
+  /// No description provided for @offlineAudioHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharge les sourates que tu veux écouter sans connexion. Le récitant se change dans les réglages audio.'**
+  String get offlineAudioHint;
+
+  /// No description provided for @offlineSurahVerses.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} / {total} versets'**
+  String offlineSurahVerses(int n, int total);
+
+  /// No description provided for @offlineSurahDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get offlineSurahDownload;
+
+  /// No description provided for @offlineSurahDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get offlineSurahDelete;
+
+  /// No description provided for @offlineAudioDeleteAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer tout l\'audio'**
+  String get offlineAudioDeleteAll;
+
+  /// No description provided for @offlineConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ces contenus ?'**
+  String get offlineConfirmTitle;
+
+  /// No description provided for @offlineConfirmBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu pourras les télécharger de nouveau. Ils seront aussi récupérés à la demande, quand tu auras internet.'**
+  String get offlineConfirmBody;
+
+  /// No description provided for @offlineConfirmYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get offlineConfirmYes;
+
+  /// No description provided for @offlineConfirmNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get offlineConfirmNo;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil et réglages'**
+  String get profileTitle;
+
+  /// No description provided for @profileNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prénom'**
+  String get profileNameLabel;
+
+  /// No description provided for @profileNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment veux-tu qu\'on t\'appelle ?'**
+  String get profileNameHint;
+
+  /// No description provided for @profileNameEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non renseigné'**
+  String get profileNameEmpty;
+
+  /// No description provided for @profileNameSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get profileNameSave;
+
+  /// No description provided for @profileLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau'**
+  String get profileLevel;
+
+  /// No description provided for @levelBeginner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débutant'**
+  String get levelBeginner;
+
+  /// No description provided for @levelOngoing.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours de mémorisation'**
+  String get levelOngoing;
+
+  /// No description provided for @levelHafiz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hafiz'**
+  String get levelHafiz;
+
+  /// No description provided for @planTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plan d\'étude'**
+  String get planTitle;
+
+  /// No description provided for @planMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Temps par jour'**
+  String get planMinutes;
+
+  /// No description provided for @planMinutesValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} min'**
+  String planMinutesValue(int n);
+
+  /// No description provided for @planDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours disponibles'**
+  String get planDays;
+
+  /// No description provided for @planDaysNeedOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garde au moins un jour disponible.'**
+  String get planDaysNeedOne;
+
+  /// No description provided for @planExplain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton plan règle tes objectifs, ton rappel et ta série : un jour où tu n\'es pas disponible ne la casse jamais.'**
+  String get planExplain;
+
+  /// No description provided for @readingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture'**
+  String get readingTitle;
+
+  /// No description provided for @readingMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affichage du texte'**
+  String get readingMode;
+
+  /// No description provided for @readingModeArabic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arabe'**
+  String get readingModeArabic;
+
+  /// No description provided for @readingModeTranslit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Translittération'**
+  String get readingModeTranslit;
+
+  /// No description provided for @readingModeBilingual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilingue'**
+  String get readingModeBilingual;
+
+  /// No description provided for @readingScale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille du texte'**
+  String get readingScale;
+
+  /// No description provided for @audioSectionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Audio'**
+  String get audioSectionTitle;
+
+  /// No description provided for @audioReciter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récitant'**
+  String get audioReciter;
+
+  /// No description provided for @audioSpeed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vitesse par défaut'**
+  String get audioSpeed;
+
+  /// No description provided for @offlineTileSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mushaf et audio sans connexion'**
+  String get offlineTileSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/database/memorization_repository.dart';
+import '../../core/database/profile_repository.dart';
 import '../../core/format/french_date.dart';
 import '../../core/gamification/achievements_provider.dart';
 import '../../core/gamification/memorizer_badge_icon.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends ConsumerWidget {
     final referenceAsync = ref.watch(quranReferenceProvider);
     final statsAsync = ref.watch(progressStatsProvider);
     final newBadges = ref.watch(achievementsProvider).value?.newCount ?? 0;
+    final name = ref.watch(currentProfileProvider).value?.displayName ?? '';
 
     return Scaffold(
       body: SafeArea(
@@ -45,7 +47,9 @@ class HomeScreen extends ConsumerWidget {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       Text(
-                        'Assalamu alaykum',
+                        name.isEmpty
+                            ? 'Assalamu alaykum'
+                            : 'Assalamu alaykum, $name',
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     ],

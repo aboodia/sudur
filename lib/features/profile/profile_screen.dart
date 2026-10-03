@@ -5,60 +5,67 @@ import 'package:go_router/go_router.dart';
 import '../../core/database/profile_repository.dart';
 import '../../l10n/app_localizations.dart';
 import 'widgets/reminder_card.dart';
+import 'widgets/settings_sections.dart';
 import 'widgets/theme_variant_picker.dart';
 
-/// Placeholder for Profil et paramètres (Brique 9 for the advanced parts).
-/// Already wired to the local profile row so Brique 0's data layer
-/// (fondations) is exercised end-to-end, plus a live charte graphique
-/// picker (3 themes to try and switch between).
+/// Profil et réglages (Brique 9): who the user is, their study plan, how the
+/// text and the audio are presented, the reminder, the look of the app and
+/// what is kept on the phone for offline use.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final profileAsync = ref.watch(currentProfileProvider);
 
     return Scaffold(
+      appBar: AppBar(title: Text(l10n.profileTitle)),
       body: SafeArea(
         child: ListView(
           children: [
             profileAsync.when(
-              data: (profile) => Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Profil local créé (id: ${profile.id})'),
-                    Text('Niveau : ${profile.memorizationLevel}'),
-                    Text(
-                      'Objectif quotidien : ${profile.dailyTargetMinutes} min',
-                    ),
-                    const SizedBox(height: 4),
-                    const Text('Réglages complets — à venir (Brique 9)'),
-                  ],
-                ),
+              data: (profile) => Column(
+                children: [
+                  ProfileHeader(profile: profile),
+                  SettingsHeading(l10n.planTitle),
+                  StudyPlanSection(profile: profile),
+                ],
               ),
               loading: () => const Padding(
                 padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
+                child: Center(child: CircularProgressIndicator()),
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text('Erreur de chargement du profil : $err'),
               ),
             ),
-            const Divider(height: 1),
-            ListTile(
-              leading: const Icon(Icons.workspace_premium_outlined),
-              title: Text(AppLocalizations.of(context).successTitle),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/succes'),
-            ),
+            SettingsHeading(l10n.readingTitle),
+            const ReadingSection(),
+            SettingsHeading(l10n.audioSectionTitle),
+            const AudioSection(),
+            const SizedBox(height: 8),
             const Divider(height: 1),
             const ReminderCard(),
             const Divider(height: 1),
             const SizedBox(height: 8),
             const ThemeVariantPicker(),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.download_for_offline_outlined),
+              title: Text(l10n.offlineTitle),
+              subtitle: Text(l10n.offlineTileSubtitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/hors-ligne'),
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.workspace_premium_outlined),
+              title: Text(l10n.successTitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/succes'),
+            ),
             const SizedBox(height: 16),
           ],
         ),
