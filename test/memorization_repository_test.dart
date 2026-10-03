@@ -204,4 +204,46 @@ void main() {
     expect(updated.reviewCycleStep, 1);
     expect(updated.lastOutcome, 'clean');
   });
+
+  test(
+    'sourates declared when joining count as memorized, verse by verse',
+    () async {
+      final container = _freshContainer();
+      addTearDown(container.dispose);
+      final profile = await container.read(currentProfileProvider.future);
+      final repo = container.read(memorizationRepositoryProvider);
+
+      // Al-Fatiha (7 verses) declared, Al-Mulk's first verse learned.
+      await repo.markSurahMemorized(profile.id, 1, 7);
+      await repo.recordAyahMemorized(
+        profileId: profile.id,
+        surahNumber: 67,
+        ayahNumber: 1,
+        surahTotalAyahs: 30,
+        outcome: ReciteOutcome.clean,
+        fragileWordIndices: [],
+      );
+
+      final keys = await repo.memorizedAyahKeys(profile.id);
+
+      expect(keys, {for (var a = 1; a <= 7; a++) '1:$a', '67:1'});
+    },
+  );
+
+  test('a sourate only partly learned is not counted as declared', () async {
+    final container = _freshContainer();
+    addTearDown(container.dispose);
+    final profile = await container.read(currentProfileProvider.future);
+    final repo = container.read(memorizationRepositoryProvider);
+    await repo.recordAyahMemorized(
+      profileId: profile.id,
+      surahNumber: 67,
+      ayahNumber: 1,
+      surahTotalAyahs: 30,
+      outcome: ReciteOutcome.clean,
+      fragileWordIndices: [],
+    );
+
+    expect(await repo.memorizedAyahKeys(profile.id), {'67:1'});
+  });
 }

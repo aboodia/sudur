@@ -62,7 +62,9 @@ ColorScheme _sudurScheme(Brightness brightness) {
       secondary: _sudurSecondary,
       onSecondary: _sudurInk,
       tertiary: _sudurTertiary,
-      onTertiary: Colors.white,
+      // Ink, not white: white on the terracotta is 3.5 : 1, below the 4.5 : 1
+      // legibility minimum.
+      onTertiary: _sudurInk,
       surface: _sudurBackground,
       onSurface: _sudurInk,
     );
@@ -71,7 +73,7 @@ ColorScheme _sudurScheme(Brightness brightness) {
     surface: _sudurNight,
     onSurface: _sudurBackground,
     tertiary: _sudurTertiary,
-    onTertiary: Colors.white,
+    onTertiary: _sudurInk,
   );
 }
 

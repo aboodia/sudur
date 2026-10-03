@@ -259,7 +259,7 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
           outcome: outcome,
           fragileWordIndices: state.fragileIndices.toList(),
         );
-    refreshProgressData(ref);
+    refreshProgressData(ref.invalidate);
     ref.invalidate(surahProgressProvider);
 
     final newStatuses = {
@@ -304,7 +304,7 @@ class GuidedSessionController extends Notifier<GuidedSessionState> {
       ayahCount: passage.ayahEnd - passage.ayahStart + 1,
     );
     ref.invalidate(ayahProgressProvider);
-    refreshProgressData(ref);
+    refreshProgressData(ref.invalidate);
     ref.invalidate(surahProgressProvider);
     ref.invalidate(activeSessionProvider);
     ref.invalidate(todaysPassagePreviewProvider);

@@ -114,11 +114,21 @@ class MemorizationRepository {
   // Per-ayah memorization & review scheduling
   // ---------------------------------------------------------------------
 
+  /// Every verse the user already has, as "surah:ayah": the verses learned
+  /// in the guided parcours, and every verse of the sourates they declared
+  /// as memorized when they joined (those have no verse of their own).
   Future<Set<String>> memorizedAyahKeys(String profileId) async {
     final rows = await (_db.select(
       _db.ayahProgressEntries,
     )..where((t) => t.profileId.equals(profileId))).get();
-    return {for (final r in rows) '${r.surahNumber}:${r.ayahNumber}'};
+    final keys = {for (final r in rows) '${r.surahNumber}:${r.ayahNumber}'};
+    for (final s in await allSurahProgress(profileId)) {
+      if (s.completedAt == null) continue;
+      for (var a = 1; a <= s.totalAyahCount; a++) {
+        keys.add('${s.surahNumber}:$a');
+      }
+    }
+    return keys;
   }
 
   /// Verses whose review falls on [asOf]'s day or earlier — due the whole
@@ -253,6 +263,23 @@ class MemorizationRepository {
     );
   }
 
+  /// A share of the revision cycle was reviewed: counts as activity for the
+  /// streak and the retention, like any other review. [surahNumber] and
+  /// [ayahNumber] only say where the share began.
+  Future<void> logCycleReview({
+    required String profileId,
+    required int surahNumber,
+    required int ayahNumber,
+    required ReciteOutcome outcome,
+  }) => _log(
+    profileId,
+    surahNumber,
+    ayahNumber,
+    'review',
+    outcome,
+    DateTime.now(),
+  );
+
   /// Every validation (first memorization or review) ever logged, oldest
   /// first — the dashboard's streak and retention are computed from it.
   Future<List<ReviewLogEntry>> reviewLog(String profileId) =>
@@ -261,9 +288,10 @@ class MemorizationRepository {
             ..orderBy([(t) => OrderingTerm.asc(t.occurredAt)]))
           .get();
 
-  Future<List<StudySessionEntry>> studySessions(String profileId) => (_db.select(
-    _db.studySessionEntries,
-  )..where((t) => t.profileId.equals(profileId))).get();
+  Future<List<StudySessionEntry>> studySessions(String profileId) =>
+      (_db.select(
+        _db.studySessionEntries,
+      )..where((t) => t.profileId.equals(profileId))).get();
 
   Future<void> _log(
     String profileId,

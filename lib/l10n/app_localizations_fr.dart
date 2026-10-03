@@ -975,4 +975,79 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tooltipBookmarkRemove => 'Retirer le signet';
+
+  @override
+  String get cycleTitle => 'Révision du Coran';
+
+  @override
+  String get cycleIntro =>
+      'Tu as déjà mémorisé ces sourates : voici ta part du jour, page par page. Elle se règle sur la durée du cycle que tu choisis.';
+
+  @override
+  String cycleTodayCount(int n) {
+    return '$n page(s) à réviser aujourd\'hui';
+  }
+
+  @override
+  String cyclePage(int n) {
+    return 'Page $n';
+  }
+
+  @override
+  String cyclePageIn(int n, String surah) {
+    return 'Page $n · $surah';
+  }
+
+  @override
+  String get cycleOpenPage => 'Ouvrir la page';
+
+  @override
+  String cycleProgress(int done, int total, int days) {
+    return '$done page(s) sur $total · $days jour(s) restant(s)';
+  }
+
+  @override
+  String get cycleLength => 'Durée du cycle';
+
+  @override
+  String cycleLengthDays(int n) {
+    return '$n jours';
+  }
+
+  @override
+  String get cycleHow => 'Comment était ta récitation de ces pages ?';
+
+  @override
+  String get cycleOutcomeCleanSub => 'Bien revu, on passe à la suite';
+
+  @override
+  String get cycleOutcomeHesitantSub => 'Revu, on passe à la suite';
+
+  @override
+  String get cycleOutcomeRedoSub => 'Cette part reste à faire';
+
+  @override
+  String get cycleFinish => 'Terminer la révision';
+
+  @override
+  String get cycleDoneToday =>
+      'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.';
+
+  @override
+  String get cycleFinishedTitle => 'Cycle terminé, mabrouk !';
+
+  @override
+  String get cycleFinishedBody =>
+      'Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.';
+
+  @override
+  String get homeCycleTitle => 'Révision du Coran';
+
+  @override
+  String homeCycleToday(int n) {
+    return '$n page(s) aujourd\'hui';
+  }
+
+  @override
+  String get homeCycleDone => 'Faite aujourd\'hui';
 }

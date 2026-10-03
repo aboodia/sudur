@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show ProviderOrFamily;
 
 import '../database/app_database.dart';
 import '../database/memorization_repository.dart';
@@ -60,14 +61,15 @@ final studyHistoryProvider = FutureProvider<List<StudySessionEntry>>((
 });
 
 /// Everything computed from the user's activity goes stale when a verse is
-/// validated or a session ends: refresh it all from one place.
-void refreshProgressData(Ref ref) {
-  ref.invalidate(ayahProgressProvider);
-  ref.invalidate(surahProgressProvider);
-  ref.invalidate(progressStatsProvider);
-  ref.invalidate(memorizationEventsProvider);
-  ref.invalidate(mushafCoverageProvider);
-  ref.invalidate(studyHistoryProvider);
-  ref.invalidate(goalsProvider);
-  ref.invalidate(achievementsProvider);
+/// validated or a session ends: refresh it all from one place. Pass the
+/// `invalidate` of the `Ref` or `WidgetRef` at hand.
+void refreshProgressData(void Function(ProviderOrFamily provider) invalidate) {
+  invalidate(ayahProgressProvider);
+  invalidate(surahProgressProvider);
+  invalidate(progressStatsProvider);
+  invalidate(memorizationEventsProvider);
+  invalidate(mushafCoverageProvider);
+  invalidate(studyHistoryProvider);
+  invalidate(goalsProvider);
+  invalidate(achievementsProvider);
 }

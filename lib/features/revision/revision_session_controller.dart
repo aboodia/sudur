@@ -109,7 +109,7 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
       outcome: outcome,
       hasFragileWords: _hasFragileWords(entry),
     );
-    refreshProgressData(ref);
+    refreshProgressData(ref.invalidate);
 
     final results = [...state.results, outcome];
     final next = state.index + 1;

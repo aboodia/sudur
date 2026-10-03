@@ -1713,6 +1713,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Retirer le signet'**
   String get tooltipBookmarkRemove;
+
+  /// No description provided for @cycleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révision du Coran'**
+  String get cycleTitle;
+
+  /// No description provided for @cycleIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu as déjà mémorisé ces sourates : voici ta part du jour, page par page. Elle se règle sur la durée du cycle que tu choisis.'**
+  String get cycleIntro;
+
+  /// No description provided for @cycleTodayCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} page(s) à réviser aujourd\'hui'**
+  String cycleTodayCount(int n);
+
+  /// No description provided for @cyclePage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {n}'**
+  String cyclePage(int n);
+
+  /// No description provided for @cyclePageIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {n} · {surah}'**
+  String cyclePageIn(int n, String surah);
+
+  /// No description provided for @cycleOpenPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la page'**
+  String get cycleOpenPage;
+
+  /// No description provided for @cycleProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} page(s) sur {total} · {days} jour(s) restant(s)'**
+  String cycleProgress(int done, int total, int days);
+
+  /// No description provided for @cycleLength.
+  ///
+  /// In fr, this message translates to:
+  /// **'Durée du cycle'**
+  String get cycleLength;
+
+  /// No description provided for @cycleLengthDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} jours'**
+  String cycleLengthDays(int n);
+
+  /// No description provided for @cycleHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment était ta récitation de ces pages ?'**
+  String get cycleHow;
+
+  /// No description provided for @cycleOutcomeCleanSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien revu, on passe à la suite'**
+  String get cycleOutcomeCleanSub;
+
+  /// No description provided for @cycleOutcomeHesitantSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revu, on passe à la suite'**
+  String get cycleOutcomeHesitantSub;
+
+  /// No description provided for @cycleOutcomeRedoSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette part reste à faire'**
+  String get cycleOutcomeRedoSub;
+
+  /// No description provided for @cycleFinish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer la révision'**
+  String get cycleFinish;
+
+  /// No description provided for @cycleDoneToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.'**
+  String get cycleDoneToday;
+
+  /// No description provided for @cycleFinishedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cycle terminé, mabrouk !'**
+  String get cycleFinishedTitle;
+
+  /// No description provided for @cycleFinishedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.'**
+  String get cycleFinishedBody;
+
+  /// No description provided for @homeCycleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révision du Coran'**
+  String get homeCycleTitle;
+
+  /// No description provided for @homeCycleToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} page(s) aujourd\'hui'**
+  String homeCycleToday(int n);
+
+  /// No description provided for @homeCycleDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faite aujourd\'hui'**
+  String get homeCycleDone;
 }
 
 class _AppLocalizationsDelegate

@@ -12,7 +12,13 @@ import '../../core/memorization/profile_resolver.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
 import '../../core/stats/progress_stats_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../revision/widgets/cycle_card.dart';
 import 'widgets/progress_stats_section.dart';
+
+/// The small label at the top of the session card: the text color made for
+/// the card's background, slightly softened.
+Color sessionLabelColor(ColorScheme scheme) =>
+    Color.alphaBlend(scheme.onPrimary.withValues(alpha: 0.85), scheme.primary);
 
 /// "Accueil, session du jour" — la carte de session s'appuie sur le
 /// contrôleur de session pour rester cohérente avec ce qui sera réellement
@@ -114,6 +120,7 @@ class HomeScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.labelMedium,
             ),
             const SizedBox(height: 8),
+            const CycleCard(),
             dueReviewsAsync.when(
               data: (due) {
                 if (due.isEmpty) {
@@ -344,10 +351,11 @@ class _SessionCard extends ConsumerWidget {
             children: [
               Text(
                 'SESSION DU JOUR · MÉMORISATION',
+                // On the card's own color, in the text color made for it: the
+                // terracotta used here before was 1.8 : 1.
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: isDark
-                      ? theme.colorScheme.tertiaryContainer
-                      : const Color(0xFFB57A64),
+                  color: sessionLabelColor(theme.colorScheme),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
