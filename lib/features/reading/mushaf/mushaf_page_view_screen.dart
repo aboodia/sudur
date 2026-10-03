@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/mushaf/mushaf_font_cache.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
+import '../../../core/mushaf/page_layout.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 import '../widgets/audio_player_bar.dart';
@@ -32,6 +33,11 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   /// une lecture immersive, plutôt que deux réglages indépendants qui se
   /// désynchroniseraient.
   bool _showChrome = true;
+
+  /// Turning the phone sideways leaves little height: the bar and the
+  /// player would take a third of it, so they fold away (a tap brings them
+  /// back) and come back when the phone is turned upright again.
+  bool? _wasLandscape;
 
   @override
   void initState() {
@@ -75,6 +81,12 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
   Widget build(BuildContext context) {
     final mushafAsync = ref.watch(mushafRepositoryProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
+
+    final landscape = MediaQuery.orientationOf(context) == Orientation.landscape;
+    if (landscape != _wasLandscape) {
+      _wasLandscape = landscape;
+      _showChrome = !landscape;
+    }
 
     // Keep the playing ayah's highlight always in view: whenever playback
     // moves to a new ayah, jump to whichever page it's on if we're not
@@ -279,32 +291,45 @@ class _MushafPageBody extends ConsumerWidget {
         if (fontFamily == null) {
           return _OfflineFallback(onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber)));
         }
-        // Each line is sized to fill the available width (FittedBox in
-        // MushafLineRow), so it grows or shrinks with the actual screen —
-        // portrait, landscape or tablet — instead of staying pixel-locked
-        // to whatever fit a fixed row-height grid on first layout. Lines
-        // are no longer squeezed into a fixed 15-row height division, so
-        // the page scrolls vertically when a wider (and therefore taller,
-        // width-fit) line no longer fits the viewport, e.g. in landscape.
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            children: [
-              for (final line in lines)
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 6 * settings.textScale),
-                  child: MushafLineRow(
-                    line: line,
-                    words: mushaf.wordsForLine(line),
-                    fontFamily: fontFamily,
-                    textScale: settings.textScale,
-                    playingSurah: playback.surahNumber,
-                    playingAyah: playback.ayahNumber,
-                    onWordTap: (word) => controller.select(word.surah, word.ayah),
+        // Each line is stretched to the page's width (FittedBox in
+        // MushafLineRow), and the page's width follows the screen: as wide
+        // as fits, but never so wide that a portrait page overflows or a
+        // landscape one turns into giant lines (see [mushafPageWidth]). The
+        // page is centered and scrolls vertically when it is taller than
+        // the viewport.
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            const padding = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+            final pageWidth = mushafPageWidth(
+              viewportWidth: constraints.maxWidth - padding.horizontal,
+              viewportHeight: constraints.maxHeight - padding.vertical,
+            );
+            return SingleChildScrollView(
+              padding: padding,
+              child: Center(
+                child: SizedBox(
+                  width: pageWidth,
+                  child: Column(
+                    children: [
+                      for (final line in lines)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 6 * settings.textScale),
+                          child: MushafLineRow(
+                            line: line,
+                            words: mushaf.wordsForLine(line),
+                            fontFamily: fontFamily,
+                            textScale: settings.textScale,
+                            playingSurah: playback.surahNumber,
+                            playingAyah: playback.ayahNumber,
+                            onWordTap: (word) => controller.select(word.surah, word.ayah),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-            ],
-          ),
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
