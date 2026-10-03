@@ -14,12 +14,23 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sudur/app/app.dart';
 import 'package:sudur/core/database/app_database.dart';
+import 'package:sudur/core/database/profile_repository.dart';
+import 'package:sudur/core/quran_reference/quran_reference_repository.dart';
 
 void main() {
+  // Loaded once, outside the widget tests: an asset load cached by an
+  // earlier test never completes again in a later test's fake-async zone.
+  late QuranReferenceRepository reference;
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    reference = await QuranReferenceRepository.load();
+  });
+
   testWidgets('a fresh profile boots straight into Onboarding', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          quranReferenceProvider.overrideWith((ref) => reference),
           appDatabaseProvider.overrideWithValue(
             AppDatabase.forTesting(NativeDatabase.memory()),
           ),
@@ -39,6 +50,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          quranReferenceProvider.overrideWith((ref) => reference),
           appDatabaseProvider.overrideWithValue(
             AppDatabase.forTesting(NativeDatabase.memory()),
           ),
@@ -62,6 +74,45 @@ void main() {
     expect(find.text('Chemin'), findsWidgets);
     // La Communauté (Brique 8) est volontairement retirée pour l'instant.
     expect(find.text('Communauté'), findsNothing);
+    expect(find.text('Profil'), findsWidgets);
+  });
+
+  testWidgets('reloading the profile does not tear the app down', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          quranReferenceProvider.overrideWith((ref) => reference),
+          appDatabaseProvider.overrideWithValue(
+            AppDatabase.forTesting(NativeDatabase.memory()),
+          ),
+        ],
+        child: const SudurApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 4; i++) {
+      await tester.tap(find.text('Suivant'));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.text('Terminer'));
+    // Bounded pumps: from the second widget test on, the Accueil's
+    // loading indicators never settle (cached asset loads).
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.text('Accueil'), findsWidgets);
+
+    // Changing a setting stored on the profile reloads it. That must not
+    // send the app through its loading screen and rebuild everything.
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(SudurApp)),
+    );
+    container.invalidate(currentProfileProvider);
+    await tester.pump();
+
+    expect(find.text('Accueil'), findsWidgets);
     expect(find.text('Profil'), findsWidgets);
   });
 }

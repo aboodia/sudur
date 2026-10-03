@@ -19,7 +19,10 @@ class SudurApp extends ConsumerWidget {
     // Brique 2 : tant que l'Onboarding n'est pas terminé, on affiche ce
     // flux linéaire à la place du shell à onglets — pas de redirect
     // go_router, plus simple pour un flux qui ne fait pas de deep-linking.
+    // Reloading the profile (a setting stored on it changed) keeps showing
+    // the current screen: only the very first load shows the blank one.
     return needsOnboardingAsync.when(
+      skipLoadingOnReload: true,
       data: (needsOnboarding) => needsOnboarding
           ? MaterialApp(
               title: 'Sudur',

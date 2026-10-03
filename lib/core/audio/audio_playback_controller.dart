@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../quran_text/quran_text_repository.dart';
+import '../settings/audio_settings.dart';
 import 'ayah_audio_cache.dart';
 import 'playback_plan.dart';
 import 'playback_state.dart';
@@ -28,7 +29,19 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     _configureSession();
     _player.playerStateStream.listen(_onPlayerStateChanged);
     ref.onDispose(_player.dispose);
-    return const ReadingPlaybackState();
+
+    // The preferred reciter and speed, as soon as they are known (they are
+    // read from disk), and again whenever the settings change them.
+    ref.listen(audioSettingsProvider, (_, settings) {
+      if (!settings.loaded) return;
+      _applyReciter(settings.reciterId);
+      _applySpeed(settings.speed);
+    });
+    final settings = ref.read(audioSettingsProvider);
+    return ReadingPlaybackState(
+      reciterId: settings.reciterId,
+      speed: settings.speed,
+    );
   }
 
   Future<void> _configureSession() async {
@@ -154,12 +167,26 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
     setNoRepeat();
   }
 
+  /// Chosen in the mini-player: also becomes the preferred speed.
   Future<void> setSpeed(double speed) async {
+    await _applySpeed(speed);
+    await ref.read(audioSettingsProvider.notifier).setSpeed(speed);
+  }
+
+  /// Chosen in the mini-player: also becomes the preferred reciter.
+  void setReciter(String reciterId) {
+    _applyReciter(reciterId);
+    ref.read(audioSettingsProvider.notifier).setReciter(reciterId);
+  }
+
+  Future<void> _applySpeed(double speed) async {
+    if (state.speed == speed) return;
     state = state.copyWith(speed: speed);
     await _player.setSpeed(speed);
   }
 
-  void setReciter(String reciterId) {
+  void _applyReciter(String reciterId) {
+    if (state.reciterId == reciterId) return;
     state = state.copyWith(reciterId: reciterId);
     if (state.isPlaying || state.isLoading) {
       _loadAndPlayCurrent();

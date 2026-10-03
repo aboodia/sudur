@@ -39,12 +39,17 @@ class ReminderSettingsController extends Notifier<ReminderSettings> {
   }
 
   Future<void> _restore() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences? prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } catch (_) {
+      // Storage unavailable: the reminder stays off, and the app goes on.
+    }
     if (!ref.mounted) return;
     state = ReminderSettings(
-      enabled: prefs.getBool(_kEnabledKey) ?? false,
-      hour: (prefs.getInt(_kHourKey) ?? 20).clamp(0, 23),
-      minute: (prefs.getInt(_kMinuteKey) ?? 0).clamp(0, 59),
+      enabled: prefs?.getBool(_kEnabledKey) ?? false,
+      hour: (prefs?.getInt(_kHourKey) ?? 20).clamp(0, 23),
+      minute: (prefs?.getInt(_kMinuteKey) ?? 0).clamp(0, 59),
       loaded: true,
     );
   }

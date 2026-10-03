@@ -5,10 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/audio/playback_state.dart';
 import '../../../core/audio/reciter.dart';
+import '../../../core/settings/audio_settings.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
-
-const _kSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
 
 /// Lecteur audio étendu (Brique 1) : transport, répétition à 4 états,
 /// vitesse, choix du récitateur. Rendu globalement par le shell de
@@ -174,7 +173,7 @@ class _SpeedButton extends StatelessWidget {
       tooltip: 'Vitesse',
       initialValue: speed,
       onSelected: onSelected,
-      itemBuilder: (context) => _kSpeeds
+      itemBuilder: (context) => kPlaybackSpeeds
           .map((s) => PopupMenuItem(value: s, child: Text('${s}x')))
           .toList(),
       child: Padding(
