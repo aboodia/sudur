@@ -128,9 +128,13 @@ class _GoalCard extends StatelessWidget {
                   Expanded(
                     child: Text(title, style: theme.textTheme.titleMedium),
                   ),
-                  Text(
-                    l10n.goalCount(p.done, p.goal),
-                    style: theme.textTheme.titleSmall,
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      l10n.goalCount(p.done, p.goal),
+                      textAlign: TextAlign.end,
+                      style: theme.textTheme.titleSmall,
+                    ),
                   ),
                 ],
               ),

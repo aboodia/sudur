@@ -89,34 +89,45 @@ class _PathContentState extends State<_PathContent>
         ? 0
         : (current.surahNumber - 2).clamp(0, 113);
 
-    return Column(
-      children: [
-        _SummaryCard(
-          milestones: milestones,
-          reference: reference,
-          current: current,
-        ),
-        Expanded(
-          child: ScrollablePositionedList.builder(
-            initialScrollIndex: startIndex,
-            itemCount: milestones.length,
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            itemBuilder: (context, index) {
-              final m = milestones[index];
-              return _MilestoneTile(
-                milestone: m,
-                surah: reference.surahByNumber(m.surahNumber),
-                isFirst: index == 0,
-                isLast: index == milestones.length - 1,
-                previousCompleted:
-                    index > 0 &&
-                    milestones[index - 1].state == MilestoneState.completed,
-                onTap: () => showMilestoneSheet(context, m),
-              );
-            },
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
+        children: [
+          // With the text enlarged the card can be taller than the screen can
+          // spare: it then scrolls on its own, and the path keeps its room.
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: constraints.maxHeight * 0.45,
+            ),
+            child: SingleChildScrollView(
+              child: _SummaryCard(
+                milestones: milestones,
+                reference: reference,
+                current: current,
+              ),
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: ScrollablePositionedList.builder(
+              initialScrollIndex: startIndex,
+              itemCount: milestones.length,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              itemBuilder: (context, index) {
+                final m = milestones[index];
+                return _MilestoneTile(
+                  milestone: m,
+                  surah: reference.surahByNumber(m.surahNumber),
+                  isFirst: index == 0,
+                  isLast: index == milestones.length - 1,
+                  previousCompleted:
+                      index > 0 &&
+                      milestones[index - 1].state == MilestoneState.completed,
+                  onTap: () => showMilestoneSheet(context, m),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -182,6 +193,48 @@ class _SummaryCard extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+/// The sourate's name in French and in Arabic: side by side, or one above
+/// the other when the text is enlarged enough that they would not both fit.
+class _SurahNames extends StatelessWidget {
+  const _SurahNames({required this.surah});
+
+  final Surah surah;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final english = Text(surah.englishName, style: theme.textTheme.titleMedium);
+    final arabic = Text(
+      surah.nameArabic,
+      textDirection: TextDirection.rtl,
+      style: const TextStyle(
+        fontFamily: 'AmiriQuran',
+        fontSize: 22,
+        // The script's marks reach below the line: without the height
+        // they overlap the subtitle.
+        height: 1.7,
+      ),
+    );
+    final enlarged = MediaQuery.textScalerOf(context).scale(14) > 14 * 1.4;
+    if (enlarged) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          english,
+          Align(alignment: AlignmentDirectional.centerEnd, child: arabic),
+        ],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: english),
+        arabic,
+      ],
     );
   }
 }
@@ -277,28 +330,7 @@ class _MilestoneTile extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    surah.englishName,
-                                    style: theme.textTheme.titleMedium,
-                                  ),
-                                ),
-                                Text(
-                                  surah.nameArabic,
-                                  textDirection: TextDirection.rtl,
-                                  style: const TextStyle(
-                                    fontFamily: 'AmiriQuran',
-                                    fontSize: 22,
-                                    // The script's marks reach below the line: without
-                                    // the height they overlap the subtitle.
-                                    height: 1.7,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            _SurahNames(surah: surah),
                             const SizedBox(height: 8),
                             Text(
                               '$stateLabel · ${l10n.milestoneVersesAndType(surah.numberOfAyahs, revelationLabel(l10n, surah))}',

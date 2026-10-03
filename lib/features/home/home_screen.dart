@@ -253,6 +253,55 @@ class _ProfileCard extends StatelessWidget {
   }
 }
 
+/// The sourate's name in French and Arabic on the session card: side by
+/// side, or one above the other when the text is enlarged enough that they
+/// would not both fit.
+class _SessionTitle extends StatelessWidget {
+  const _SessionTitle({
+    required this.surahName,
+    required this.surahArabic,
+    required this.color,
+  });
+
+  final String surahName;
+  final String surahArabic;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final name = Text(
+      surahName,
+      style: theme.textTheme.headlineMedium?.copyWith(
+        color: color,
+        fontFamily: 'CormorantGaramond',
+      ),
+    );
+    final arabic = Text(
+      surahArabic,
+      textDirection: TextDirection.rtl,
+      style: TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, color: color),
+    );
+    final enlarged = MediaQuery.textScalerOf(context).scale(14) > 14 * 1.4;
+    if (enlarged) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          name,
+          Align(alignment: AlignmentDirectional.centerEnd, child: arabic),
+        ],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: name),
+        arabic,
+      ],
+    );
+  }
+}
+
 class _SessionCard extends ConsumerWidget {
   const _SessionCard({
     required this.surahName,
@@ -287,7 +336,11 @@ class _SessionCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          // Side by side, or one under the other when the text is enlarged.
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: 12,
+            runSpacing: 4,
             children: [
               Text(
                 'SESSION DU JOUR · MÉMORISATION',
@@ -297,7 +350,6 @@ class _SessionCard extends ConsumerWidget {
                       : const Color(0xFFB57A64),
                 ),
               ),
-              const Spacer(),
               Text(
                 '≈ $estimatedMinutes min',
                 style: TextStyle(color: onCardMuted),
@@ -305,28 +357,10 @@ class _SessionCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  surahName,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: onCard,
-                    fontFamily: 'CormorantGaramond',
-                  ),
-                ),
-              ),
-              Text(
-                surahArabic,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(
-                  fontFamily: 'AmiriQuran',
-                  fontSize: 28,
-                  color: onCard,
-                ),
-              ),
-            ],
+          _SessionTitle(
+            surahName: surahName,
+            surahArabic: surahArabic,
+            color: onCard,
           ),
           Text(
             'Sourate $surahNumber · versets $ayahStart à $ayahEnd',
@@ -368,7 +402,12 @@ class _SessionCard extends ConsumerWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Commencer la session'),
+                  Flexible(
+                    child: Text(
+                      'Commencer la session',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                   SizedBox(width: 8),
                   Icon(Icons.arrow_forward, size: 18),
                 ],

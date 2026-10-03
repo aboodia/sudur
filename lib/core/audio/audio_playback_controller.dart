@@ -123,9 +123,14 @@ class AudioPlaybackController extends Notifier<ReadingPlaybackState> {
       await _player.setSpeed(state.speed);
       await _player.play();
     } catch (_) {
-      // Network/CDN failure: surface as "not playing" rather than crash the
-      // reading screen; the user can retry.
-      state = state.copyWith(isPlaying: false, isLoading: false);
+      // Network/CDN failure: "not playing" rather than a crash of the
+      // reading screen, and counted so the app can tell the user why.
+      if (!ref.mounted) return;
+      state = state.copyWith(
+        isPlaying: false,
+        isLoading: false,
+        playbackFailures: state.playbackFailures + 1,
+      );
     }
   }
 

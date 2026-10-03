@@ -94,15 +94,17 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      l10n.verseOfTotal(
-                        widget.ayahNumber - widget.passage.ayahStart + 1,
-                        widget.passage.ayahEnd - widget.passage.ayahStart + 1,
+                    Expanded(
+                      child: Text(
+                        l10n.verseOfTotal(
+                          widget.ayahNumber - widget.passage.ayahStart + 1,
+                          widget.passage.ayahEnd - widget.passage.ayahStart + 1,
+                        ),
+                        style: theme.textTheme.titleMedium,
                       ),
-                      style: theme.textTheme.titleMedium,
                     ),
-                    const Spacer(),
-                    Chip(label: Text(l10n.repeatAloudBadge)),
+                    const SizedBox(width: 8),
+                    Flexible(child: Chip(label: Text(l10n.repeatAloudBadge))),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -181,6 +183,9 @@ class _RepeatScreenState extends ConsumerState<RepeatScreen> {
               ),
               const SizedBox(width: 24),
               IconButton.filled(
+                tooltip: playback.isPlaying
+                    ? l10n.tooltipPause
+                    : l10n.tooltipPlay,
                 iconSize: 40,
                 icon: Icon(playback.isPlaying ? Icons.pause : Icons.play_arrow),
                 onPressed: () =>

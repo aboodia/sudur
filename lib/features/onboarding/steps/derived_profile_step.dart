@@ -1,3 +1,5 @@
+import 'step_scroll.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,11 +22,13 @@ class DerivedProfileStep extends ConsumerWidget {
     final info = badge.info;
     // Sa situation personnelle plutôt que l'intervalle du palier : "12
     // sourates mémorisées" parle plus à l'utilisateur que "6 – 20 sourates".
-    final countLabel = '$count sourate${count > 1 ? 's' : ''} mémorisée${count > 1 ? 's' : ''}';
+    final countLabel =
+        '$count sourate${count > 1 ? 's' : ''} mémorisée${count > 1 ? 's' : ''}';
 
     final foreground = info.isDark ? Colors.white : theme.colorScheme.onSurface;
-    final subForeground =
-        info.isDark ? Colors.white.withValues(alpha: 0.75) : theme.colorScheme.onSurfaceVariant;
+    final subForeground = info.isDark
+        ? Colors.white.withValues(alpha: 0.75)
+        : theme.colorScheme.onSurfaceVariant;
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -39,14 +43,20 @@ class DerivedProfileStep extends ConsumerWidget {
           ),
           child: Text(
             countLabel,
-            style: theme.textTheme.labelMedium?.copyWith(color: info.isDark ? info.color : null),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: info.isDark ? info.color : null,
+            ),
           ),
         ),
         const SizedBox(height: 20),
         Text(
           info.arabicTitle,
           textDirection: TextDirection.rtl,
-          style: TextStyle(fontFamily: 'Amiri', fontSize: 40, color: foreground),
+          style: TextStyle(
+            fontFamily: 'Amiri',
+            fontSize: 40,
+            color: foreground,
+          ),
         ),
         const SizedBox(height: 12),
         Text(
@@ -56,7 +66,10 @@ class DerivedProfileStep extends ConsumerWidget {
         ),
         Text(
           info.transliteration,
-          style: theme.textTheme.bodyMedium?.copyWith(color: subForeground, fontStyle: FontStyle.italic),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: subForeground,
+            fontStyle: FontStyle.italic,
+          ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
@@ -68,7 +81,7 @@ class DerivedProfileStep extends ConsumerWidget {
       ],
     );
 
-    return Center(
+    return StepScroll(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: info.isDark

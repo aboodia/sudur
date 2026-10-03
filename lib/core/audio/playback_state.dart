@@ -29,6 +29,7 @@ class ReadingPlaybackState {
     this.repeatRangeEnd,
     this.repeatTarget = 3,
     this.repeatProgress = 0,
+    this.playbackFailures = 0,
   });
 
   final int? surahNumber;
@@ -47,6 +48,11 @@ class ReadingPlaybackState {
   /// How many times the current ayah has already been repeated (État 4).
   final int repeatProgress;
 
+  /// How many times an ayah could not be played (no connection and not
+  /// downloaded). A counter rather than a flag, so every failure can be
+  /// told to the user, not only the first.
+  final int playbackFailures;
+
   bool get hasCurrentAyah => surahNumber != null && ayahNumber != null;
 
   ReadingPlaybackState copyWith({
@@ -61,6 +67,7 @@ class ReadingPlaybackState {
     int? repeatRangeEnd,
     int? repeatTarget,
     int? repeatProgress,
+    int? playbackFailures,
   }) {
     return ReadingPlaybackState(
       surahNumber: surahNumber ?? this.surahNumber,
@@ -74,6 +81,7 @@ class ReadingPlaybackState {
       repeatRangeEnd: repeatRangeEnd ?? this.repeatRangeEnd,
       repeatTarget: repeatTarget ?? this.repeatTarget,
       repeatProgress: repeatProgress ?? this.repeatProgress,
+      playbackFailures: playbackFailures ?? this.playbackFailures,
     );
   }
 }

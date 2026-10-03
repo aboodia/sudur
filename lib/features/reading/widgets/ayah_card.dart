@@ -6,6 +6,7 @@ import '../../../core/database/profile_repository.dart';
 import '../../../core/quran_text/quran_text_models.dart';
 import '../../../core/quran_text/sajda_repository.dart';
 import '../../../core/settings/reading_settings.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AyahCard extends ConsumerWidget {
   const AyahCard({
@@ -67,6 +68,9 @@ class AyahCard extends ConsumerWidget {
                   ayahNumber: ayah.numberInSurah,
                 ),
               IconButton(
+                tooltip: isPlaying
+                    ? AppLocalizations.of(context).tooltipPause
+                    : AppLocalizations.of(context).tooltipPlay,
                 icon: Icon(isPlaying ? Icons.pause_circle : Icons.play_circle_outline),
                 onPressed: onTap,
               ),
@@ -156,7 +160,9 @@ class _BookmarkButton extends ConsumerWidget {
     final isBookmarked = bookmarks.any(
       (b) => b.surahNumber == surahNumber && b.ayahNumber == ayahNumber,
     );
+    final l10n = AppLocalizations.of(context);
     return IconButton(
+      tooltip: isBookmarked ? l10n.tooltipBookmarkRemove : l10n.tooltipBookmarkAdd,
       icon: Icon(isBookmarked ? Icons.bookmark : Icons.bookmark_border),
       onPressed: () => ref
           .read(bookmarkRepositoryProvider)

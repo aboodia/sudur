@@ -8,6 +8,7 @@ import '../../../core/audio/reciter.dart';
 import '../../../core/settings/audio_settings.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Lecteur audio étendu (Brique 1) : transport, répétition à 4 états,
 /// vitesse, choix du récitateur. Rendu globalement par le shell de
@@ -46,10 +47,14 @@ class AudioPlayerBar extends ConsumerWidget {
             children: [
               _RepeatModeButton(playback: playback, controller: controller),
               IconButton(
+                tooltip: AppLocalizations.of(context).tooltipPreviousAyah,
                 icon: const Icon(Icons.skip_previous),
                 onPressed: controller.previous,
               ),
               IconButton(
+                tooltip: playback.isPlaying
+                    ? AppLocalizations.of(context).tooltipPause
+                    : AppLocalizations.of(context).tooltipPlay,
                 iconSize: 36,
                 icon: playback.isLoading
                     ? const SizedBox(
@@ -61,6 +66,7 @@ class AudioPlayerBar extends ConsumerWidget {
                 onPressed: playback.isPlaying ? controller.pause : controller.resume,
               ),
               IconButton(
+                tooltip: AppLocalizations.of(context).tooltipNextAyah,
                 icon: const Icon(Icons.skip_next),
                 onPressed: controller.next,
               ),

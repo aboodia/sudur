@@ -50,7 +50,9 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       );
     }
 
-    await ref.read(userProfileRepositoryProvider).updateProfile(
+    await ref
+        .read(userProfileRepositoryProvider)
+        .updateProfile(
           id: profile.id,
           memorizationLevel: draft.derivedLevel.dbValue,
           availableDaysMask: draft.availableDaysMask,
@@ -73,14 +75,22 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
             Expanded(child: _kSteps[_stepIndex]),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
+              // Side by side, or one above the other when the text is
+              // enlarged enough that they would not both fit.
+              child: OverflowBar(
+                alignment: _stepIndex > 0
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.end,
+                overflowAlignment: OverflowBarAlignment.end,
+                overflowSpacing: 8,
                 children: [
                   if (_stepIndex > 0)
                     TextButton(
-                      onPressed: _isSaving ? null : () => setState(() => _stepIndex--),
+                      onPressed: _isSaving
+                          ? null
+                          : () => setState(() => _stepIndex--),
                       child: const Text('Retour'),
                     ),
-                  const Spacer(),
                   FilledButton(
                     onPressed: _isSaving
                         ? null

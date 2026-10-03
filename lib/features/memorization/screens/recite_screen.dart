@@ -59,7 +59,9 @@ class _ReciteScreenState extends ConsumerState<ReciteScreen> {
               .ayahs[widget.ayahNumber - 1];
           final words = quranWords(ayah.arabic);
 
-          return Padding(
+          // Scrolls: on a short screen, or with the text enlarged, the verse,
+          // the buttons and the three answers do not all fit at once.
+          return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

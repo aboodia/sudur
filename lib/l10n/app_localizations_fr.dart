@@ -944,4 +944,35 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get offlineMushafWifi =>
       'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.';
+
+  @override
+  String get playbackOffline =>
+      'Impossible de lire cet audio sans connexion. Télécharge-le d\'avance quand tu auras internet.';
+
+  @override
+  String get playbackOfflineAction => 'Télécharger';
+
+  @override
+  String get tooltipPlay => 'Lecture';
+
+  @override
+  String get tooltipPause => 'Pause';
+
+  @override
+  String get tooltipPreviousAyah => 'Verset précédent';
+
+  @override
+  String get tooltipNextAyah => 'Verset suivant';
+
+  @override
+  String get tooltipTextSmaller => 'Réduire le texte';
+
+  @override
+  String get tooltipTextLarger => 'Agrandir le texte';
+
+  @override
+  String get tooltipBookmarkAdd => 'Ajouter un signet';
+
+  @override
+  String get tooltipBookmarkRemove => 'Retirer le signet';
 }

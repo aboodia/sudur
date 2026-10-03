@@ -1,3 +1,5 @@
+import 'step_scroll.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,7 +29,8 @@ class PlanSummaryStep extends ConsumerWidget {
     final draft = ref.watch(onboardingDraftProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
 
-    final memorizedAyahs = referenceAsync.value?.surahs
+    final memorizedAyahs =
+        referenceAsync.value?.surahs
             .where((s) => draft.memorizedSurahs.contains(s.number))
             .fold<int>(0, (sum, s) => sum + s.numberOfAyahs) ??
         0;
@@ -50,7 +53,8 @@ class PlanSummaryStep extends ConsumerWidget {
       );
     } else {
       final activeDaysPerWeek = _popcount(draft.availableDaysMask);
-      final ayahsPerActiveDay = (draft.dailyTargetMinutes / _kMinutesPerNewAyah).clamp(1, double.infinity);
+      final ayahsPerActiveDay = (draft.dailyTargetMinutes / _kMinutesPerNewAyah)
+          .clamp(1, double.infinity);
       final weeksEstimate = activeDaysPerWeek > 0
           ? (remainingAyahs / (ayahsPerActiveDay * activeDaysPerWeek)).ceil()
           : null;
@@ -77,18 +81,24 @@ class PlanSummaryStep extends ConsumerWidget {
           else
             Text(
               'Choisissez au moins un jour disponible pour obtenir une estimation.',
-              style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.error,
+              ),
             ),
           const SizedBox(height: 8),
           Text(
             'Estimation grossière, affinée automatiquement au fil de vos '
             'révisions.',
-            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       );
     }
 
-    return Center(child: Padding(padding: const EdgeInsets.all(24), child: content));
+    return StepScroll(
+      child: Padding(padding: const EdgeInsets.all(24), child: content),
+    );
   }
 }

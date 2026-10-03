@@ -286,6 +286,7 @@ class AudioSection extends ConsumerWidget {
       child: Column(
         children: [
           DropdownButtonFormField<String>(
+            isExpanded: true,
             initialValue: settings.reciterId,
             decoration: InputDecoration(labelText: l10n.audioReciter),
             items: [
@@ -298,6 +299,7 @@ class AudioSection extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<double>(
+            isExpanded: true,
             initialValue: settings.speed,
             decoration: InputDecoration(labelText: l10n.audioSpeed),
             items: [

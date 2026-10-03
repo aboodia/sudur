@@ -245,6 +245,9 @@ class _NowPlayingBar extends ConsumerWidget {
           Row(
             children: [
               IconButton(
+                tooltip: playback.isPlaying
+                    ? l10n.tooltipPause
+                    : l10n.tooltipPlay,
                 icon: Icon(
                   playback.isPlaying ? Icons.pause_circle : Icons.play_circle,
                   color: Colors.white,

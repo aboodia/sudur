@@ -1653,6 +1653,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.'**
   String get offlineMushafWifi;
+
+  /// No description provided for @playbackOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de lire cet audio sans connexion. Télécharge-le d\'avance quand tu auras internet.'**
+  String get playbackOffline;
+
+  /// No description provided for @playbackOfflineAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get playbackOfflineAction;
+
+  /// No description provided for @tooltipPlay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture'**
+  String get tooltipPlay;
+
+  /// No description provided for @tooltipPause.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pause'**
+  String get tooltipPause;
+
+  /// No description provided for @tooltipPreviousAyah.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset précédent'**
+  String get tooltipPreviousAyah;
+
+  /// No description provided for @tooltipNextAyah.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset suivant'**
+  String get tooltipNextAyah;
+
+  /// No description provided for @tooltipTextSmaller.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réduire le texte'**
+  String get tooltipTextSmaller;
+
+  /// No description provided for @tooltipTextLarger.
+  ///
+  /// In fr, this message translates to:
+  /// **'Agrandir le texte'**
+  String get tooltipTextLarger;
+
+  /// No description provided for @tooltipBookmarkAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un signet'**
+  String get tooltipBookmarkAdd;
+
+  /// No description provided for @tooltipBookmarkRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer le signet'**
+  String get tooltipBookmarkRemove;
 }
 
 class _AppLocalizationsDelegate

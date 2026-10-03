@@ -8,6 +8,10 @@ import '../l10n/app_localizations.dart';
 import 'router.dart';
 import 'theme.dart';
 
+/// Lets code outside the widget tree (the playback failure host) show a
+/// message on whichever screen is open.
+final appMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class SudurApp extends ConsumerWidget {
   const SudurApp({super.key});
 
@@ -26,6 +30,7 @@ class SudurApp extends ConsumerWidget {
       data: (needsOnboarding) => needsOnboarding
           ? MaterialApp(
               title: 'Sudur',
+              scaffoldMessengerKey: appMessengerKey,
               debugShowCheckedModeBanner: false,
               theme: SudurTheme.light(variant),
               darkTheme: SudurTheme.dark(variant),
@@ -35,6 +40,7 @@ class SudurApp extends ConsumerWidget {
             )
           : MaterialApp.router(
               title: 'Sudur',
+              scaffoldMessengerKey: appMessengerKey,
               debugShowCheckedModeBanner: false,
               theme: SudurTheme.light(variant),
               darkTheme: SudurTheme.dark(variant),
@@ -43,6 +49,7 @@ class SudurApp extends ConsumerWidget {
               routerConfig: appRouter,
             ),
       loading: () => MaterialApp(
+        scaffoldMessengerKey: appMessengerKey,
         debugShowCheckedModeBanner: false,
         theme: SudurTheme.light(variant),
         darkTheme: SudurTheme.dark(variant),
@@ -54,6 +61,7 @@ class SudurApp extends ConsumerWidget {
       // sur un écran cassé, on le laisse entrer dans l'app normale.
       error: (_, _) => MaterialApp.router(
         title: 'Sudur',
+        scaffoldMessengerKey: appMessengerKey,
         debugShowCheckedModeBanner: false,
         theme: SudurTheme.light(variant),
         darkTheme: SudurTheme.dark(variant),

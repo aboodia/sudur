@@ -10,6 +10,7 @@ import '../../core/quran_text/quran_text_repository.dart';
 import '../../core/settings/reading_settings.dart';
 import 'widgets/audio_player_bar.dart';
 import 'widgets/ayah_card.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Écran de lecture (Brique 1), mode Arabe seul en priorité — Translittération
 /// et Bilingue réutilisent le même écran et le même réglage de zoom.
@@ -226,10 +227,12 @@ class _TextSizeMenu extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
+          tooltip: AppLocalizations.of(context).tooltipTextSmaller,
           icon: const Icon(Icons.text_decrease),
           onPressed: () => controller.setTextScale(settings.textScale - 0.1),
         ),
         IconButton(
+          tooltip: AppLocalizations.of(context).tooltipTextLarger,
           icon: const Icon(Icons.text_increase),
           onPressed: () => controller.setTextScale(settings.textScale + 0.1),
         ),

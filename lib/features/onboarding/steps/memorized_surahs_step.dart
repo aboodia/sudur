@@ -19,52 +19,65 @@ class MemorizedSurahsStep extends ConsumerWidget {
     return referenceAsync.when(
       data: (reference) {
         final allNumbers = reference.surahs.map((s) => s.number);
-        final allSelected = draft.memorizedSurahs.length == reference.surahs.length;
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+        final allSelected =
+            draft.memorizedSurahs.length == reference.surahs.length;
+        // One scroll for the header and the list: with the text enlarged the
+        // header alone can fill the screen, and the list must stay reachable.
+        return CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Quelles sourates avez-vous déjà mémorisées ?',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quelles sourates avez-vous déjà mémorisées ?',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Aucune ? Pas de souci, laissez tout décoché.',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Aucune ? Pas de souci, laissez tout décoché.',
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: allSelected
+                          ? controller.deselectAllSurahs
+                          : () => controller.selectAllSurahs(allNumbers),
+                      child: Text(
+                        allSelected
+                            ? 'Tout désélectionner'
+                            : 'Tout sélectionner',
+                      ),
+                    ),
                   ),
+                  const Divider(height: 1),
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: allSelected
-                    ? controller.deselectAllSurahs
-                    : () => controller.selectAllSurahs(allNumbers),
-                child: Text(allSelected ? 'Tout désélectionner' : 'Tout sélectionner'),
-              ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: ListView.separated(
-                itemCount: reference.surahs.length,
-                separatorBuilder: (_, _) => const Divider(height: 1),
-                itemBuilder: (context, index) {
-                  final surah = reference.surahs[index];
-                  final checked = draft.memorizedSurahs.contains(surah.number);
-                  return CheckboxListTile(
-                    value: checked,
-                    onChanged: (_) => controller.toggleSurah(surah.number),
-                    title: Text('${surah.englishName} — ${surah.frenchNameTranslation}'),
-                    subtitle: Text('${surah.numberOfAyahs} versets'),
-                    secondary: CircleAvatar(child: Text('${surah.number}')),
-                  );
-                },
-              ),
+            SliverList.separated(
+              itemCount: reference.surahs.length,
+              separatorBuilder: (_, _) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final surah = reference.surahs[index];
+                final checked = draft.memorizedSurahs.contains(surah.number);
+                return CheckboxListTile(
+                  value: checked,
+                  onChanged: (_) => controller.toggleSurah(surah.number),
+                  title: Text(
+                    '${surah.englishName} — ${surah.frenchNameTranslation}',
+                  ),
+                  subtitle: Text('${surah.numberOfAyahs} versets'),
+                  secondary: CircleAvatar(child: Text('${surah.number}')),
+                );
+              },
             ),
           ],
         );

@@ -58,8 +58,24 @@ class SessionStepScaffold extends StatelessWidget {
   /// when null rather than showing an inert placeholder icon.
   final Widget? trailing;
 
+  /// The most the phone's text enlargement is followed in the session
+  /// screens. They are built to fit one screen — the passage, the player
+  /// and the action bar at once — so beyond this the controls no longer
+  /// fit; below it the text still follows the user's setting.
+  static const maxTextScale = 1.3;
+
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    return MediaQuery(
+      data: media.copyWith(
+        textScaler: media.textScaler.clamp(maxScaleFactor: maxTextScale),
+      ),
+      child: _buildScaffold(context),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     return Scaffold(
