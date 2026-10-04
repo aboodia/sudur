@@ -93,7 +93,7 @@ void main() {
         find.text(_reference.surahByNumber(1).englishName),
         findsOneWidget,
       );
-      expect(find.text('Réviser mes sourates connues'), findsNothing);
+      expect(find.text('Mon Wird'), findsNothing);
       expect(find.text('Rien à réviser aujourd\'hui.'), findsOneWidget);
     });
 
@@ -108,35 +108,42 @@ void main() {
   group('someone partway through', () {
     const declared = [1, 2, 3, 4, 5];
 
-    testWidgets('continues with the next sourate and reviews what they know', (
-      tester,
-    ) async {
-      await _pump(tester, const HomeScreen(), declared: declared);
+    testWidgets(
+      'continues with the next sourate and has a Wird for what they know',
+      (tester) async {
+        await _pump(tester, const HomeScreen(), declared: declared);
 
-      expect(tester.takeException(), isNull);
-      expect(
-        find.text(_reference.surahByNumber(6).englishName),
-        findsOneWidget,
-        reason: 'the session picks up after the declared sourates',
-      );
-      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
-    });
+        expect(tester.takeException(), isNull);
+        expect(
+          find.text(_reference.surahByNumber(6).englishName),
+          findsOneWidget,
+          reason: 'the session picks up after the declared sourates',
+        );
+        expect(find.text('Mon Wird'), findsOneWidget);
+      },
+    );
 
     testWidgets('is not told there is nothing to review while sourates wait', (
       tester,
     ) async {
       await _pump(tester, const HomeScreen(), declared: declared);
 
-      // The cycle card is there: "nothing to review" would contradict it.
-      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+      // The Wird card is there: "nothing to review" would contradict it.
+      expect(find.text('Mon Wird'), findsOneWidget);
       expect(find.text("Rien à réviser aujourd'hui."), findsNothing);
     });
 
-    testWidgets('has the Révision hub offer the cycle', (tester) async {
+    testWidgets('has nothing in Révision: what they know is in the Wird', (
+      tester,
+    ) async {
       await _pump(tester, const RevisionHubScreen(), declared: declared);
 
       expect(tester.takeException(), isNull);
-      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+      expect(find.text('Mon Wird'), findsNothing);
+      expect(
+        find.textContaining('apparaîtront ici dès que tu auras mémorisé'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('sees their sourates as done on the Chemin', (tester) async {
@@ -160,8 +167,8 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Commencer la session'), findsNothing);
-      // The whole Quran to keep up: a cycle across all its pages.
-      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+      // The whole Quran to keep up: a Wird across all its pages.
+      expect(find.text('Mon Wird'), findsOneWidget);
     });
 
     testWidgets('sees the whole Chemin walked', (tester) async {
@@ -175,13 +182,13 @@ void main() {
       );
     });
 
-    testWidgets('has a share of pages to review each day', (tester) async {
-      await _pump(tester, const RevisionHubScreen(), declared: all);
+    testWidgets('has a share of pages to read each day', (tester) async {
+      await _pump(tester, const HomeScreen(), declared: all);
 
       expect(tester.takeException(), isNull);
-      // 604 pages over the default 30 days is about 21 a day.
+      // 604 pages over about a month: roughly 21 a day.
       expect(
-        find.textContaining('page(s) à relire aujourd\'hui'),
+        find.textContaining('page(s) à lire aujourd\'hui'),
         findsOneWidget,
       );
     });

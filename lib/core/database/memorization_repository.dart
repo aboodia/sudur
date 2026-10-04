@@ -278,10 +278,11 @@ class MemorizationRepository {
     );
   }
 
-  /// A share of the revision cycle was reviewed: counts as activity for the
-  /// streak and the retention, like any other review. [surahNumber] and
-  /// [ayahNumber] only say where the share began.
-  Future<void> logCycleReview({
+  /// A share of the Wird was read: counts as activity for the streak and
+  /// as a review for the retention, but not as a review of the verse it
+  /// begins on — [surahNumber] and [ayahNumber] only say where the share
+  /// began.
+  Future<void> logWirdShare({
     required String profileId,
     required int surahNumber,
     required int ayahNumber,
@@ -290,7 +291,7 @@ class MemorizationRepository {
     profileId,
     surahNumber,
     ayahNumber,
-    'review',
+    'wird',
     outcome,
     DateTime.now(),
   );

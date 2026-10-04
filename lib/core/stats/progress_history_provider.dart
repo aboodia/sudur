@@ -8,7 +8,7 @@ import '../mushaf/mushaf_repository.dart';
 import 'memorized_set.dart';
 import 'progress_history.dart';
 import '../gamification/achievements_provider.dart';
-import '../revision/review_cycle_provider.dart';
+import '../wird/wird_providers.dart';
 import 'goals_provider.dart';
 import 'progress_stats_provider.dart';
 
@@ -22,6 +22,22 @@ final memorizationEventsProvider = FutureProvider<List<MemorizationEvent>>((
 ) async {
   final ayahRows = await ref.watch(ayahProgressProvider.future);
   return [for (final r in ayahRows) (at: r.memorizedAt, weight: 1)];
+});
+
+/// The verses declared as already memorized when joining: sourates with no
+/// verse of their own in the guided parcours.
+final declaredAyahsProvider = FutureProvider<List<({int surah, int ayah})>>((
+  ref,
+) async {
+  final surahRows = await ref.watch(surahProgressProvider.future);
+  final ayahRows = await ref.watch(ayahProgressProvider.future);
+  final withVerseRows = {for (final r in ayahRows) r.surahNumber};
+  return [
+    for (final r in surahRows)
+      if (r.completedAt != null && !withVerseRows.contains(r.surahNumber))
+        for (var a = 1; a <= r.totalAyahCount; a++)
+          (surah: r.surahNumber, ayah: a),
+  ];
 });
 
 /// Verses known before joining (the declared sourates): where the progress
@@ -64,6 +80,7 @@ final studyHistoryProvider = FutureProvider<List<StudySessionEntry>>((
 /// validated or a session ends: refresh it all from one place. Pass the
 /// `invalidate` of the `Ref` or `WidgetRef` at hand.
 void refreshProgressData(void Function(ProviderOrFamily provider) invalidate) {
+  invalidate(successfulReviewsProvider);
   invalidate(ayahProgressProvider);
   invalidate(surahProgressProvider);
   invalidate(progressStatsProvider);

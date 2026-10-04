@@ -3,14 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/database/app_database.dart';
-import '../../../core/database/memorization_repository.dart';
 import '../../../core/format/french_date.dart';
 import '../../../core/memorization/mastery.dart';
 import '../../../core/memorization/review_calendar.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
-import '../../../core/revision/review_cycle_provider.dart';
+import '../../../core/wird/wird_providers.dart';
 import '../../../l10n/app_localizations.dart';
-import '../widgets/cycle_card.dart';
 import '../widgets/mastery_widgets.dart';
 import '../widgets/revision_calendar.dart';
 
@@ -26,20 +24,16 @@ class RevisionHubScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final progressAsync = ref.watch(ayahProgressProvider);
+    final progressAsync = ref.watch(revisionEntriesProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
-    final hasCycle = ref.watch(cyclePoolProvider).value?.isNotEmpty ?? false;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.revisionHubTitle)),
       body: SafeArea(
         child: progressAsync.when(
           data: (entries) => referenceAsync.when(
-            data: (reference) => _Content(
-              entries: entries,
-              reference: reference,
-              hasCycle: hasCycle,
-            ),
+            data: (reference) =>
+                _Content(entries: entries, reference: reference),
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, _) => Center(child: Text('Erreur : $err')),
           ),
@@ -52,17 +46,10 @@ class RevisionHubScreen extends ConsumerWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({
-    required this.entries,
-    required this.reference,
-    required this.hasCycle,
-  });
+  const _Content({required this.entries, required this.reference});
 
   final List<AyahProgressEntry> entries;
   final QuranReferenceRepository reference;
-
-  /// The user has sourates declared as memorized, reviewed by the cycle.
-  final bool hasCycle;
 
   @override
   Widget build(BuildContext context) {
@@ -74,17 +61,15 @@ class _Content extends StatelessWidget {
       return ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const CycleCard(),
-          if (!hasCycle)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  l10n.revisionNothingYet,
-                  style: theme.textTheme.bodyLarge,
-                ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                l10n.revisionNothingYet,
+                style: theme.textTheme.bodyLarge,
               ),
             ),
+          ),
         ],
       );
     }
@@ -101,7 +86,6 @@ class _Content extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const CycleCard(),
         if (dueToday.isEmpty)
           _UpToDateCard(
             nextDay: upcomingDays.isEmpty ? null : upcomingDays.first,

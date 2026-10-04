@@ -52,7 +52,7 @@ final progressStatsProvider = FutureProvider<ProgressStats>((ref) async {
     completedSurahs: surahRows.where((r) => r.completedAt != null).length,
     juz: juzEquivalent(reference, memorized),
     retention: computeRetention([
-      for (final l in log.where((l) => l.kind == 'review'))
+      for (final l in log.where((l) => l.kind == 'review' || l.kind == 'wird'))
         (at: l.occurredAt, outcome: l.outcome),
     ], now),
     streak: computeStreakState(

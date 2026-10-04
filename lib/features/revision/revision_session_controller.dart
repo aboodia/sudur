@@ -9,6 +9,7 @@ import '../../core/memorization/review_calendar.dart';
 import '../../core/memorization/review_scheduler.dart';
 import '../../core/memorization/study_session.dart';
 import '../../core/stats/progress_history_provider.dart';
+import '../../core/wird/wird_providers.dart';
 
 /// Most verses one revision session offers — "sessions courtes (5-15 min)"
 /// per the cahier des charges. Whatever is left stays due and is offered by
@@ -86,7 +87,11 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
     // Oldest due first, so the most overdue verses are never the ones left
     // out by the cap — then back in Mushaf order, so consecutive verses are
     // recited one after the other.
-    final due = await repo.dueReviews(profile.id);
+    // The sourates in the Wird are read there, not recited here.
+    final wird = await ref.read(wirdSurahsProvider.future);
+    final due = (await repo.dueReviews(
+      profile.id,
+    )).where((e) => !wird.contains(e.surahNumber));
     final items = due.take(revisionSessionSize).toList()
       ..sort((a, b) {
         final bySurah = a.surahNumber.compareTo(b.surahNumber);
@@ -133,10 +138,15 @@ class RevisionSessionController extends Notifier<RevisionSessionState> {
       ayahCount: results.length,
     );
 
-    final remaining = (await repo.dueReviews(profile.id)).length;
+    // A sourate may have just moved to the Wird.
+    final wird = await ref.read(wirdSurahsProvider.future);
+    final remaining = (await repo.dueReviews(
+      profile.id,
+    )).where((e) => !wird.contains(e.surahNumber)).length;
     final today = dateOnly(now);
     final upcoming =
         (await repo.allAyahProgress(profile.id))
+            .where((e) => !wird.contains(e.surahNumber))
             .map((e) => dateOnly(e.nextReviewAt))
             .where((d) => d.isAfter(today))
             .toList()

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/database/profile_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../wird/widgets/wird_goal_editor.dart';
 import 'widgets/reminder_card.dart';
 import 'widgets/settings_sections.dart';
 import 'widgets/theme_variant_picker.dart';
@@ -40,6 +41,21 @@ class ProfileScreen extends ConsumerWidget {
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text('Erreur de chargement du profil : $err'),
+              ),
+            ),
+            SettingsHeading(l10n.wirdSettingsTitle),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.wirdSettingsHint,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 12),
+                  const WirdGoalSection(),
+                ],
               ),
             ),
             SettingsHeading(l10n.readingTitle),

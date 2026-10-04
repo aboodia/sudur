@@ -178,7 +178,7 @@ class ReviewLogEntries extends Table {
   IntColumn get surahNumber => integer()();
   IntColumn get ayahNumber => integer()();
 
-  /// 'memorize' | 'review'.
+  /// 'memorize' | 'review' | 'wird'.
   TextColumn get kind => text()();
 
   /// 'clean' | 'hesitant' | 'redo' — same values as

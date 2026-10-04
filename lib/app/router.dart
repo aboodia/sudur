@@ -9,10 +9,10 @@ import '../features/profile/profile_screen.dart';
 import '../features/settings/offline_screen.dart';
 import '../features/reading/mushaf/mushaf_page_view_screen.dart';
 import '../features/reading/reading_screen.dart';
-import '../features/revision/screens/cycle_screen.dart';
 import '../features/revision/screens/revision_hub_screen.dart';
 import '../features/revision/screens/revision_session_screen.dart';
 import '../features/reading/surah_reading_screen.dart';
+import '../features/wird/wird_screen.dart';
 
 /// Squelette de navigation (Brique 0) : les grands onglets existent, même
 /// si la plupart des écrans sont encore des placeholders. Mémorisation et
@@ -112,12 +112,10 @@ final appRouter = GoRouter(
           path: 'session',
           builder: (context, state) => const RevisionSessionScreen(),
         ),
-        GoRoute(
-          path: 'cycle',
-          builder: (context, state) => const CycleScreen(),
-        ),
       ],
     ),
+    // Le Wird : sa propre route, lancée depuis sa carte de l'Accueil.
+    GoRoute(path: '/wird', builder: (context, state) => const WirdScreen()),
   ],
 );
 

@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/wird/wird_plan.dart';
+
 /// 'debutant' | 'en_cours' | 'hafiz' — mirrors [UserProfiles.memorizationLevel]
 /// in core/database/tables.dart, derived (not asked) from how many sourates
 /// the Onboarding selection step marked as already memorized.
@@ -21,11 +23,17 @@ class OnboardingDraft {
     this.memorizedSurahs = const {},
     this.availableDaysMask = 127,
     this.dailyTargetMinutes = 10,
+    this.wirdUnit = WirdUnit.pages,
+    this.wirdAmount,
   });
 
   final Set<int> memorizedSurahs;
   final int availableDaysMask;
   final int dailyTargetMinutes;
+
+  /// The Wird goal the user chose, if they did (null: the app suggests one).
+  final WirdUnit wirdUnit;
+  final int? wirdAmount;
 
   /// Hafiz iff every one of the 114 sourates is marked memorized — anything
   /// less is "en_cours", zero is "debutant".
@@ -39,11 +47,15 @@ class OnboardingDraft {
     Set<int>? memorizedSurahs,
     int? availableDaysMask,
     int? dailyTargetMinutes,
+    WirdUnit? wirdUnit,
+    int? wirdAmount,
   }) =>
       OnboardingDraft(
         memorizedSurahs: memorizedSurahs ?? this.memorizedSurahs,
         availableDaysMask: availableDaysMask ?? this.availableDaysMask,
         dailyTargetMinutes: dailyTargetMinutes ?? this.dailyTargetMinutes,
+        wirdUnit: wirdUnit ?? this.wirdUnit,
+        wirdAmount: wirdAmount ?? this.wirdAmount,
       );
 }
 
@@ -67,6 +79,10 @@ class OnboardingDraftController extends Notifier<OnboardingDraft> {
 
   void toggleDay(int dayBitIndex) {
     state = state.copyWith(availableDaysMask: state.availableDaysMask ^ (1 << dayBitIndex));
+  }
+
+  void setWirdGoal(WirdUnit unit, int amount) {
+    state = state.copyWith(wirdUnit: unit, wirdAmount: amount);
   }
 
   void setDailyTargetMinutes(int minutes) {

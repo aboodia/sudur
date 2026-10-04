@@ -505,7 +505,7 @@ abstract class AppLocalizations {
   /// No description provided for @revisionTodayLabel.
   ///
   /// In fr, this message translates to:
-  /// **'RÉVISER MES VERSETS APPRIS'**
+  /// **'RÉVISION DU JOUR'**
   String get revisionTodayLabel;
 
   /// No description provided for @revisionStart.
@@ -1720,126 +1720,6 @@ abstract class AppLocalizations {
   /// **'Retirer le signet'**
   String get tooltipBookmarkRemove;
 
-  /// No description provided for @cycleTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Réviser mes sourates connues'**
-  String get cycleTitle;
-
-  /// No description provided for @cycleIntro.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tu as déjà mémorisé ces sourates : voici ta part du jour, page par page. Elle se règle sur la durée du cycle que tu choisis.'**
-  String get cycleIntro;
-
-  /// No description provided for @cycleTodayCount.
-  ///
-  /// In fr, this message translates to:
-  /// **'{n} page(s) à réviser aujourd\'hui'**
-  String cycleTodayCount(int n);
-
-  /// No description provided for @cyclePage.
-  ///
-  /// In fr, this message translates to:
-  /// **'Page {n}'**
-  String cyclePage(int n);
-
-  /// No description provided for @cyclePageIn.
-  ///
-  /// In fr, this message translates to:
-  /// **'Page {n} · {surah}'**
-  String cyclePageIn(int n, String surah);
-
-  /// No description provided for @cycleOpenPage.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ouvrir la page'**
-  String get cycleOpenPage;
-
-  /// No description provided for @cycleProgress.
-  ///
-  /// In fr, this message translates to:
-  /// **'{done} page(s) sur {total} · {days} jour(s) restant(s)'**
-  String cycleProgress(int done, int total, int days);
-
-  /// No description provided for @cycleLength.
-  ///
-  /// In fr, this message translates to:
-  /// **'Durée du cycle'**
-  String get cycleLength;
-
-  /// No description provided for @cycleLengthDays.
-  ///
-  /// In fr, this message translates to:
-  /// **'{n} jours'**
-  String cycleLengthDays(int n);
-
-  /// No description provided for @cycleHow.
-  ///
-  /// In fr, this message translates to:
-  /// **'Comment était ta récitation de ces pages ?'**
-  String get cycleHow;
-
-  /// No description provided for @cycleOutcomeCleanSub.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bien revu, on passe à la suite'**
-  String get cycleOutcomeCleanSub;
-
-  /// No description provided for @cycleOutcomeHesitantSub.
-  ///
-  /// In fr, this message translates to:
-  /// **'Revu, on passe à la suite'**
-  String get cycleOutcomeHesitantSub;
-
-  /// No description provided for @cycleOutcomeRedoSub.
-  ///
-  /// In fr, this message translates to:
-  /// **'Cette part reste à faire'**
-  String get cycleOutcomeRedoSub;
-
-  /// No description provided for @cycleFinish.
-  ///
-  /// In fr, this message translates to:
-  /// **'Terminer la révision'**
-  String get cycleFinish;
-
-  /// No description provided for @cycleDoneToday.
-  ///
-  /// In fr, this message translates to:
-  /// **'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.'**
-  String get cycleDoneToday;
-
-  /// No description provided for @cycleFinishedTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Cycle terminé, mabrouk !'**
-  String get cycleFinishedTitle;
-
-  /// No description provided for @cycleFinishedBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.'**
-  String get cycleFinishedBody;
-
-  /// No description provided for @homeCycleTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Réviser mes sourates connues'**
-  String get homeCycleTitle;
-
-  /// No description provided for @homeCycleToday.
-  ///
-  /// In fr, this message translates to:
-  /// **'{n} page(s) à relire aujourd\'hui'**
-  String homeCycleToday(int n);
-
-  /// No description provided for @homeCycleDone.
-  ///
-  /// In fr, this message translates to:
-  /// **'Faite aujourd\'hui'**
-  String get homeCycleDone;
-
   /// No description provided for @mushafReadAsText.
   ///
   /// In fr, this message translates to:
@@ -1849,7 +1729,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeReviseVersesTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Réviser mes versets appris'**
+  /// **'Révision'**
   String get homeReviseVersesTitle;
 
   /// No description provided for @homeReviseVersesSubtitle.
@@ -1869,6 +1749,192 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce verset est trop court pour être masqué : relis-le bien, puis passe à la suite.'**
   String get maskNothingToHide;
+
+  /// No description provided for @wirdTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon Wird'**
+  String get wirdTitle;
+
+  /// No description provided for @wirdIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque jour, une part des sourates que tu connais déjà, page après page, en boucle.'**
+  String get wirdIntro;
+
+  /// No description provided for @wirdTodayCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} page(s) à lire aujourd\'hui'**
+  String wirdTodayCount(int n);
+
+  /// No description provided for @wirdTurn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tour {n}'**
+  String wirdTurn(int n);
+
+  /// No description provided for @wirdProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} page(s) sur {total} dans ce tour'**
+  String wirdProgress(int done, int total);
+
+  /// No description provided for @wirdLoopIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un tour complet en {n} jour(s) à ce rythme.'**
+  String wirdLoopIn(int n);
+
+  /// No description provided for @wirdPageIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {n} · {surah}'**
+  String wirdPageIn(int n, String surah);
+
+  /// No description provided for @wirdGoalTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif quotidien'**
+  String get wirdGoalTitle;
+
+  /// No description provided for @wirdUnitPages.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pages'**
+  String get wirdUnitPages;
+
+  /// No description provided for @wirdUnitJuz.
+  ///
+  /// In fr, this message translates to:
+  /// **'Juz'**
+  String get wirdUnitJuz;
+
+  /// No description provided for @wirdGoalPagesValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} page(s) par jour'**
+  String wirdGoalPagesValue(int n);
+
+  /// No description provided for @wirdGoalJuzValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} Juz par jour'**
+  String wirdGoalJuzValue(int n);
+
+  /// No description provided for @wirdGoalSuggested.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est une proposition de départ : règle-la comme tu veux.'**
+  String get wirdGoalSuggested;
+
+  /// No description provided for @wirdGoalNoSourates.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le Wird se remplit avec les sourates que tu connais et qui sont bien fixées. Règle déjà ton objectif.'**
+  String get wirdGoalNoSourates;
+
+  /// No description provided for @wirdHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment s\'est passée ta lecture de ces pages ?'**
+  String get wirdHow;
+
+  /// No description provided for @wirdOutcomeCleanSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien lu, on passe à la suite'**
+  String get wirdOutcomeCleanSub;
+
+  /// No description provided for @wirdOutcomeHesitantSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu, on passe à la suite'**
+  String get wirdOutcomeHesitantSub;
+
+  /// No description provided for @wirdOutcomeRedoSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette part reste à faire'**
+  String get wirdOutcomeRedoSub;
+
+  /// No description provided for @wirdFinish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer ma part'**
+  String get wirdFinish;
+
+  /// No description provided for @wirdDoneToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.'**
+  String get wirdDoneToday;
+
+  /// No description provided for @wirdRoundDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tour terminé, mabrouk ! Un nouveau tour commence demain.'**
+  String get wirdRoundDone;
+
+  /// No description provided for @homeWirdTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon Wird'**
+  String get homeWirdTitle;
+
+  /// No description provided for @homeWirdToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} page(s) à lire aujourd\'hui'**
+  String homeWirdToday(int n);
+
+  /// No description provided for @homeWirdDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faite aujourd\'hui'**
+  String get homeWirdDone;
+
+  /// No description provided for @wirdOnboardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton Wird'**
+  String get wirdOnboardTitle;
+
+  /// No description provided for @wirdOnboardBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu connais déjà une partie du Coran. Le Wird te la fait relire chaque jour, en boucle. Combien veux-tu en lire par jour ?'**
+  String get wirdOnboardBody;
+
+  /// No description provided for @wirdNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaine part : page {n}'**
+  String wirdNext(int n);
+
+  /// No description provided for @wirdLess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins'**
+  String get wirdLess;
+
+  /// No description provided for @wirdMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus'**
+  String get wirdMore;
+
+  /// No description provided for @wirdSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon Wird'**
+  String get wirdSettingsTitle;
+
+  /// No description provided for @wirdSettingsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta lecture quotidienne des sourates déjà apprises.'**
+  String get wirdSettingsHint;
 
   /// No description provided for @profileLevelHint.
   ///

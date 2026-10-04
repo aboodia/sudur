@@ -10,10 +10,10 @@ import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/gamification/memorizer_profile.dart';
 import '../../core/memorization/profile_resolver.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
-import '../../core/revision/review_cycle_provider.dart';
 import '../../core/stats/progress_stats_provider.dart';
+import '../../core/wird/wird_providers.dart';
 import '../../l10n/app_localizations.dart';
-import '../revision/widgets/cycle_card.dart';
+import '../wird/widgets/wird_card.dart';
 import 'widgets/progress_stats_section.dart';
 
 /// The small label at the top of the session card: the text color made for
@@ -31,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final surahProgressAsync = ref.watch(surahProgressProvider);
     final previewAsync = ref.watch(todaysPassagePreviewProvider);
-    final dueReviewsAsync = ref.watch(dueReviewsProvider);
+    final dueReviewsAsync = ref.watch(dueRevisionProvider);
     final referenceAsync = ref.watch(quranReferenceProvider);
     final statsAsync = ref.watch(progressStatsProvider);
     final newBadges = ref.watch(achievementsProvider).value?.newCount ?? 0;
@@ -121,13 +121,13 @@ class HomeScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.labelMedium,
             ),
             const SizedBox(height: 8),
-            const CycleCard(),
+            const WirdCard(),
             dueReviewsAsync.when(
               data: (due) {
                 if (due.isEmpty) {
-                  // With sourates to review in the cycle, "nothing to
-                  // review" would contradict the card just above.
-                  if (ref.watch(cycleTodayProvider).value != null) {
+                  // With a Wird to read, "nothing to review" would
+                  // contradict the card just above.
+                  if (ref.watch(wirdTodayProvider).value != null) {
                     return const SizedBox.shrink();
                   }
                   return const Card(

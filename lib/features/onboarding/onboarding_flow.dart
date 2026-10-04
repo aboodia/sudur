@@ -4,19 +4,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/database/memorization_repository.dart';
 import '../../core/database/profile_repository.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
+import '../../core/wird/wird_state.dart';
 import 'onboarding_draft.dart';
 import 'steps/availability_step.dart';
 import 'steps/derived_profile_step.dart';
 import 'steps/memorized_surahs_step.dart';
 import 'steps/plan_summary_step.dart';
 import 'steps/welcome_step.dart';
+import 'steps/wird_goal_step.dart';
 
-const _kSteps = [
-  WelcomeStep(),
-  MemorizedSurahsStep(),
-  DerivedProfileStep(),
-  AvailabilityStep(),
-  PlanSummaryStep(),
+/// The Wird goal is only asked when some sourates are already memorized.
+List<Widget> _stepsFor(OnboardingDraft draft) => [
+  const WelcomeStep(),
+  const MemorizedSurahsStep(),
+  const DerivedProfileStep(),
+  if (draft.memorizedSurahs.isNotEmpty) const WirdGoalStep(),
+  const AvailabilityStep(),
+  const PlanSummaryStep(),
 ];
 
 /// Brique 2 : accueil, sélection des sourates déjà mémorisées (le niveau en
@@ -33,7 +37,6 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   int _stepIndex = 0;
   bool _isSaving = false;
 
-  bool get _isLastStep => _stepIndex == _kSteps.length - 1;
 
   Future<void> _finish() async {
     setState(() => _isSaving = true);
@@ -41,6 +44,12 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
     final profile = await ref.read(currentProfileProvider.future);
     final reference = await ref.read(quranReferenceProvider.future);
     final memorization = ref.read(memorizationRepositoryProvider);
+    final wirdAmount = draft.wirdAmount;
+    if (draft.memorizedSurahs.isNotEmpty && wirdAmount != null) {
+      await ref
+          .read(wirdControllerProvider.notifier)
+          .setGoal(draft.wirdUnit, wirdAmount);
+    }
 
     for (final surahNumber in draft.memorizedSurahs) {
       await memorization.markSurahMemorized(
@@ -67,12 +76,14 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
 
   @override
   Widget build(BuildContext context) {
+    final steps = _stepsFor(ref.watch(onboardingDraftProvider));
+    final isLastStep = _stepIndex == steps.length - 1;
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            LinearProgressIndicator(value: (_stepIndex + 1) / _kSteps.length),
-            Expanded(child: _kSteps[_stepIndex]),
+            LinearProgressIndicator(value: (_stepIndex + 1) / steps.length),
+            Expanded(child: steps[_stepIndex]),
             Padding(
               padding: const EdgeInsets.all(16),
               // Side by side, or one above the other when the text is
@@ -95,7 +106,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                     onPressed: _isSaving
                         ? null
                         : () async {
-                            if (_isLastStep) {
+                            if (isLastStep) {
                               await _finish();
                             } else {
                               setState(() => _stepIndex++);
@@ -107,7 +118,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : Text(_isLastStep ? 'Terminer' : 'Suivant'),
+                        : Text(isLastStep ? 'Terminer' : 'Suivant'),
                   ),
                 ],
               ),

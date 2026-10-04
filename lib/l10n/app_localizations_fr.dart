@@ -262,7 +262,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get revisionHubTitle => 'Révision';
 
   @override
-  String get revisionTodayLabel => 'RÉVISER MES VERSETS APPRIS';
+  String get revisionTodayLabel => 'RÉVISION DU JOUR';
 
   @override
   String get revisionStart => 'Commencer la révision';
@@ -982,85 +982,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tooltipBookmarkRemove => 'Retirer le signet';
 
   @override
-  String get cycleTitle => 'Réviser mes sourates connues';
-
-  @override
-  String get cycleIntro =>
-      'Tu as déjà mémorisé ces sourates : voici ta part du jour, page par page. Elle se règle sur la durée du cycle que tu choisis.';
-
-  @override
-  String cycleTodayCount(int n) {
-    return '$n page(s) à réviser aujourd\'hui';
-  }
-
-  @override
-  String cyclePage(int n) {
-    return 'Page $n';
-  }
-
-  @override
-  String cyclePageIn(int n, String surah) {
-    return 'Page $n · $surah';
-  }
-
-  @override
-  String get cycleOpenPage => 'Ouvrir la page';
-
-  @override
-  String cycleProgress(int done, int total, int days) {
-    return '$done page(s) sur $total · $days jour(s) restant(s)';
-  }
-
-  @override
-  String get cycleLength => 'Durée du cycle';
-
-  @override
-  String cycleLengthDays(int n) {
-    return '$n jours';
-  }
-
-  @override
-  String get cycleHow => 'Comment était ta récitation de ces pages ?';
-
-  @override
-  String get cycleOutcomeCleanSub => 'Bien revu, on passe à la suite';
-
-  @override
-  String get cycleOutcomeHesitantSub => 'Revu, on passe à la suite';
-
-  @override
-  String get cycleOutcomeRedoSub => 'Cette part reste à faire';
-
-  @override
-  String get cycleFinish => 'Terminer la révision';
-
-  @override
-  String get cycleDoneToday =>
-      'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.';
-
-  @override
-  String get cycleFinishedTitle => 'Cycle terminé, mabrouk !';
-
-  @override
-  String get cycleFinishedBody =>
-      'Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.';
-
-  @override
-  String get homeCycleTitle => 'Réviser mes sourates connues';
-
-  @override
-  String homeCycleToday(int n) {
-    return '$n page(s) à relire aujourd\'hui';
-  }
-
-  @override
-  String get homeCycleDone => 'Faite aujourd\'hui';
-
-  @override
   String get mushafReadAsText => 'Lire en vue texte';
 
   @override
-  String get homeReviseVersesTitle => 'Réviser mes versets appris';
+  String get homeReviseVersesTitle => 'Révision';
 
   @override
   String homeReviseVersesSubtitle(int n) {
@@ -1075,6 +1000,124 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get maskNothingToHide =>
       'Ce verset est trop court pour être masqué : relis-le bien, puis passe à la suite.';
+
+  @override
+  String get wirdTitle => 'Mon Wird';
+
+  @override
+  String get wirdIntro =>
+      'Chaque jour, une part des sourates que tu connais déjà, page après page, en boucle.';
+
+  @override
+  String wirdTodayCount(int n) {
+    return '$n page(s) à lire aujourd\'hui';
+  }
+
+  @override
+  String wirdTurn(int n) {
+    return 'Tour $n';
+  }
+
+  @override
+  String wirdProgress(int done, int total) {
+    return '$done page(s) sur $total dans ce tour';
+  }
+
+  @override
+  String wirdLoopIn(int n) {
+    return 'Un tour complet en $n jour(s) à ce rythme.';
+  }
+
+  @override
+  String wirdPageIn(int n, String surah) {
+    return 'Page $n · $surah';
+  }
+
+  @override
+  String get wirdGoalTitle => 'Objectif quotidien';
+
+  @override
+  String get wirdUnitPages => 'Pages';
+
+  @override
+  String get wirdUnitJuz => 'Juz';
+
+  @override
+  String wirdGoalPagesValue(int n) {
+    return '$n page(s) par jour';
+  }
+
+  @override
+  String wirdGoalJuzValue(int n) {
+    return '$n Juz par jour';
+  }
+
+  @override
+  String get wirdGoalSuggested =>
+      'C\'est une proposition de départ : règle-la comme tu veux.';
+
+  @override
+  String get wirdGoalNoSourates =>
+      'Le Wird se remplit avec les sourates que tu connais et qui sont bien fixées. Règle déjà ton objectif.';
+
+  @override
+  String get wirdHow => 'Comment s\'est passée ta lecture de ces pages ?';
+
+  @override
+  String get wirdOutcomeCleanSub => 'Bien lu, on passe à la suite';
+
+  @override
+  String get wirdOutcomeHesitantSub => 'Lu, on passe à la suite';
+
+  @override
+  String get wirdOutcomeRedoSub => 'Cette part reste à faire';
+
+  @override
+  String get wirdFinish => 'Terminer ma part';
+
+  @override
+  String get wirdDoneToday =>
+      'C\'est fait pour aujourd\'hui, bravo. Ta prochaine part t\'attend demain.';
+
+  @override
+  String get wirdRoundDone =>
+      'Tour terminé, mabrouk ! Un nouveau tour commence demain.';
+
+  @override
+  String get homeWirdTitle => 'Mon Wird';
+
+  @override
+  String homeWirdToday(int n) {
+    return '$n page(s) à lire aujourd\'hui';
+  }
+
+  @override
+  String get homeWirdDone => 'Faite aujourd\'hui';
+
+  @override
+  String get wirdOnboardTitle => 'Ton Wird';
+
+  @override
+  String get wirdOnboardBody =>
+      'Tu connais déjà une partie du Coran. Le Wird te la fait relire chaque jour, en boucle. Combien veux-tu en lire par jour ?';
+
+  @override
+  String wirdNext(int n) {
+    return 'Prochaine part : page $n';
+  }
+
+  @override
+  String get wirdLess => 'Moins';
+
+  @override
+  String get wirdMore => 'Plus';
+
+  @override
+  String get wirdSettingsTitle => 'Mon Wird';
+
+  @override
+  String get wirdSettingsHint =>
+      'Ta lecture quotidienne des sourates déjà apprises.';
 
   @override
   String get profileLevelHint => 'Défini à ton inscription';
