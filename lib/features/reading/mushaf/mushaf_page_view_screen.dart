@@ -7,6 +7,7 @@ import '../../../core/mushaf/mushaf_font_cache.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/mushaf/page_layout.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
+import '../../../core/settings/last_read.dart';
 import '../../../core/settings/reading_settings.dart';
 import '../widgets/audio_player_bar.dart';
 import 'mushaf_line_row.dart';
@@ -46,6 +47,10 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
     _currentPage = widget.initialPage;
     _controller = PageController(initialPage: widget.initialPage - 1);
     _prepareInitialAyah();
+    // Deferred: a provider cannot be written while the tree is building.
+    Future.microtask(() {
+      if (mounted) ref.read(lastReadProvider.notifier).record(widget.initialPage);
+    });
   }
 
   // Le mini-lecteur doit être visible dès l'entrée sur la page, prêt à
@@ -157,7 +162,10 @@ class _MushafPageViewScreenState extends ConsumerState<MushafPageViewScreen> {
                     // reculer.
                     reverse: true,
                     itemCount: mushaf.pageCount,
-                    onPageChanged: (index) => setState(() => _currentPage = index + 1),
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index + 1);
+                      ref.read(lastReadProvider.notifier).record(index + 1);
+                    },
                     itemBuilder: (context, index) => _MushafPageBody(pageNumber: index + 1),
                   ),
                   loading: () => const Center(child: CircularProgressIndicator()),

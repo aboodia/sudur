@@ -93,7 +93,7 @@ void main() {
         find.text(_reference.surahByNumber(1).englishName),
         findsOneWidget,
       );
-      expect(find.text('Révision du Coran'), findsNothing);
+      expect(find.text('Réviser mes sourates connues'), findsNothing);
       expect(find.text('Rien à réviser aujourd\'hui.'), findsOneWidget);
     });
 
@@ -119,14 +119,24 @@ void main() {
         findsOneWidget,
         reason: 'the session picks up after the declared sourates',
       );
-      expect(find.text('Révision du Coran'), findsOneWidget);
+      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+    });
+
+    testWidgets('is not told there is nothing to review while sourates wait', (
+      tester,
+    ) async {
+      await _pump(tester, const HomeScreen(), declared: declared);
+
+      // The cycle card is there: "nothing to review" would contradict it.
+      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+      expect(find.text("Rien à réviser aujourd'hui."), findsNothing);
     });
 
     testWidgets('has the Révision hub offer the cycle', (tester) async {
       await _pump(tester, const RevisionHubScreen(), declared: declared);
 
       expect(tester.takeException(), isNull);
-      expect(find.text('Révision du Coran'), findsOneWidget);
+      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
     });
 
     testWidgets('sees their sourates as done on the Chemin', (tester) async {
@@ -151,7 +161,7 @@ void main() {
       );
       expect(find.text('Commencer la session'), findsNothing);
       // The whole Quran to keep up: a cycle across all its pages.
-      expect(find.text('Révision du Coran'), findsOneWidget);
+      expect(find.text('Réviser mes sourates connues'), findsOneWidget);
     });
 
     testWidgets('sees the whole Chemin walked', (tester) async {
@@ -170,7 +180,10 @@ void main() {
 
       expect(tester.takeException(), isNull);
       // 604 pages over the default 30 days is about 21 a day.
-      expect(find.textContaining('page(s) aujourd\'hui'), findsOneWidget);
+      expect(
+        find.textContaining('page(s) à relire aujourd\'hui'),
+        findsOneWidget,
+      );
     });
   });
 }

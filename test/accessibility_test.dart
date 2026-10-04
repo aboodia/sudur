@@ -212,20 +212,29 @@ void main() {
     });
 
     testWidgets('every step of a memorization session', (tester) async {
-      // Nothing memorized yet: the session starts on the first sourate.
+      // Al-Fatiha known: the session starts on Al-Baqara 2:1-5, whose first
+      // verse is a single word.
       await _pump(
         tester,
         const MemorizationFlowScreen(),
-        db: await _db(declared: []),
+        db: await _db(declared: const [1]),
       );
       expect(tester.takeException(), isNull);
 
       // Go through the five steps by pressing the main button of each.
       final seen = <String>{};
+      var sawShortVerse = false;
       for (var i = 0; i < 14; i++) {
         final steps = find.textContaining(RegExp(r'Étape \d sur 5'));
         if (steps.evaluate().isNotEmpty) {
           seen.add((tester.widget<Text>(steps.first)).data ?? '');
+        }
+        // Al-Baqara 2:1 is a single word: nothing to hide in Masquer.
+        if (find
+            .textContaining('trop court pour être masqué')
+            .evaluate()
+            .isNotEmpty) {
+          sawShortVerse = true;
         }
         final buttons = find.byType(FilledButton);
         if (buttons.evaluate().isEmpty) break;
@@ -235,6 +244,7 @@ void main() {
         expect(tester.takeException(), isNull, reason: 'after press ${i + 1}');
       }
       expect(seen.length, greaterThanOrEqualTo(4), reason: 'steps reached');
+      expect(sawShortVerse, isTrue, reason: 'a one-word verse is not masked');
     });
   });
 }

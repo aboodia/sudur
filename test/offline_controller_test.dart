@@ -1,3 +1,8 @@
+@Timeout(Duration(minutes: 3))
+// These write the 604 page files to disk: on a busy machine the default 30
+// seconds is not always enough.
+library;
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -52,7 +57,14 @@ void main() {
     // Let the saved audio settings load, then the first scan of the disk.
     container.read(audioSettingsProvider);
     container.read(offlineControllerProvider);
-    await Future<void>.delayed(const Duration(milliseconds: 80));
+    // Wait for both to have read their disk, however busy the machine is.
+    for (var i = 0; i < 200; i++) {
+      if (container.read(offlineControllerProvider).loaded &&
+          container.read(audioSettingsProvider).loaded) {
+        break;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 25));
+    }
   });
 
   tearDown(() async {

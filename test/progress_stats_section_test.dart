@@ -52,6 +52,8 @@ void main() {
     expect(find.text('1,3'), findsOneWidget);
     expect(find.text('75 %'), findsOneWidget);
     expect(find.text('3 j'), findsOneWidget);
+    // The tile adds what the chip at the top does not say: the record.
+    expect(find.text('record : 3 j'), findsOneWidget);
     expect(find.text('2 h 05'), findsOneWidget);
   });
 

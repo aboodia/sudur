@@ -17,7 +17,34 @@ class BookmarksListView extends ConsumerWidget {
     return bookmarksAsync.when(
       data: (bookmarks) {
         if (bookmarks.isEmpty) {
-          return const Center(child: Text('Aucun signet pour le moment'));
+          final theme = Theme.of(context);
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.bookmark_border,
+                    size: 40,
+                    color: theme.colorScheme.outline,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Aucun signet pour le moment',
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Dans la vue texte d\'une sourate, touche l\'icône de signet '
+                    'd\'un verset : tu le retrouveras ici.',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          );
         }
         final reference = referenceAsync.value;
         return ListView.separated(

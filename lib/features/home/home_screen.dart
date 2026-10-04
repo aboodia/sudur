@@ -10,6 +10,7 @@ import '../../core/gamification/memorizer_badge_icon.dart';
 import '../../core/gamification/memorizer_profile.dart';
 import '../../core/memorization/profile_resolver.dart';
 import '../../core/quran_reference/quran_reference_repository.dart';
+import '../../core/revision/review_cycle_provider.dart';
 import '../../core/stats/progress_stats_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../revision/widgets/cycle_card.dart';
@@ -124,6 +125,11 @@ class HomeScreen extends ConsumerWidget {
             dueReviewsAsync.when(
               data: (due) {
                 if (due.isEmpty) {
+                  // With sourates to review in the cycle, "nothing to
+                  // review" would contradict the card just above.
+                  if (ref.watch(cycleTodayProvider).value != null) {
+                    return const SizedBox.shrink();
+                  }
                   return const Card(
                     child: Padding(
                       padding: EdgeInsets.all(16),
@@ -134,8 +140,14 @@ class HomeScreen extends ConsumerWidget {
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.refresh),
-                    title: Text('Révision · ${due.length} verset(s)'),
-                    subtitle: const Text('À réviser aujourd\'hui · appris avec Sudur'),
+                    title: Text(
+                      AppLocalizations.of(context).homeReviseVersesTitle,
+                    ),
+                    subtitle: Text(
+                      AppLocalizations.of(context).homeReviseVersesSubtitle(
+                        due.length,
+                      ),
+                    ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/revision'),
                   ),

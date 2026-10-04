@@ -93,7 +93,7 @@ void main() {
     await _pump(tester, const CycleScreen());
 
     expect(tester.takeException(), isNull);
-    expect(find.text('Révision du Coran'), findsOneWidget);
+    expect(find.text('Réviser mes sourates connues'), findsOneWidget);
     expect(
       find.textContaining('page(s) à réviser aujourd\'hui'),
       findsOneWidget,
@@ -190,8 +190,8 @@ void main() {
   ) async {
     await _pump(tester, const RevisionHubScreen());
 
-    expect(find.text('Révision du Coran'), findsOneWidget);
-    expect(find.textContaining('page(s) aujourd\'hui'), findsOneWidget);
+    expect(find.text('Réviser mes sourates connues'), findsOneWidget);
+    expect(find.textContaining('page(s) à relire aujourd\'hui'), findsOneWidget);
     // Not the "your reviews will appear here" message: there is something.
     expect(
       find.textContaining('apparaîtront ici dès que tu auras mémorisé'),
@@ -204,7 +204,7 @@ void main() {
   ) async {
     await _pump(tester, const RevisionHubScreen(), declared: const []);
 
-    expect(find.text('Révision du Coran'), findsNothing);
+    expect(find.text('Réviser mes sourates connues'), findsNothing);
     expect(
       find.textContaining('apparaîtront ici dès que tu auras mémorisé'),
       findsOneWidget,

@@ -505,7 +505,7 @@ abstract class AppLocalizations {
   /// No description provided for @revisionTodayLabel.
   ///
   /// In fr, this message translates to:
-  /// **'RÉVISION DU JOUR'**
+  /// **'RÉVISER MES VERSETS APPRIS'**
   String get revisionTodayLabel;
 
   /// No description provided for @revisionStart.
@@ -1723,7 +1723,7 @@ abstract class AppLocalizations {
   /// No description provided for @cycleTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Révision du Coran'**
+  /// **'Réviser mes sourates connues'**
   String get cycleTitle;
 
   /// No description provided for @cycleIntro.
@@ -1825,13 +1825,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeCycleTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Révision du Coran'**
+  /// **'Réviser mes sourates connues'**
   String get homeCycleTitle;
 
   /// No description provided for @homeCycleToday.
   ///
   /// In fr, this message translates to:
-  /// **'Ce que tu connaissais déjà : {n} page(s) aujourd\'hui'**
+  /// **'{n} page(s) à relire aujourd\'hui'**
   String homeCycleToday(int n);
 
   /// No description provided for @homeCycleDone.
@@ -1845,6 +1845,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Lire en vue texte'**
   String get mushafReadAsText;
+
+  /// No description provided for @homeReviseVersesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réviser mes versets appris'**
+  String get homeReviseVersesTitle;
+
+  /// No description provided for @homeReviseVersesSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} verset(s) à réciter aujourd\'hui'**
+  String homeReviseVersesSubtitle(int n);
+
+  /// No description provided for @statsCaptionStreakBest.
+  ///
+  /// In fr, this message translates to:
+  /// **'record : {n} j'**
+  String statsCaptionStreakBest(int n);
+
+  /// No description provided for @maskNothingToHide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce verset est trop court pour être masqué : relis-le bien, puis passe à la suite.'**
+  String get maskNothingToHide;
+
+  /// No description provided for @profileLevelHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Défini à ton inscription'**
+  String get profileLevelHint;
 }
 
 class _AppLocalizationsDelegate

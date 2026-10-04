@@ -63,6 +63,7 @@ class ProfileHeader extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.flag_outlined),
           title: Text(l10n.profileLevel),
+          subtitle: Text(l10n.profileLevelHint),
           trailing: Text(
             levelLabel(l10n, profile.memorizationLevel),
             style: theme.textTheme.titleSmall,

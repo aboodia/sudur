@@ -262,7 +262,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get revisionHubTitle => 'Révision';
 
   @override
-  String get revisionTodayLabel => 'RÉVISION DU JOUR';
+  String get revisionTodayLabel => 'RÉVISER MES VERSETS APPRIS';
 
   @override
   String get revisionStart => 'Commencer la révision';
@@ -982,7 +982,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tooltipBookmarkRemove => 'Retirer le signet';
 
   @override
-  String get cycleTitle => 'Révision du Coran';
+  String get cycleTitle => 'Réviser mes sourates connues';
 
   @override
   String get cycleIntro =>
@@ -1046,11 +1046,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.';
 
   @override
-  String get homeCycleTitle => 'Révision du Coran';
+  String get homeCycleTitle => 'Réviser mes sourates connues';
 
   @override
   String homeCycleToday(int n) {
-    return 'Ce que tu connaissais déjà : $n page(s) aujourd\'hui';
+    return '$n page(s) à relire aujourd\'hui';
   }
 
   @override
@@ -1058,4 +1058,24 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mushafReadAsText => 'Lire en vue texte';
+
+  @override
+  String get homeReviseVersesTitle => 'Réviser mes versets appris';
+
+  @override
+  String homeReviseVersesSubtitle(int n) {
+    return '$n verset(s) à réciter aujourd\'hui';
+  }
+
+  @override
+  String statsCaptionStreakBest(int n) {
+    return 'record : $n j';
+  }
+
+  @override
+  String get maskNothingToHide =>
+      'Ce verset est trop court pour être masqué : relis-le bien, puis passe à la suite.';
+
+  @override
+  String get profileLevelHint => 'Défini à ton inscription';
 }

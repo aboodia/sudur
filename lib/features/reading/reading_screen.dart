@@ -31,6 +31,7 @@ class ReadingScreen extends ConsumerWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('Lecture'),
           bottom: const TabBar(tabs: [
             Tab(text: 'Sourates'),
             Tab(text: 'Juz'),

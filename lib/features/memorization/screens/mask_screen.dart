@@ -50,6 +50,8 @@ class MaskScreen extends ConsumerWidget {
           final words = quranWords(ayah.arabic);
           final seed = passage.surahNumber * 1000 + ayahNumber;
           final hidden = maskedIndices(words, session.maskLevel, seed).toSet();
+          // A one-word verse has nothing to hide at any level.
+          final nothingToHide = hidden.isEmpty && words.length < 2;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -64,28 +66,34 @@ class MaskScreen extends ConsumerWidget {
                   style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 4),
-                Text(l10n.maskInstructions, style: theme.textTheme.bodyMedium),
-                const SizedBox(height: 16),
-                SegmentedButton<MaskLevel>(
-                  segments: [
-                    ButtonSegment(
-                      value: MaskLevel.light,
-                      label: Text(l10n.levelLight),
-                    ),
-                    ButtonSegment(
-                      value: MaskLevel.medium,
-                      label: Text(l10n.levelMedium),
-                    ),
-                    ButtonSegment(
-                      value: MaskLevel.full,
-                      label: Text(l10n.levelFull),
-                    ),
-                  ],
-                  selected: {session.maskLevel},
-                  onSelectionChanged: (selection) =>
-                      controller.setMaskLevel(selection.first),
+                Text(
+                  nothingToHide
+                      ? l10n.maskNothingToHide
+                      : l10n.maskInstructions,
+                  style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),
+                if (!nothingToHide)
+                  SegmentedButton<MaskLevel>(
+                    segments: [
+                      ButtonSegment(
+                        value: MaskLevel.light,
+                        label: Text(l10n.levelLight),
+                      ),
+                      ButtonSegment(
+                        value: MaskLevel.medium,
+                        label: Text(l10n.levelMedium),
+                      ),
+                      ButtonSegment(
+                        value: MaskLevel.full,
+                        label: Text(l10n.levelFull),
+                      ),
+                    ],
+                    selected: {session.maskLevel},
+                    onSelectionChanged: (selection) =>
+                        controller.setMaskLevel(selection.first),
+                  ),
+                if (!nothingToHide) const SizedBox(height: 16),
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -109,22 +117,23 @@ class MaskScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const Icon(Icons.info_outline, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        session.revealedIndices.isEmpty
-                            ? l10n.noWordRevealedYet
-                            : l10n.someWordsRevealed(
-                                session.revealedIndices.length,
-                              ),
-                        style: theme.textTheme.bodySmall,
+                if (!nothingToHide)
+                  Row(
+                    children: [
+                      const Icon(Icons.info_outline, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          session.revealedIndices.isEmpty
+                              ? l10n.noWordRevealedYet
+                              : l10n.someWordsRevealed(
+                                  session.revealedIndices.length,
+                                ),
+                          style: theme.textTheme.bodySmall,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
                 const SizedBox(height: 8),
               ],
             ),

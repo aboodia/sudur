@@ -126,10 +126,12 @@ class _CompletedBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Sourates declared in the onboarding have no per-verse history, so
-        // their "completion date" would only be the day of sign-up.
+        // A sourate declared in the onboarding was not learned here: its
+        // "completion date" would only be the day of sign-up, even when a few
+        // of its verses were later learned again. The date is told only when
+        // every verse went through the parcours.
         Text(
-          levels.isEmpty || completedAt == null
+          levels.length < surah.numberOfAyahs || completedAt == null
               ? l10n.milestoneAlreadyKnown
               : l10n.milestoneCompletedOn(frenchFullDate(completedAt)),
           style: theme.textTheme.bodyLarge,

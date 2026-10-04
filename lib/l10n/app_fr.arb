@@ -124,7 +124,7 @@
   ,
 
   "revisionHubTitle": "Révision",
-  "revisionTodayLabel": "RÉVISION DU JOUR",
+  "revisionTodayLabel": "RÉVISER MES VERSETS APPRIS",
   "revisionStart": "Commencer la révision",
   "revisionUpToDateTitle": "Tu es à jour",
   "revisionUpToDateSubtitle": "Rien à réviser aujourd'hui.",
@@ -396,7 +396,7 @@
   "tooltipBookmarkAdd": "Ajouter un signet",
   "tooltipBookmarkRemove": "Retirer le signet",
 
-  "cycleTitle": "Révision du Coran",
+  "cycleTitle": "Réviser mes sourates connues",
   "cycleIntro": "Tu as déjà mémorisé ces sourates : voici ta part du jour, page par page. Elle se règle sur la durée du cycle que tu choisis.",
   "cycleTodayCount": "{n} page(s) à réviser aujourd'hui",
   "@cycleTodayCount": {"placeholders": {"n": {"type": "int"}}},
@@ -418,10 +418,19 @@
   "cycleDoneToday": "C'est fait pour aujourd'hui, bravo. Ta prochaine part t'attend demain.",
   "cycleFinishedTitle": "Cycle terminé, mabrouk !",
   "cycleFinishedBody": "Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.",
-  "homeCycleTitle": "Révision du Coran",
-  "homeCycleToday": "Ce que tu connaissais déjà : {n} page(s) aujourd'hui",
+  "homeCycleTitle": "Réviser mes sourates connues",
+  "homeCycleToday": "{n} page(s) à relire aujourd'hui",
   "@homeCycleToday": {"placeholders": {"n": {"type": "int"}}},
   "homeCycleDone": "Faite aujourd'hui",
 
-  "mushafReadAsText": "Lire en vue texte"
+  "mushafReadAsText": "Lire en vue texte",
+
+  "homeReviseVersesTitle": "Réviser mes versets appris",
+  "homeReviseVersesSubtitle": "{n} verset(s) à réciter aujourd'hui",
+  "@homeReviseVersesSubtitle": {"placeholders": {"n": {"type": "int"}}},
+  "statsCaptionStreakBest": "record : {n} j",
+  "@statsCaptionStreakBest": {"placeholders": {"n": {"type": "int"}}},
+
+  "maskNothingToHide": "Ce verset est trop court pour être masqué : relis-le bien, puis passe à la suite.",
+  "profileLevelHint": "Défini à ton inscription"
 }

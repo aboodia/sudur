@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/stats/progress_stats.dart';
 import '../../../core/stats/progress_stats_provider.dart';
@@ -47,7 +48,12 @@ class ProgressStatsSection extends ConsumerWidget {
           _StatTile(
             label: l10n.statsTileStreak,
             value: l10n.statsDays(s.streakDays),
-            caption: l10n.statsCaptionStreak,
+            // The chip at the top already says the current streak: this
+            // tile adds the record, and leads to the badges.
+            caption: s.streak.longest > 0
+                ? l10n.statsCaptionStreakBest(s.streak.longest)
+                : l10n.statsCaptionStreak,
+            onTap: () => context.push('/succes'),
           ),
           _StatTile(
             label: l10n.statsTileTime,
@@ -90,40 +96,46 @@ class _StatTile extends StatelessWidget {
     required this.label,
     required this.value,
     required this.caption,
+    this.onTap,
   });
 
   final String label;
   final String value;
   final String caption;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return MergeSemantics(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerLowest,
-          border: Border.all(color: theme.colorScheme.outlineVariant),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: theme.textTheme.labelMedium),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                // The title font's default old-style figures make "0 min"
-                // read as "o min" and "1" as "I".
-                fontFeatures: const [FontFeature.liningFigures()],
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerLowest,
+            border: Border.all(color: theme.colorScheme.outlineVariant),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: theme.textTheme.labelMedium),
+              const SizedBox(height: 6),
+              Text(
+                value,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  // The title font's default old-style figures make "0 min"
+                  // read as "o min" and "1" as "I".
+                  fontFeatures: const [FontFeature.liningFigures()],
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(caption, style: theme.textTheme.bodySmall),
-          ],
+              const SizedBox(height: 2),
+              Text(caption, style: theme.textTheme.bodySmall),
+            ],
+          ),
         ),
       ),
     );

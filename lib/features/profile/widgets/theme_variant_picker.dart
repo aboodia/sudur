@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/settings/theme_settings.dart';
 
 /// Lets the user try and switch between the 3 chartes graphiques live —
-/// each card previews its own palette so the choice is visual, not just a
-/// name in a list.
+/// each choice previews its own palette so the choice is visual, not just a
+/// name in a list. Three side by side rather than three tall cards, with the
+/// description of the one chosen underneath.
 class ThemeVariantPicker extends ConsumerWidget {
   const ThemeVariantPicker({super.key});
 
@@ -14,28 +15,49 @@ class ThemeVariantPicker extends ConsumerWidget {
     final selected = ref.watch(themeVariantProvider);
     final controller = ref.read(themeVariantProvider.notifier);
     final brightness = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final chosen = kThemeVariantConfigs[selected]!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text('Charte graphique', style: Theme.of(context).textTheme.titleMedium),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Text('Charte graphique', style: theme.textTheme.titleMedium),
         ),
-        for (final variant in SudurThemeVariant.values)
-          _ThemeVariantCard(
-            variant: variant,
-            isSelected: variant == selected,
-            brightness: brightness,
-            onTap: () => controller.setVariant(variant),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final variant in SudurThemeVariant.values) ...[
+                  if (variant != SudurThemeVariant.values.first)
+                    const SizedBox(width: 8),
+                  Expanded(
+                    child: _ThemeVariantChoice(
+                      variant: variant,
+                      isSelected: variant == selected,
+                      brightness: brightness,
+                      onTap: () => controller.setVariant(variant),
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: Text(chosen.description, style: theme.textTheme.bodySmall),
+        ),
       ],
     );
   }
 }
 
-class _ThemeVariantCard extends StatelessWidget {
-  const _ThemeVariantCard({
+class _ThemeVariantChoice extends StatelessWidget {
+  const _ThemeVariantChoice({
     required this.variant,
     required this.isSelected,
     required this.brightness,
@@ -50,6 +72,7 @@ class _ThemeVariantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = kThemeVariantConfigs[variant]!;
+    final theme = Theme.of(context);
     final previewScheme = config.schemeBuilder != null
         ? config.schemeBuilder!(brightness)
         : ColorScheme.fromSeed(
@@ -58,41 +81,52 @@ class _ThemeVariantCard extends StatelessWidget {
             dynamicSchemeVariant: config.schemeVariant!,
           );
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    return Semantics(
+      button: true,
+      selected: isSelected,
       child: InkWell(
         borderRadius: BorderRadius.circular(config.cornerRadius),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected
+                  ? previewScheme.primary
+                  : theme.colorScheme.outlineVariant,
+              width: isSelected ? 2 : 1,
+            ),
+            borderRadius: BorderRadius.circular(config.cornerRadius),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _Swatch(color: previewScheme.primary),
-              _Swatch(color: previewScheme.secondary),
-              _Swatch(color: previewScheme.tertiary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      config.label,
-                      style: TextStyle(
-                        fontFamily: config.headlineFontFamily ?? config.uiFontFamily,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      config.description,
-                      style: TextStyle(fontFamily: config.uiFontFamily, fontSize: 12),
-                    ),
-                  ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _Swatch(color: previewScheme.primary),
+                  _Swatch(color: previewScheme.secondary),
+                  _Swatch(color: previewScheme.tertiary),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                config.label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: config.headlineFontFamily ?? config.uiFontFamily,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
+              const SizedBox(height: 4),
               Icon(
                 isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
-                color: isSelected ? previewScheme.primary : Theme.of(context).colorScheme.outline,
+                size: 18,
+                color: isSelected
+                    ? previewScheme.primary
+                    : theme.colorScheme.outline,
               ),
             ],
           ),
@@ -110,9 +144,9 @@ class _Swatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 20,
-      height: 20,
-      margin: const EdgeInsets.only(right: 4),
+      width: 16,
+      height: 16,
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
