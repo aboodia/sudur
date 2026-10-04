@@ -41,7 +41,8 @@ class _WirdScreenState extends ConsumerState<WirdScreen> {
     final repo = ref.read(memorizationRepositoryProvider);
     final portion = today.plan.todayPages;
 
-    final first = mushaf.firstAyahOnPage(portion.first);
+    final starts = await ref.read(wirdPageStartsProvider.future);
+    final first = starts[portion.first];
     if (first != null) {
       await repo.logWirdShare(
         profileId: profile.id,
@@ -241,12 +242,12 @@ class _Share extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final mushaf = ref.watch(mushafRepositoryProvider).value;
+    final starts = ref.watch(wirdPageStartsProvider).value;
     final reference = ref.watch(quranReferenceProvider).value;
     final pages = today.plan.todayPages;
 
     String surahOf(int page) {
-      final first = mushaf?.firstAyahOnPage(page);
+      final first = starts?[page];
       if (first == null || reference == null) return '';
       return reference.surahByNumber(first.surah).englishName;
     }

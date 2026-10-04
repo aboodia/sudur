@@ -90,6 +90,25 @@ final wirdPoolProvider = FutureProvider<List<int>>((ref) async {
   );
 });
 
+/// The verse each page of the loop starts from, among the sourates in the
+/// Wird.
+final wirdPageStartsProvider =
+    FutureProvider<Map<int, ({int surah, int ayah})>>((ref) async {
+      final wird = await ref.watch(wirdSurahsProvider.future);
+      if (wird.isEmpty) return const {};
+      final surahRows = await ref.watch(surahProgressProvider.future);
+      final mushaf = await ref.watch(mushafRepositoryProvider.future);
+      return firstWirdAyahByPage(
+        ayahs: [
+          for (final r in surahRows)
+            if (wird.contains(r.surahNumber))
+              for (var a = 1; a <= r.totalAyahCount; a++)
+                (surah: r.surahNumber, ayah: a),
+        ],
+        pageByAyah: mushaf.firstPageByAyah(),
+      );
+    });
+
 /// Today's share of the Wird, with the goal behind it.
 class WirdToday {
   const WirdToday({

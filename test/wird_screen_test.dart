@@ -124,6 +124,20 @@ void main() {
     expect(find.text('mushaf 1'), findsOneWidget);
   });
 
+  testWidgets('a page is named after the sourate of the Wird on it', (
+    tester,
+  ) async {
+    // Page 293 opens with the end of Al-Isra, which is not in the Wird.
+    await _pump(tester, const WirdScreen(), declared: const [18]);
+
+    final kahf = _reference.surahByNumber(18).englishName;
+    expect(find.text('Page 293 · $kahf'), findsOneWidget);
+    expect(
+      find.textContaining(_reference.surahByNumber(17).englishName),
+      findsNothing,
+    );
+  });
+
   testWidgets('finishing needs a self-assessment first', (tester) async {
     await _pump(tester, const WirdScreen());
 

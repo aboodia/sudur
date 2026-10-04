@@ -135,5 +135,26 @@ List<int> wirdPoolPages({
   return pages.toList()..sort();
 }
 
+/// For each page of the loop, the first of [ayahs] that begins on it. A page
+/// may open with the end of a sourate that is not in the Wird: this is the
+/// verse the Wird's own reading starts from, and the sourate to name it by.
+Map<int, ({int surah, int ayah})> firstWirdAyahByPage({
+  required Iterable<({int surah, int ayah})> ayahs,
+  required Map<({int surah, int ayah}), int> pageByAyah,
+}) {
+  final first = <int, ({int surah, int ayah})>{};
+  for (final ayah in ayahs) {
+    final page = pageByAyah[ayah];
+    if (page == null) continue;
+    final known = first[page];
+    if (known == null ||
+        ayah.surah < known.surah ||
+        (ayah.surah == known.surah && ayah.ayah < known.ayah)) {
+      first[page] = ayah;
+    }
+  }
+  return first;
+}
+
 /// Whether [a] and [b] are the same calendar day.
 bool sameDay(DateTime a, DateTime b) => dateOnly(a) == dateOnly(b);

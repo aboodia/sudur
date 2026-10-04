@@ -165,4 +165,30 @@ void main() {
     );
     expect(pages, [1, 2]);
   });
+
+  group('firstWirdAyahByPage', () {
+    test('names a page by the sourate of the Wird that begins on it', () {
+      // Page 5 opens with the end of sourate 1 (not in the Wird) and sourate
+      // 2 begins there.
+      final byPage = firstWirdAyahByPage(
+        ayahs: [(surah: 2, ayah: 1), (surah: 2, ayah: 2)],
+        pageByAyah: {
+          (surah: 1, ayah: 9): 5,
+          (surah: 2, ayah: 1): 5,
+          (surah: 2, ayah: 2): 5,
+        },
+      );
+
+      expect(byPage, {5: (surah: 2, ayah: 1)});
+    });
+
+    test('keeps the earliest verse of the page', () {
+      final byPage = firstWirdAyahByPage(
+        ayahs: [(surah: 3, ayah: 4), (surah: 3, ayah: 2)],
+        pageByAyah: {(surah: 3, ayah: 4): 9, (surah: 3, ayah: 2): 9},
+      );
+
+      expect(byPage[9], (surah: 3, ayah: 2));
+    });
+  });
 }
