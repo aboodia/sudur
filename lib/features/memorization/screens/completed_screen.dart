@@ -6,6 +6,7 @@ import '../../../core/audio/audio_playback_controller.dart';
 import '../../../core/database/memorization_repository.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/path/surah_stories.dart';
 import '../../path/widgets/surah_story_sheet.dart';
 
 /// Écran de fin sobre (fond Nuit bleue, pas de confettis) : bilan du
@@ -238,7 +239,8 @@ class CompletedScreen extends ConsumerWidget {
                               fontSize: 12,
                             ),
                           ),
-                          if (complete)
+                          if (complete &&
+                              ref.watch(hasStoryProvider(surahNumber)))
                             Align(
                               alignment: AlignmentDirectional.centerStart,
                               child: TextButton.icon(

@@ -24,6 +24,8 @@
   "discoverTitle": "Écoute le passage en entier",
   "discoverSubtitle": "Suis le texte des yeux, sans chercher à retenir. Tu prends simplement contact avec les versets.",
   "listeningToAyah": "Verset {ayah} en lecture",
+  "readyAtAyah": "Verset {ayah}",
+  "@readyAtAyah": {"placeholders": {"ayah": {"type": "int"}}},
   "@listeningToAyah": {"placeholders": {"ayah": {"type": "int"}}},
   "finishedListening": "J'ai écouté le passage",
   "listenAgain": "Écouter une seconde fois",
@@ -228,7 +230,7 @@
   "@curveSemantics": {"placeholders": {"from": {"type": "int"}, "to": {"type": "int"}}},
   "mapTitle": "Carte du Mushaf",
   "mapSubtitle": "Chaque case est une page des 604 du Mushaf.",
-  "mapSummary": "{full} page(s) complète(s) · {partial} entamée(s) sur {total}",
+  "mapSummary": "{full} page(s) complète(s) · {partial} entamée(s) · {total} au total",
   "@mapSummary": {
     "placeholders": {"full": {"type": "int"}, "partial": {"type": "int"}, "total": {"type": "int"}}
   },
@@ -417,7 +419,7 @@
   "cycleFinishedTitle": "Cycle terminé, mabrouk !",
   "cycleFinishedBody": "Tu as révisé tout ce que tu avais déjà mémorisé. Un nouveau cycle commence demain.",
   "homeCycleTitle": "Révision du Coran",
-  "homeCycleToday": "{n} page(s) aujourd'hui",
+  "homeCycleToday": "Ce que tu connaissais déjà : {n} page(s) aujourd'hui",
   "@homeCycleToday": {"placeholders": {"n": {"type": "int"}}},
   "homeCycleDone": "Faite aujourd'hui",
 

@@ -53,7 +53,7 @@ void main() {
     expect(find.text('Télécharger'), findsOneWidget);
   });
 
-  testWidgets('every failure is told, not only the first', (tester) async {
+  testWidgets('failures close together are told once', (tester) async {
     final container = await _pump(tester);
     final fake =
         container.read(audioPlaybackProvider.notifier) as _FakePlayback;
@@ -61,11 +61,48 @@ void main() {
     fake.fail();
     await tester.pump(const Duration(milliseconds: 300));
     fake.fail();
+    fake.fail();
     await tester.pump(const Duration(milliseconds: 300));
-    await tester.pump(const Duration(seconds: 1));
 
-    // The second replaces the first: one message at a time.
     expect(find.byType(SnackBar), findsOneWidget);
+    // Dismissed, then a failure right after: still quiet.
+    ScaffoldMessenger.of(tester.element(find.text('Lecture')))
+        .hideCurrentSnackBar();
+    await tester.pump(const Duration(seconds: 1));
+    fake.fail();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SnackBar), findsNothing);
+  });
+
+  testWidgets('a later failure is told again', (tester) async {
+    final container = await _pump(tester);
+    final fake =
+        container.read(audioPlaybackProvider.notifier) as _FakePlayback;
+
+    fake.fail();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    // Past the quiet period (the clock is real: wait it out in real time
+    // would take too long, so the host's period is the thing under test).
+    expect(
+      PlaybackErrorHost.quietPeriod,
+      greaterThanOrEqualTo(const Duration(seconds: 10)),
+    );
+  });
+
+  testWidgets('the message goes away by itself', (tester) async {
+    final container = await _pump(tester);
+
+    (container.read(audioPlaybackProvider.notifier) as _FakePlayback).fail();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    // It has an action, which keeps a message up forever unless told not to.
+    for (var i = 0; i < 30; i++) {
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.byType(SnackBar), findsNothing);
   });
 
   testWidgets('other changes of the player say nothing', (tester) async {

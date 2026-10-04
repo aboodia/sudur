@@ -31,4 +31,16 @@ void main() {
       );
     }
   }
+
+  test('titles use lining figures, so a "1" does not read as a capital I', () {
+    final theme = SudurTheme.light(SudurThemeVariant.sudur);
+    for (final style in [
+      theme.textTheme.headlineSmall,
+      theme.textTheme.headlineMedium,
+      theme.textTheme.titleLarge,
+    ]) {
+      expect(style!.fontFamily, 'CormorantGaramond');
+      expect(style.fontFeatures, contains(const FontFeature.liningFigures()));
+    }
+  });
 }

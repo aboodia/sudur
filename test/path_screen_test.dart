@@ -41,7 +41,11 @@ Future<void> _settle(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 100));
 }
 
-Future<void> _pump(WidgetTester tester, AppDatabase db) async {
+Future<void> _pump(
+  WidgetTester tester,
+  AppDatabase db, {
+  Map<int, SurahStory> stories = const {},
+}) async {
   tester.view.physicalSize = const Size(900, 2000);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -55,7 +59,7 @@ Future<void> _pump(WidgetTester tester, AppDatabase db) async {
       overrides: [
         appDatabaseProvider.overrideWithValue(db),
         quranReferenceProvider.overrideWith((ref) => _reference),
-        surahStoriesProvider.overrideWith((ref) => const {}),
+        surahStoriesProvider.overrideWith((ref) => stories),
       ],
       child: MaterialApp.router(
         routerConfig: router,
@@ -99,7 +103,9 @@ void main() {
     expect(find.textContaining('À venir ·'), findsWidgets);
   });
 
-  testWidgets('a completed milestone opens its unlocked story', (tester) async {
+  testWidgets('a completed milestone shows no empty story section', (
+    tester,
+  ) async {
     await _pump(tester, await _dbWithDeclared(const [1, 2]));
 
     final second = _reference.surahByNumber(2);
@@ -107,20 +113,44 @@ void main() {
     await tester.tap(find.text(second.englishName).first);
     await _settle(tester);
 
-    expect(find.text('Histoire débloquée'.toUpperCase()), findsOneWidget);
-    // No validated story is shipped yet: it says so, it invents nothing.
+    // No validated story is shipped yet: nothing is promised on every
+    // sourate, and nothing is invented.
+    expect(find.text('Histoire débloquée'.toUpperCase()), findsNothing);
     expect(
       find.text(
         'Le récit de cette sourate sera ajouté une fois son contenu validé.',
       ),
-      findsOneWidget,
+      findsNothing,
     );
     // Declared in the onboarding: no per-verse history, no fake date.
     expect(
-      find.text('Déjà mémorisée avant ton arrivée dans l\'application.'),
+      find.text("Déjà mémorisée avant ton arrivée dans l'application."),
       findsOneWidget,
     );
     expect(find.text('Lire la sourate'), findsOneWidget);
+  });
+
+  testWidgets('a completed milestone opens its story when one exists', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      await _dbWithDeclared(const [1, 2]),
+      stories: const {
+        2: SurahStory(
+          title: 'Titre de test',
+          body: 'Texte de test.',
+          source: 'Source de test',
+        ),
+      },
+    );
+
+    await tester.tap(find.text(_reference.surahByNumber(2).englishName).first);
+    await _settle(tester);
+
+    expect(find.text('Histoire débloquée'.toUpperCase()), findsOneWidget);
+    expect(find.text('Titre de test'), findsOneWidget);
+    expect(find.text('Texte de test.'), findsOneWidget);
   });
 
   testWidgets('the current milestone offers to continue memorizing', (

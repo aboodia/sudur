@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Verset {ayah} en lecture'**
   String listeningToAyah(int ayah);
 
+  /// No description provided for @readyAtAyah.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verset {ayah}'**
+  String readyAtAyah(int ayah);
+
   /// No description provided for @finishedListening.
   ///
   /// In fr, this message translates to:
@@ -967,7 +973,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapSummary.
   ///
   /// In fr, this message translates to:
-  /// **'{full} page(s) complète(s) · {partial} entamée(s) sur {total}'**
+  /// **'{full} page(s) complète(s) · {partial} entamée(s) · {total} au total'**
   String mapSummary(int full, int partial, int total);
 
   /// No description provided for @mapLegendNone.
@@ -1825,7 +1831,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeCycleToday.
   ///
   /// In fr, this message translates to:
-  /// **'{n} page(s) aujourd\'hui'**
+  /// **'Ce que tu connaissais déjà : {n} page(s) aujourd\'hui'**
   String homeCycleToday(int n);
 
   /// No description provided for @homeCycleDone.

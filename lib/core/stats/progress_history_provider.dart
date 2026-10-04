@@ -8,26 +8,26 @@ import '../mushaf/mushaf_repository.dart';
 import 'memorized_set.dart';
 import 'progress_history.dart';
 import '../gamification/achievements_provider.dart';
+import '../revision/review_cycle_provider.dart';
 import 'goals_provider.dart';
 import 'progress_stats_provider.dart';
 
 /// When verses were memorized, for the progress curve: one event per verse
-/// learned in the guided parcours (on the day it was learned), and one
-/// event per sourate declared in the onboarding (carrying all its verses,
-/// on the day of the declaration).
+/// learned in the guided parcours, on the day it was learned. Sourates
+/// declared when joining are not events — they were known before the first
+/// day — and make up the curve's starting level instead
+/// ([declaredBaselineProvider]).
 final memorizationEventsProvider = FutureProvider<List<MemorizationEvent>>((
   ref,
 ) async {
-  final surahRows = await ref.watch(surahProgressProvider.future);
   final ayahRows = await ref.watch(ayahProgressProvider.future);
+  return [for (final r in ayahRows) (at: r.memorizedAt, weight: 1)];
+});
 
-  final withVerseRows = {for (final r in ayahRows) r.surahNumber};
-  return [
-    for (final r in ayahRows) (at: r.memorizedAt, weight: 1),
-    for (final r in surahRows)
-      if (r.completedAt != null && !withVerseRows.contains(r.surahNumber))
-        (at: r.completedAt!, weight: r.totalAyahCount),
-  ];
+/// Verses known before joining (the declared sourates): where the progress
+/// curve starts from, so that declaring a sourate is not counted as progress.
+final declaredBaselineProvider = FutureProvider<int>((ref) async {
+  return (await ref.watch(declaredAyahsProvider.future)).length;
 });
 
 /// Memorized share of each of the 604 Mushaf pages (index 0 = page 1).

@@ -259,7 +259,9 @@ class _NowPlayingBar extends ConsumerWidget {
               Expanded(
                 child: Text(
                   playback.ayahNumber != null
-                      ? l10n.listeningToAyah(playback.ayahNumber!)
+                      ? (playback.isPlaying
+                          ? l10n.listeningToAyah(playback.ayahNumber!)
+                          : l10n.readyAtAyah(playback.ayahNumber!))
                       : '',
                   style: const TextStyle(
                     color: Colors.white,

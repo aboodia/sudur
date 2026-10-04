@@ -7,6 +7,7 @@ import '../../../core/format/french_date.dart';
 import '../../../core/memorization/mastery.dart';
 import '../../../core/mushaf/mushaf_repository.dart';
 import '../../../core/path/milestones.dart';
+import '../../../core/path/surah_stories.dart';
 import '../../../core/quran_reference/quran_reference_models.dart';
 import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../l10n/app_localizations.dart';
@@ -139,13 +140,17 @@ class _CompletedBody extends ConsumerWidget {
           const SizedBox(height: 6),
           MasteryLegend(counts: counts),
         ],
-        const SizedBox(height: 16),
-        const Divider(height: 1),
-        const SizedBox(height: 16),
-        SurahStoryContent(
-          surahNumber: surah.number,
-          surahName: surah.englishName,
-        ),
+        // The story only when there is one: no empty placeholder repeated
+        // on every sourate.
+        if (ref.watch(hasStoryProvider(surah.number))) ...[
+          const SizedBox(height: 16),
+          const Divider(height: 1),
+          const SizedBox(height: 16),
+          SurahStoryContent(
+            surahNumber: surah.number,
+            surahName: surah.englishName,
+          ),
+        ],
         const SizedBox(height: 16),
         OutlinedButton(
           onPressed: () async {

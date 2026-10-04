@@ -31,7 +31,7 @@ void main() {
   );
 
   test(
-    'a declared sourate is a single event carrying all its verses',
+    'a declared sourate is where the curve starts, not progress made',
     () async {
       final c = freshContainer();
       addTearDown(c.dispose);
@@ -41,9 +41,35 @@ void main() {
           .markSurahMemorized(profile.id, 1, 7);
 
       final events = await c.read(memorizationEventsProvider.future);
+      final baseline = await c.read(declaredBaselineProvider.future);
 
-      expect(events, hasLength(1));
-      expect(events.single.weight, 7);
+      expect(events, isEmpty);
+      expect(baseline, 7);
+    },
+  );
+
+  test(
+    'a sourate with verses of its own is not part of the baseline',
+    () async {
+      final c = freshContainer();
+      addTearDown(c.dispose);
+      final profile = await c.read(currentProfileProvider.future);
+      await c
+          .read(memorizationRepositoryProvider)
+          .markSurahMemorized(profile.id, 1, 7);
+      await c
+          .read(memorizationRepositoryProvider)
+          .recordAyahMemorized(
+            profileId: profile.id,
+            surahNumber: 2,
+            ayahNumber: 1,
+            surahTotalAyahs: 286,
+            outcome: ReciteOutcome.clean,
+            fragileWordIndices: [],
+          );
+
+      expect(await c.read(declaredBaselineProvider.future), 7);
+      expect(await c.read(memorizationEventsProvider.future), hasLength(1));
     },
   );
 
@@ -68,8 +94,9 @@ void main() {
       final events = await c.read(memorizationEventsProvider.future);
 
       // The sourate is complete (it has a completion date) but has its own
-      // verse rows: 3 events of 1, not those plus a 3-verse declaration.
+      // verse rows: 3 events of 1, and nothing in the declared baseline.
       expect(events.fold<int>(0, (a, e) => a + e.weight), 3);
+      expect(await c.read(declaredBaselineProvider.future), 0);
     },
   );
 

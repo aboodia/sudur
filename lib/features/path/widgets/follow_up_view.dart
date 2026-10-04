@@ -98,7 +98,13 @@ class _CurveSection extends ConsumerWidget {
         }
         final today = dateOnly(DateTime.now());
         final start = historyStart(period, events, today);
-        final series = cumulativeSeries(events, from: start, to: today);
+        // The curve starts from what was known before joining; only the
+        // verses learned since are progress.
+        final baseline = ref.watch(declaredBaselineProvider).value ?? 0;
+        final series = [
+          for (final v in cumulativeSeries(events, from: start, to: today))
+            v + baseline,
+        ];
         final gain = versesGained(events, from: start, to: today);
 
         return Column(

@@ -135,7 +135,7 @@ class HomeScreen extends ConsumerWidget {
                   child: ListTile(
                     leading: const Icon(Icons.refresh),
                     title: Text('Révision · ${due.length} verset(s)'),
-                    subtitle: const Text('À réviser aujourd\'hui'),
+                    subtitle: const Text('À réviser aujourd\'hui · appris avec Sudur'),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/revision'),
                   ),
@@ -247,7 +247,7 @@ class _ProfileCard extends StatelessWidget {
                   Text(
                     next == null
                         ? 'Le sommet est atteint, mabrouk !'
-                        : '$completedSurahCount sourate(s) · encore $remaining pour ${next.info.frenchName}',
+                        : '$completedSurahCount sourate(s) · encore $remaining pour atteindre « ${next.info.frenchName} »',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],

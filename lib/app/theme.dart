@@ -65,7 +65,12 @@ class SudurTheme {
   /// stays on the variant's flat `uiFontFamily` (set separately via
   /// [ThemeData.fontFamily]).
   static TextTheme _headlineSplitTextTheme(String headlineFontFamily) {
-    final style = TextStyle(fontFamily: headlineFontFamily);
+    // Lining figures: Cormorant's default old-style ones make a "1" look like
+    // a small capital I ("verset I") and let digits drop below the line.
+    final style = TextStyle(
+      fontFamily: headlineFontFamily,
+      fontFeatures: const [FontFeature.liningFigures()],
+    );
     return TextTheme(
       displayLarge: style,
       displayMedium: style,

@@ -280,10 +280,14 @@ class _MasterySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        MasteryBar(counts: overall, height: 12),
-        const SizedBox(height: 8),
-        MasteryLegend(counts: overall),
-        const SizedBox(height: 16),
+        // With a single sourate the overall bar and the sourate's own bar
+        // would say the same thing twice.
+        if (surahNumbers.length > 1) ...[
+          MasteryBar(counts: overall, height: 12),
+          const SizedBox(height: 8),
+          MasteryLegend(counts: overall),
+          const SizedBox(height: 16),
+        ],
         for (final n in surahNumbers)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),

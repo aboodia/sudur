@@ -53,3 +53,11 @@ final surahStoriesProvider = FutureProvider<Map<int, SurahStory>>((ref) async {
   final raw = await rootBundle.loadString('assets/data/surah_stories.json');
   return parseSurahStories(raw);
 });
+
+/// Whether a validated story exists for [surah]. While none does, the app
+/// shows no "story" section at all rather than an empty promise on every
+/// sourate.
+final hasStoryProvider = Provider.family<bool, int>(
+  (ref, surah) =>
+      ref.watch(surahStoriesProvider).value?.containsKey(surah) ?? false,
+);

@@ -333,7 +333,9 @@ class _MilestoneTile extends StatelessWidget {
                             _SurahNames(surah: surah),
                             const SizedBox(height: 8),
                             Text(
-                              '$stateLabel · ${l10n.milestoneVersesAndType(surah.numberOfAyahs, revelationLabel(l10n, surah))}',
+                              state == MilestoneState.current
+                                  ? '$stateLabel · ${revelationLabel(l10n, surah)}'
+                                  : '$stateLabel · ${l10n.milestoneVersesAndType(surah.numberOfAyahs, revelationLabel(l10n, surah))}',
                               style: theme.textTheme.bodySmall,
                             ),
                             if (state == MilestoneState.current) ...[

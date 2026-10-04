@@ -103,7 +103,7 @@ void main() {
       find.text('Ton historique apparaîtra ici dès ta première session.'),
       findsOneWidget,
     );
-    expect(find.text('0 page(s) complète(s) · 0 entamée(s) sur 604'), findsOne);
+    expect(find.text('0 page(s) complète(s) · 0 entamée(s) · 604 au total'), findsOne);
   });
 
   testWidgets('sessions are listed newest first with kind and duration', (
@@ -143,23 +143,50 @@ void main() {
     expect(find.textContaining('· 1 min'), findsOneWidget);
   });
 
-  testWidgets('the curve reports the gain over the chosen period', (
+  testWidgets('the curve counts what was learned, not what was declared', (
     tester,
   ) async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
-    // Declared today: its 7 verses are new within the last 30 days.
-    await MemorizationRepository(db).markSurahMemorized(profile.id, 1, 7);
+    final repo = MemorizationRepository(db);
+    // 7 verses known on joining, 3 learned since.
+    await repo.markSurahMemorized(profile.id, 1, 7);
+    for (var ayah = 1; ayah <= 3; ayah++) {
+      await repo.recordAyahMemorized(
+        profileId: profile.id,
+        surahNumber: 67,
+        ayahNumber: ayah,
+        surahTotalAyahs: 30,
+        outcome: ReciteOutcome.clean,
+        fragileWordIndices: [],
+      );
+    }
 
     await _openFollowUp(tester, db);
 
-    expect(find.text('+7 verset(s) sur la période'), findsOneWidget);
+    expect(find.text('+3 verset(s) sur la période'), findsOneWidget);
     expect(find.text('30 j'), findsOneWidget);
 
     await tester.tap(find.text('Tout'));
     await _settle(tester);
     expect(tester.takeException(), isNull);
     expect(find.text('Courbe de progression'), findsOneWidget);
+    expect(find.text('+3 verset(s) sur la période'), findsOneWidget);
+  });
+
+  testWidgets('declaring sourates alone is no progress to show', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    final profile = await UserProfileRepository(db).getOrCreateLocalProfile();
+    await MemorizationRepository(db).markSurahMemorized(profile.id, 1, 7);
+
+    await _openFollowUp(tester, db);
+
+    expect(
+      find.text('Ta courbe commencera avec ton premier passage mémorisé.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('the map summary counts complete and started pages', (
@@ -172,7 +199,7 @@ void main() {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     await _openFollowUp(tester, db, coverage: coverage);
 
-    expect(find.text('2 page(s) complète(s) · 1 entamée(s) sur 604'), findsOne);
+    expect(find.text('2 page(s) complète(s) · 1 entamée(s) · 604 au total'), findsOne);
   });
 
   testWidgets('goals show progress and what is left, without reproach', (

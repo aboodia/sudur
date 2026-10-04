@@ -83,11 +83,17 @@ class AudioPlayerBar extends ConsumerWidget {
                       context.push('/lecture/mushaf?page=$page');
                     }
                   },
-                  child: Text(
-                    '$surahName · verset ${playback.ayahNumber}'
-                    '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget + 1})' : ''}',
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodySmall,
+                  // Short, so the verse number is not the part cut off next to
+                  // the speed and reciter buttons.
+                  child: Semantics(
+                    label: '$surahName, verset ${playback.ayahNumber}',
+                    excludeSemantics: true,
+                    child: Text(
+                      '$surahName · ${playback.ayahNumber}'
+                      '${playback.repeatMode == RepeatMode.repeatEachAyahNTimes ? ' (${playback.repeatProgress + 1}/${playback.repeatTarget + 1})' : ''}',
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall,
+                    ),
                   ),
                 ),
               ),

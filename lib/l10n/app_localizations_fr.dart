@@ -33,6 +33,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String readyAtAyah(int ayah) {
+    return 'Verset $ayah';
+  }
+
+  @override
   String get finishedListening => 'J\'ai écouté le passage';
 
   @override
@@ -531,7 +536,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String mapSummary(int full, int partial, int total) {
-    return '$full page(s) complète(s) · $partial entamée(s) sur $total';
+    return '$full page(s) complète(s) · $partial entamée(s) · $total au total';
   }
 
   @override
@@ -1045,7 +1050,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String homeCycleToday(int n) {
-    return '$n page(s) aujourd\'hui';
+    return 'Ce que tu connaissais déjà : $n page(s) aujourd\'hui';
   }
 
   @override
