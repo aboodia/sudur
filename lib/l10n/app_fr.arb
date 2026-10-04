@@ -380,7 +380,7 @@
 
   "offlineMushafEstimate": "Environ {size} restent à télécharger. Préfère le Wi-Fi.",
   "@offlineMushafEstimate": {"placeholders": {"size": {"type": "String"}}},
-  "offlineMushafWifi": "Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.",
+  "offlineMushafWifi": "Cela peut représenter plus de 100 Mo : préfère le Wi-Fi.",
 
   "playbackOffline": "Impossible de lire cet audio sans connexion. Télécharge-le d'avance quand tu auras internet.",
   "playbackOfflineAction": "Télécharger",
@@ -419,5 +419,7 @@
   "homeCycleTitle": "Révision du Coran",
   "homeCycleToday": "{n} page(s) aujourd'hui",
   "@homeCycleToday": {"placeholders": {"n": {"type": "int"}}},
-  "homeCycleDone": "Faite aujourd'hui"
+  "homeCycleDone": "Faite aujourd'hui",
+
+  "mushafReadAsText": "Lire en vue texte"
 }

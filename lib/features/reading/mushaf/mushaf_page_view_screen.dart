@@ -10,6 +10,7 @@ import '../../../core/quran_reference/quran_reference_repository.dart';
 import '../../../core/settings/reading_settings.dart';
 import '../widgets/audio_player_bar.dart';
 import 'mushaf_line_row.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Vue Mushaf : pagination fidèle au Mushaf imprimé (604 pages, glyphes
 /// mot-par-mot QCF v4 tajwid) — §6.6 du cahier des charges. C'est la vue de
@@ -285,11 +286,20 @@ class _MushafPageBody extends ConsumerWidget {
     if (mushaf == null) return const SizedBox.shrink();
 
     final lines = mushaf.linesForPage(pageNumber);
+    // The text view needs no connection: it is the way on when the page's
+    // font cannot be fetched.
+    final first = mushaf.firstAyahOnPage(pageNumber);
+    final VoidCallback? readText = first == null
+        ? null
+        : () => context.push('/lecture/sourate/${first.surah}?ayah=${first.ayah}');
 
     return fontAsync.when(
       data: (fontFamily) {
         if (fontFamily == null) {
-          return _OfflineFallback(onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber)));
+          return _OfflineFallback(
+            onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber)),
+            onReadText: readText,
+          );
         }
         // Each line is stretched to the page's width (FittedBox in
         // MushafLineRow), and the page's width follows the screen: as wide
@@ -338,18 +348,26 @@ class _MushafPageBody extends ConsumerWidget {
         ));
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => _OfflineFallback(onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber))),
+      error: (err, _) => _OfflineFallback(
+        onRetry: () => ref.invalidate(mushafPageFontProvider(pageNumber)),
+        onReadText: readText,
+      ),
     );
   }
 }
 
 class _OfflineFallback extends StatelessWidget {
-  const _OfflineFallback({required this.onRetry});
+  const _OfflineFallback({required this.onRetry, this.onReadText});
 
   final VoidCallback onRetry;
 
+  /// Opens the same place in the text view, which works without a
+  /// connection; null if the page's first verse is unknown.
+  final VoidCallback? onReadText;
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -359,6 +377,11 @@ class _OfflineFallback extends StatelessWidget {
           const Text('Cette page nécessite une connexion la première fois.'),
           const SizedBox(height: 8),
           OutlinedButton(onPressed: onRetry, child: const Text('Réessayer')),
+          if (onReadText != null)
+            TextButton(
+              onPressed: onReadText,
+              child: Text(l10n.mushafReadAsText),
+            ),
         ],
       ),
     );

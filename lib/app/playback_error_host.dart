@@ -29,7 +29,11 @@ class PlaybackErrorHost extends ConsumerWidget {
         ..showSnackBar(
           SnackBar(
             content: Text(l10n.playbackOffline),
-            duration: const Duration(seconds: 6),
+            duration: const Duration(seconds: 5),
+            // Above the bottom bar: the session screens keep their main
+            // button there, which a message on the bottom edge would hide.
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 170),
             action: SnackBarAction(
               label: l10n.playbackOfflineAction,
               onPressed: () => appRouter.push('/hors-ligne'),

@@ -246,4 +246,42 @@ void main() {
 
     expect(await repo.memorizedAyahKeys(profile.id), {'67:1'});
   });
+
+  test('a saved session whose verses are all known is dropped', () async {
+    final container = _freshContainer();
+    addTearDown(container.dispose);
+    final profile = await container.read(currentProfileProvider.future);
+    final repo = container.read(memorizationRepositoryProvider);
+
+    // A passage left mid-session, then its whole sourate declared as known.
+    await repo.startPassage(profile.id, 1, 6, 7);
+    expect(await repo.activeSession(profile.id), isNotNull);
+    await repo.markSurahMemorized(profile.id, 1, 7);
+
+    expect(await repo.activeSession(profile.id), isNull);
+    // And it stays dropped: nothing to resume the next time either.
+    expect(await repo.activeSession(profile.id), isNull);
+  });
+
+  test('a saved session with verses still to learn is kept', () async {
+    final container = _freshContainer();
+    addTearDown(container.dispose);
+    final profile = await container.read(currentProfileProvider.future);
+    final repo = container.read(memorizationRepositoryProvider);
+
+    await repo.startPassage(profile.id, 67, 1, 5);
+    await repo.recordAyahMemorized(
+      profileId: profile.id,
+      surahNumber: 67,
+      ayahNumber: 1,
+      surahTotalAyahs: 30,
+      outcome: ReciteOutcome.clean,
+      fragileWordIndices: [],
+    );
+
+    final active = await repo.activeSession(profile.id);
+
+    expect(active, isNotNull);
+    expect(active!.passage.surahNumber, 67);
+  });
 }

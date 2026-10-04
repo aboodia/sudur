@@ -943,7 +943,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get offlineMushafWifi =>
-      'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.';
+      'Cela peut représenter plus de 100 Mo : préfère le Wi-Fi.';
 
   @override
   String get playbackOffline =>
@@ -1050,4 +1050,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeCycleDone => 'Faite aujourd\'hui';
+
+  @override
+  String get mushafReadAsText => 'Lire en vue texte';
 }

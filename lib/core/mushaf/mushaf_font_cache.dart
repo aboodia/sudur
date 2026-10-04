@@ -30,7 +30,7 @@ Future<Uint8List?> httpFetch(String url) async {
 
 /// Downloads and caches, one page at a time, the QCF v4 tajweed font for
 /// that Mushaf page (public CDN, no API key). Bundling all 604 page fonts
-/// (about 0.8 MB each as TTF, roughly 470 MB for the 604, measured on a phone) in the app isn't practical, so pages are fetched on
+/// (about 0.27 MB each as TTF, roughly 160 MB for the 604, measured on a phone) in the app isn't practical, so pages are fetched on
 /// first view and kept on disk for offline reuse afterwards — or all at
 /// once from the offline-content screen ([downloadPage]).
 ///

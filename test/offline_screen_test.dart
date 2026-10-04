@@ -91,9 +91,7 @@ void main() {
     expect(find.text('Contenus hors-ligne'), findsOneWidget);
     expect(find.text('0 pages sur 604 téléchargées'), findsOneWidget);
     expect(
-      find.text(
-        'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.',
-      ),
+      find.text('Cela peut représenter plus de 100 Mo : préfère le Wi-Fi.'),
       findsOneWidget,
     );
     expect(find.text('Tout télécharger'), findsOneWidget);

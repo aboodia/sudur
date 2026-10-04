@@ -34,11 +34,26 @@ class MemorizationRepository {
     final passages = await (_db.select(
       _db.passages,
     )..where((t) => t.profileId.equals(profileId))).get();
+    Set<String>? memorized;
     for (final passage in passages) {
       final progress = await (_db.select(
         _db.sessionProgressEntries,
       )..where((t) => t.passageId.equals(passage.id))).getSingleOrNull();
-      if (progress != null) return (passage: passage, progress: progress);
+      if (progress == null) continue;
+
+      // A passage whose every verse is already known is not worth resuming
+      // — typically one left behind when a declared sourate was not yet
+      // taken into account. It is dropped, and the next suggestion takes
+      // its place.
+      memorized ??= await memorizedAyahKeys(profileId);
+      final allKnown = [
+        for (var a = passage.ayahStart; a <= passage.ayahEnd; a++) a,
+      ].every((a) => memorized!.contains('${passage.surahNumber}:$a'));
+      if (allKnown) {
+        await finishPassage(passage.id);
+        continue;
+      }
+      return (passage: passage, progress: progress);
     }
     return null;
   }

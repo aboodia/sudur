@@ -1651,7 +1651,7 @@ abstract class AppLocalizations {
   /// No description provided for @offlineMushafWifi.
   ///
   /// In fr, this message translates to:
-  /// **'Cela peut représenter plusieurs centaines de Mo : préfère le Wi-Fi.'**
+  /// **'Cela peut représenter plus de 100 Mo : préfère le Wi-Fi.'**
   String get offlineMushafWifi;
 
   /// No description provided for @playbackOffline.
@@ -1833,6 +1833,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Faite aujourd\'hui'**
   String get homeCycleDone;
+
+  /// No description provided for @mushafReadAsText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire en vue texte'**
+  String get mushafReadAsText;
 }
 
 class _AppLocalizationsDelegate
