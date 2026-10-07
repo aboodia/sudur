@@ -793,7 +793,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get offlineIntro =>
-      'Le texte arabe, la traduction et la translittération sont déjà dans l\'application. Télécharge ici ce qui demande internet : les pages du Mushaf et l\'audio.';
+      'Le texte arabe, la traduction, la translittération et les pages du Mushaf sont déjà dans l\'application. Télécharge ici ce qui demande internet : l\'audio.';
+
+  @override
+  String get offlineMushafBundled =>
+      'Les 604 pages sont dans l\'application : elles se lisent sans connexion.';
 
   @override
   String offlineStorage(String size) {

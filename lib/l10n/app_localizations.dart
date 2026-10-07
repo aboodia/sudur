@@ -1387,8 +1387,14 @@ abstract class AppLocalizations {
   /// No description provided for @offlineIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Le texte arabe, la traduction et la translittération sont déjà dans l\'application. Télécharge ici ce qui demande internet : les pages du Mushaf et l\'audio.'**
+  /// **'Le texte arabe, la traduction, la translittération et les pages du Mushaf sont déjà dans l\'application. Télécharge ici ce qui demande internet : l\'audio.'**
   String get offlineIntro;
+
+  /// No description provided for @offlineMushafBundled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 604 pages sont dans l\'application : elles se lisent sans connexion.'**
+  String get offlineMushafBundled;
 
   /// No description provided for @offlineStorage.
   ///

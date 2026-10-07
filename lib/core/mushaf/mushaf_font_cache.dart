@@ -28,16 +28,20 @@ Future<Uint8List?> httpFetch(String url) async {
   }
 }
 
-/// Downloads and caches, one page at a time, the QCF v4 tajweed font for
-/// that Mushaf page (public CDN, no API key). Bundling all 604 page fonts
-/// (about 0.27 MB each as TTF, roughly 160 MB for the 604, measured on a phone) in the app isn't practical, so pages are fetched on
-/// first view and kept on disk for offline reuse afterwards — or all at
-/// once from the offline-content screen ([downloadPage]).
+/// Gives each Mushaf page the QCF v4 tajweed font it is drawn with (TTF, not
+/// WOFF2: [FontLoader] only supports OpenType/TrueType).
 ///
-/// TTF, not WOFF2: [FontLoader] only supports OpenType/TrueType.
+/// The 604 fonts ship inside the app ([bundle]), about 65 MB compressed in
+/// the install, so every page is readable offline from the first launch.
+/// Without a bundle (tests) it falls back to the earlier way: a page is
+/// fetched from the public CDN on first view and kept on disk, or all at
+/// once from the offline-content screen ([downloadPage]).
 class MushafFontCache {
-  MushafFontCache({this.directoryProvider, Fetch? fetch})
+  MushafFontCache({this.directoryProvider, Fetch? fetch, this.bundle})
     : _fetch = fetch ?? httpFetch;
+
+  /// Where the fonts shipped with the app are read from; null when none are.
+  final AssetBundle? bundle;
 
   /// Where the cache lives; the app's support folder when null (tests
   /// give a temporary one).
@@ -49,6 +53,11 @@ class MushafFontCache {
   static const pageCount = 604;
 
   static String familyForPage(int page) => 'mushaf_p$page';
+
+  static String bundledAssetFor(int page) => 'assets/mushaf_fonts/p$page.ttf';
+
+  /// The fonts come with the app: nothing to download.
+  bool get isBundled => bundle != null;
 
   static String _cdnUrl(int page) =>
       'https://static-cdn.tarteel.ai/qul/fonts/quran_fonts/v4-tajweed/ttf/p$page.ttf';
@@ -74,6 +83,18 @@ class MushafFontCache {
   Future<String?> fontFamilyForPage(int page) async {
     final family = familyForPage(page);
     if (_loadedPages.contains(page)) return family;
+
+    if (bundle != null) {
+      try {
+        final data = await bundle!.load(bundledAssetFor(page));
+        final loader = FontLoader(family)..addFont(Future.value(data));
+        await loader.load();
+        _loadedPages.add(page);
+        return family;
+      } catch (_) {
+        // Not in the bundle: fall through to the disk cache and the CDN.
+      }
+    }
 
     final dir = await _dir();
     final file = File('${dir.path}/p$page.ttf');
@@ -140,7 +161,7 @@ class MushafFontCache {
 }
 
 final mushafFontCacheProvider = Provider<MushafFontCache>(
-  (ref) => MushafFontCache(),
+  (ref) => MushafFontCache(bundle: rootBundle),
 );
 
 final mushafPageFontProvider = FutureProvider.family<String?, int>((ref, page) {

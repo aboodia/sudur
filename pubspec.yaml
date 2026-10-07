@@ -94,6 +94,8 @@ flutter:
     - assets/data/mushaf_words.json
     - assets/data/quran_sajda.json
     - assets/data/surah_stories.json
+    # The 604 QCF v4 page fonts, loaded page by page (see MushafFontCache).
+    - assets/mushaf_fonts/
 
   fonts:
     - family: AmiriQuran

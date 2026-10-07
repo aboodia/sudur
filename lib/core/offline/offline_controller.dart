@@ -15,6 +15,7 @@ class OfflineState {
     this.loaded = false,
     this.cachedPages = const {},
     this.fontBytes = 0,
+    this.fontsBundled = false,
     this.cachedAudio = const {},
     this.audioBytes = 0,
     this.fontsProgress,
@@ -27,6 +28,9 @@ class OfflineState {
   /// Mushaf pages whose font is on disk.
   final Set<int> cachedPages;
   final int fontBytes;
+
+  /// The fonts ship with the app: nothing to download or delete.
+  final bool fontsBundled;
 
   /// Audio file names on disk (all reciters).
   final Set<String> cachedAudio;
@@ -41,13 +45,15 @@ class OfflineState {
 
   bool get fontsRunning => fontsProgress != null;
   bool get audioRunning => audioSurah != null;
-  bool get fontsComplete => cachedPages.length >= MushafFontCache.pageCount;
+  bool get fontsComplete =>
+      fontsBundled || cachedPages.length >= MushafFontCache.pageCount;
   int get totalBytes => fontBytes + audioBytes;
 
   OfflineState copyWith({
     bool? loaded,
     Set<int>? cachedPages,
     int? fontBytes,
+    bool? fontsBundled,
     Set<String>? cachedAudio,
     int? audioBytes,
     DownloadProgress? Function()? fontsProgress,
@@ -57,6 +63,7 @@ class OfflineState {
     loaded: loaded ?? this.loaded,
     cachedPages: cachedPages ?? this.cachedPages,
     fontBytes: fontBytes ?? this.fontBytes,
+    fontsBundled: fontsBundled ?? this.fontsBundled,
     cachedAudio: cachedAudio ?? this.cachedAudio,
     audioBytes: audioBytes ?? this.audioBytes,
     fontsProgress: fontsProgress != null ? fontsProgress() : this.fontsProgress,
@@ -80,7 +87,13 @@ class OfflineController extends Notifier<OfflineState> {
 
   /// Reads what is on disk.
   Future<void> refresh() async {
-    final pages = await _fonts.cachedPages();
+    if (_fonts.isBundled) {
+      // Pages downloaded by an earlier version are now dead weight.
+      await _fonts.deleteAll();
+    }
+    final pages = _fonts.isBundled
+        ? {for (var p = 1; p <= MushafFontCache.pageCount; p++) p}
+        : await _fonts.cachedPages();
     final fontBytes = await _fonts.sizeOnDisk();
     final audio = await _audio.cachedFileNames();
     final audioBytes = await _audio.sizeOnDisk();
@@ -89,6 +102,7 @@ class OfflineController extends Notifier<OfflineState> {
       loaded: true,
       cachedPages: pages,
       fontBytes: fontBytes,
+      fontsBundled: _fonts.isBundled,
       cachedAudio: audio,
       audioBytes: audioBytes,
     );
