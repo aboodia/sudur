@@ -114,6 +114,15 @@ final appRouter = GoRouter(
         ),
       ],
     ),
+    // Une page du Mushaf ouverte depuis un écran hors du shell (le Wird) : la
+    // route de l'onglet Lecture ne peut pas être poussée d'ici, le shell
+    // serait alors deux fois dans la pile de navigation.
+    GoRoute(
+      path: '/mushaf',
+      builder: (context, state) => MushafPageViewScreen(
+        initialPage: int.tryParse(state.uri.queryParameters['page'] ?? '') ?? 1,
+      ),
+    ),
     // Le Wird : sa propre route, lancée depuis sa carte de l'Accueil.
     GoRoute(path: '/wird', builder: (context, state) => const WirdScreen()),
   ],

@@ -57,7 +57,7 @@ Future<AppDatabase> _pump(
       ),
       GoRoute(path: '/wird', builder: (_, _) => const Text('écran wird')),
       GoRoute(
-        path: '/lecture/mushaf',
+        path: '/mushaf',
         builder: (_, state) =>
             Scaffold(body: Text('mushaf ${state.uri.queryParameters['page']}')),
       ),

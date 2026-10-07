@@ -299,7 +299,16 @@ class _MushafPageBody extends ConsumerWidget {
     final first = mushaf.firstAyahOnPage(pageNumber);
     final VoidCallback? readText = first == null
         ? null
-        : () => context.push('/lecture/sourate/${first.surah}?ayah=${first.ayah}');
+        : () {
+            final target = '/lecture/sourate/${first.surah}?ayah=${first.ayah}';
+            // Opened from outside the tabs (the Wird), the text view cannot
+            // be pushed on top: it is a page of the Lecture tab.
+            if (GoRouterState.of(context).uri.path == '/mushaf') {
+              context.go(target);
+            } else {
+              context.push(target);
+            }
+          };
 
     return fontAsync.when(
       data: (fontFamily) {

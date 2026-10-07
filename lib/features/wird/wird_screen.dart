@@ -266,7 +266,7 @@ class _Share extends ConsumerWidget {
             child: ListTile(
               title: Text(l10n.wirdPageIn(page, surahOf(page))),
               trailing: const Icon(Icons.menu_book_outlined),
-              onTap: () => context.push('/lecture/mushaf?page=$page'),
+              onTap: () => context.push('/mushaf?page=$page'),
             ),
           ),
         const SizedBox(height: 16),
